@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Brunstkalender</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="production_site">Produktionsplats</string>
+    <string name="title_activity_production_site">Produktionsplats</string>
+
+
+</resources>
