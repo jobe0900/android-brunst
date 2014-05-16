@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name="com.example.android_projekt.ProductionSiteActivity"
-            android:label="@string/title_activity_production_site"
+            android:label="@string/production_site_activity_title"
             android:parentActivityName="com.example.android_projekt.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
