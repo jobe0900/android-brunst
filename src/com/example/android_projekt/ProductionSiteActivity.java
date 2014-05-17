@@ -3,6 +3,7 @@ package com.example.android_projekt;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.os.Build;
 public class ProductionSiteActivity extends ActionBarActivity 
 {
 	public final static String TAG = "Brunst: ProductionSiteActivity";
+	public final static String EXTRA_PPNR_STRING = "extra_ppnr_string";
 	
 	private EditText etOrg;
 	private EditText etPpnr;
@@ -30,7 +32,12 @@ public class ProductionSiteActivity extends ActionBarActivity
 	private ImageButton ibMap;
 	private ImageButton ibHere;
 	private Button btnSave;
-
+	
+	private boolean updating = false;
+	
+	private ProductionSite site;
+	
+	/** "Constreuctor." */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,9 +45,22 @@ public class ProductionSiteActivity extends ActionBarActivity
 		
 		findViews();
 		setupClickListeners();
-
+		
+		// find out if it as new ProductionSite or update of existing.
+		if(getIntent().hasExtra(EXTRA_PPNR_STRING)) {
+			setupUpdate();
+		}
 	}
 	
+	/** Fill fields with intent-extras, disable input on ProductionSiteNr. */
+	private void setupUpdate() {
+		Intent intent = getIntent();
+		
+		String ppnrString = intent.getStringExtra(EXTRA_PPNR_STRING);
+		// TODO transform string to org and pppnr parts.
+		
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

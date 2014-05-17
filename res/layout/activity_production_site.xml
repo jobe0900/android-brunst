@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android_projekt.ProductionSiteActivity" >
 
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" -->
     <TextView
         android:id="@+id/production_site_label_number"
         android:layout_width="wrap_content"
@@ -15,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/production_site_label_number"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        />
 
     <EditText
         android:id="@+id/production_site_entry_org"
@@ -48,7 +49,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="8dp"
         android:text="@string/production_site_label_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        />
 
     <EditText
         android:id="@+id/production_site_entry_name"
@@ -67,7 +68,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="8dp"
         android:text="@string/production_site_label_address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        />
 
     <EditText
         android:id="@+id/production_site_entry_address"
@@ -113,7 +114,7 @@
         android:layout_below="@id/production_site_entry_postnr"
         android:layout_marginTop="20dp"
         android:text="@string/production_site_label_coord"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        />
 
     <EditText
         android:id="@+id/production_site_entry_coord"
