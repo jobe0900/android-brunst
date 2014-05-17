@@ -24,3 +24,6 @@ proguard/
 
 #Log Files
 *.log
+
+# img thumbnail on windows
+Thumbs.db

@@ -2,14 +2,21 @@
 <resources>
 
     <string name="app_name">Brunstkalender</string>
-    <string name="action_settings">Inställningar</string>
-    <string name="production_site">Produktionsplats</string>
     
+    <string name="action_settings">Inställningar</string>
+    
+    <string name="button_save">Spara</string>
+    
+    <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>
     <string name="production_site_label_number">Produktionsplatsnummer</string>
     <string name="production_site_label_name">Namn</string>
     <string name="production_site_label_address">Adress</string>
     <string name="production_site_label_coord">Koordinater</string>
+    <string name="production_site_hint_street_address">Gatuadress</string>
+    <string name="production_site_hint_postnr">Postnr</string>
+    <string name="production_site_hint_postaddress">Postadress</string>
+    <string name="production_site_hint_coord"></string>
     <string name="production_site_org_default">SE</string>
 
 
