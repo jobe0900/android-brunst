@@ -86,7 +86,7 @@
         android:layout_alignBottom="@id/production_site_entry_address"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_place"
-        android:background="@color/btn_background" />
+        android:background="@drawable/button_bg_green" />
 
     <EditText
         android:id="@+id/production_site_entry_postnr"
@@ -133,7 +133,7 @@
         android:layout_alignBottom="@id/production_site_entry_coord"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_location_found"
-        android:background="@color/btn_background" />
+        android:background="@drawable/button_bg_green" />
 
     <Button
         android:id="@+id/production_site_button_save"

@@ -6,6 +6,7 @@
     <string name="action_settings">Inställningar</string>
     
     <string name="button_save">Spara</string>
+    <string name="button_update">Uppdatera</string>
     
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>

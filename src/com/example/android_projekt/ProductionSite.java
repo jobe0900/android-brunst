@@ -1,5 +1,11 @@
 package com.example.android_projekt;
 
+/**
+ * ProductionSite ("Produktionsplats") is a geographical site.
+ * All production animals belongs to a Site (but can temporarilly be on another).
+ * For the purpose of this App, the User has at least one Site = the home farm,
+ * but can have several, e.g. milk cows on one site and young cattle on another.
+ */
 public class ProductionSite 
 {
 	private int _id;
@@ -8,6 +14,7 @@ public class ProductionSite
 	private String address;
 	private String postnr;
 	private String postaddress;
+	private String coord;
 	
 	/** Constructor. */
 	ProductionSite(ProductionSiteNr ppnr) {
@@ -64,6 +71,14 @@ public class ProductionSite
 
 	public void setPostaddress(String postaddress) {
 		this.postaddress = postaddress;
+	}
+	
+	public String getCoordinates() {
+		return coord;
+	}
+
+	public void setCoordinates(String coord) {
+		this.coord = coord;
 	}
 
 	public ProductionSiteNr getNr() {
