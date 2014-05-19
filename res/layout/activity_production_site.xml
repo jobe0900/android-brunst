@@ -57,7 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/production_site_label_name"
         android:layout_alignLeft="@id/production_site_label_name"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:maxLength="30"
+        />
 
     <TextView
         android:id="@+id/production_site_label_address"
@@ -77,7 +79,9 @@
         android:layout_below="@id/production_site_label_address"
         android:layout_alignLeft="@id/production_site_label_address"
         android:layout_toLeftOf="@+id/production_site_imgbutton_map"
-        android:hint="@string/production_site_hint_street_address" />
+        android:hint="@string/production_site_hint_street_address" 
+        android:maxLength="25"
+        />
     
     <ImageButton
         android:id="@id/production_site_imgbutton_map"
@@ -95,6 +99,7 @@
         android:layout_below="@id/production_site_entry_address"
         android:layout_alignLeft="@id/production_site_entry_address"
         android:ems="5"
+        android:maxLength="5"
         android:hint="@string/production_site_hint_postnr"
         android:inputType="number" />
 
@@ -105,6 +110,7 @@
         android:layout_toRightOf="@id/production_site_entry_postnr"
         android:layout_alignBaseline="@id/production_site_entry_postnr"
         android:layout_alignParentRight="true"
+        android:maxLength="20"
         android:hint="@string/production_site_hint_postaddress" />
 
     <TextView

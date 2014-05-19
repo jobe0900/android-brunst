@@ -8,39 +8,70 @@ package com.example.android_projekt;
  */
 public class ProductionSite 
 {
-	private int _id;
-	private ProductionSiteNr nr;
+	public static final int UNSAVED_ID = -1;	
+	private long _id;
+	private ProductionSiteNr sitenr;
 	private String name;
 	private String address;
 	private String postnr;
 	private String postaddress;
-	private String coord;
+	private String coordinates;
 	
 	/** Constructor. */
 	ProductionSite(ProductionSiteNr ppnr) {
-		nr = ppnr;
+		_id = UNSAVED_ID;	// signal that this has not been saved
+		sitenr = ppnr;
 	}
 	
 	/** Constructor. */
 	ProductionSite(String ppnrString) {
-		nr = new ProductionSiteNr(ppnrString);
+		sitenr = new ProductionSiteNr(ppnrString);
 	}
 	
 	/** Constructor. */
 	ProductionSite(String org, String ppnr) {
-		nr = new ProductionSiteNr(org, ppnr);
+		sitenr = new ProductionSiteNr(org, ppnr);
+	}
+	
+	public String toString() {
+		String str = sitenr.toString();
+		if(name != null || !name.equals("")) {
+			str += " : " + name;
+		}
+		return str;
+	}
+	
+	/* What attributes are set? ***********************************************/
+	public boolean hasName() {
+		return name != null && !name.equals("");
+	}
+	
+	public boolean hasAddress() {
+		return address != null && !address.equals("");
+	}
+	
+	public boolean hasPostnr() {
+		return postnr != null && !postnr.equals("");
+	}
+	
+	public boolean hasPostaddress() {
+		return postaddress != null && !postaddress.equals("");
+	}
+	
+	public boolean hasCoordinates() {
+		return coordinates != null && !coordinates.equals("");
 	}
 	
 	/* Setters and Getters. ***************************************************/
 	
-	public int get_id() {
+	public long get_id() {
 		return _id;
 	}
 
-	public void set_id(int _id) {
+	public void set_id(long _id) {
 		this._id = _id;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -74,16 +105,14 @@ public class ProductionSite
 	}
 	
 	public String getCoordinates() {
-		return coord;
+		return coordinates;
 	}
 
-	public void setCoordinates(String coord) {
-		this.coord = coord;
+	public void setCoordinates(String coordinates) {
+		this.coordinates = coordinates;
 	}
 
-	public ProductionSiteNr getNr() {
-		return nr;
-	}
-	
-	
+	public ProductionSiteNr getSiteNr() {
+		return sitenr;
+	}	
 }
