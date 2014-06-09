@@ -25,12 +25,13 @@ public class ProductionSite
 	
 	/** Constructor. */
 	ProductionSite(String ppnrString) {
-		sitenr = new ProductionSiteNr(ppnrString);
+		this(new ProductionSiteNr(ppnrString));
+//		sitenr = new ProductionSiteNr(ppnrString);
 	}
 	
 	/** Constructor. */
 	ProductionSite(String org, String ppnr) {
-		sitenr = new ProductionSiteNr(org, ppnr);
+		this(new ProductionSiteNr(org, ppnr));
 	}
 	
 	public String toString() {

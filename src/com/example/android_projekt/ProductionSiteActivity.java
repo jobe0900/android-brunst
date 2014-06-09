@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.os.Build;
 
 /**
@@ -107,21 +108,31 @@ public class ProductionSiteActivity extends ActionBarActivity
 	
 	/** Save the ProductionSite to DB. */
 	protected void saveForm() {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
+		Log.d(TAG, "Save form.");
+		boolean savedOK = false;
 		if(updating) {
-			boolean savedOK = productionSiteDB.saveProductionSite(site);
+			savedOK = productionSiteDB.saveProductionSite(site);
 			Log.d(TAG, "Updated the ProductionSite " + site.toString() + ": " + savedOK);
 		}
 		else { // save
-			boolean savedOK = verifyForm();
+			savedOK = verifyForm();
+			Log.d(TAG, "Verified the form: " + savedOK);
 			if(savedOK) {
 				createProductionSiteFromForm();
+				Log.d(TAG,  "Has created site from form: " + site.get_id() + ", " + site.toString());
 				savedOK = productionSiteDB.saveProductionSite(site);
 			}
 			Log.d(TAG, "Save the ProductionSite: " + site.toString() + ": " + savedOK);
 		}
 		
-		// TODO Return to listView on success
+		// TODO Return to Main on success
+		if(savedOK) {
+			startActivity(new Intent(getApplicationContext(), MainActivity.class));
+		}
+		else {
+			Toast.makeText(getApplicationContext(), "Could not save Site", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 

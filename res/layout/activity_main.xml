@@ -7,11 +7,19 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android_projekt.MainActivity" >
+    
+    <Spinner 
+        android:id="@+id/main_spinner_production_site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        />
 
     <Button
         android:id="@+id/main_btn_production_site"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/main_spinner_production_site"
         android:text="@string/production_site" />
 
 </RelativeLayout>

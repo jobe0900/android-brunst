@@ -9,12 +9,14 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Helper class, "contract", handling the database work for the ProductionSite.
  */
 public class ProductionSiteDB implements BaseColumns 
 {
+	public final static String TAG = "Brunst: ProductionSiteDB";
 	public static final String TABLE_NAME = "ProductionSite";
 	// _ID comes from BaseColumns?
 	public static final String COLUMN_SITENR = "sitenr";
@@ -23,6 +25,10 @@ public class ProductionSiteDB implements BaseColumns
 	public static final String COLUMN_POSTNR ="postnr";
 	public static final String COLUMN_POSTADDRESS ="postaddress";
 	public static final String COLUMN_COORDINATES ="coordinates";
+	public static final String[] SQL_PROJECTION_SITENR = {
+		BaseColumns._ID,
+		COLUMN_SITENR
+	};
 	
 	private static final String[] ALL_COLUMNS = {
 		BaseColumns._ID,
@@ -47,6 +53,8 @@ public class ProductionSiteDB implements BaseColumns
 
 	private static final String SQL_DROP_TABLE = 
 		"DROP TABLE IF EXISTS " + TABLE_NAME;
+	
+	
 	
 	private SQLiteDatabase database;
 	private BrunstDBHelper dbHelper;
@@ -76,6 +84,7 @@ public class ProductionSiteDB implements BaseColumns
 		boolean retval = false;
 		// The values to store in the database
 		ContentValues values = new ContentValues();
+//		values.put(BaseColumns._ID, "NULL");
 		values.put(COLUMN_SITENR, site.getSiteNr().toString());
 		if(site.hasName()) values.put(COLUMN_NAME, site.getName());
 		if(site.hasAddress()) values.put(COLUMN_ADDRESS, site.getAddress());
@@ -83,14 +92,18 @@ public class ProductionSiteDB implements BaseColumns
 		if(site.hasPostaddress()) values.put(COLUMN_POSTADDRESS, site.getPostaddress());
 		if(site.hasCoordinates()) values.put(COLUMN_COORDINATES, site.getCoordinates());
 		
+		Log.d(TAG, "values to save to DB: " + values);
+		Log.d(TAG, "site has ID: " + site.get_id());
+		
 		// Production site has not been saved before
 		if(site.get_id() == ProductionSite.UNSAVED_ID) {
 			long insertId = database.insert(TABLE_NAME, null, values);
-			if(insertId == -1) {
-				// something wrong, perhaps sitenr already existed?
-				retval = false;
+			Log.d(TAG, "insertionID in DB: " + insertId);
+			if(insertId != -1) {
+				// saved ok
+				retval = true;
 			}
-			retval = true;
+//			retval = true;
 		}
 		// Updating an existing site
 		else {
@@ -98,10 +111,10 @@ public class ProductionSiteDB implements BaseColumns
 			String[] selectionArgs = {String.valueOf(site.get_id())};
 			int count = database.update(TABLE_NAME, values, selection, selectionArgs);
 			// TODO something we need to do with count?
-			if(count == 0) {
-				retval =  false;
+			if(count != 0) {
+				retval =  true;
 			}
-			retval = true;
+//			retval = true;
 		}
 		return retval;
 	}

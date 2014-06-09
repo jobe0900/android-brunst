@@ -20,6 +20,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Create the tables.
+		db.execSQL("PRAGMA foreign_keys=ON");
 		ProductionSiteDB.onCreate(db);
 	}
 
