@@ -142,7 +142,16 @@
         android:background="@drawable/button_bg_green" />
 
     <Button
-        android:id="@+id/production_site_button_save"
+        android:id="@+id/production_site_button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/production_site_button_save"
+        android:layout_below="@id/production_site_entry_coord"
+        android:layout_marginTop="20dp"
+        android:text="@string/button_delete" />
+    
+    <Button
+        android:id="@id/production_site_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

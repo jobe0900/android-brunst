@@ -1,5 +1,7 @@
 package com.example.android_projekt;
 
+import java.io.Serializable;
+
 /**
  * A ProductionSiteNr ("Produktionsplatsnummer") consists of two parts:
  * - 2 letters for organisation, mostly "SE" for Sweden, but in some cases it
@@ -7,8 +9,10 @@ package com.example.android_projekt;
  * - 6 digits with a unique number in the organisation (zero-padded).
  * Can be combined to a single string, delimited with a '-', like: "SE-012345".
  */
-public class ProductionSiteNr 
+public class ProductionSiteNr implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private String org;
 	private String ppnr;
 

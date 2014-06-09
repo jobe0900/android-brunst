@@ -1,13 +1,16 @@
 package com.example.android_projekt;
 
+import java.io.Serializable;
+
 /**
  * ProductionSite ("Produktionsplats") is a geographical site.
  * All production animals belongs to a Site (but can temporarilly be on another).
  * For the purpose of this App, the User has at least one Site = the home farm,
  * but can have several, e.g. milk cows on one site and young cattle on another.
  */
-public class ProductionSite 
+public class ProductionSite implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	public static final int UNSAVED_ID = -1;	
 	private long _id;
 	private ProductionSiteNr sitenr;
@@ -40,6 +43,14 @@ public class ProductionSite
 			str += " : " + name;
 		}
 		return str;
+	}
+	
+	/**
+	 * Title to use in e.g. Spinners
+	 * @return	String like "SE-012345 (Nygarden)"
+	 */
+	public String getTitle() {
+		return sitenr.toString() + " (" + name + ")";
 	}
 	
 	/* What attributes are set? ***********************************************/

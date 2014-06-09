@@ -32,16 +32,28 @@ import android.os.Build;
 
 public class MainActivity extends ActionBarActivity 
 {	
+	public static final String EXTRA_SITE_UPDATED = "brunst.extra.MainActivity.siteUpdate";
+//	public static final String EXTRA_SITE_DELETED = "brunst.extra.MainActivity.siteDelete";
 	private static final String TAG = "Brunst: MAIN";
+	private static final int DB_LOADER = 0;
+	
 	private Spinner productionSiteSpinner;
 	private ArrayAdapter<String> productionSiteSpinnerAdapter;
-	private Button productionSiteButton;
+	
+	private Button productionSiteButtonNew;
+	private Button productionSiteButtonEdit;
+	
 	private OnClickListener clickListener;
 	private OnItemSelectedListener productionSiteSpinnerListener;
 //	private SimpleCursorAdapter productionSiteAdapter;
 //	private SimpleCursorAdapter individualAdapter;
 	
-	private static final int DB_LOADER = 0;
+	private List<ProductionSite> productionSites;
+	private ProductionSite currentSite;
+//	private String currentSiteNr = null;
+	private ProductionSite updatedSite = null;
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +61,24 @@ public class MainActivity extends ActionBarActivity
 		setContentView(R.layout.activity_main);
 		
 		productionSiteSpinner = (Spinner) findViewById(R.id.main_spinner_production_site);
-		productionSiteButton = (Button) findViewById(R.id.main_btn_production_site);
+		
+		productionSiteButtonNew = (Button) findViewById(R.id.main_btn_production_site_new);
+		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
+		
+		
+		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
+			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
+		}
 		
 		fillSpinners();
 		
 		setupClickListeners();
 		setUpSpinnerListeners();
 		
+		productionSiteButtonEdit.setEnabled(false);
+//		productionSiteButtonEdit.setClickable(false);
 		
 	}
-	
-	
 
 	@Override
 	protected void onResume() {
@@ -79,21 +98,42 @@ public class MainActivity extends ActionBarActivity
 	// to present in the spinner
 	// http://stackoverflow.com/questions/2784081/android-create-spinner-programmatically-from-array
 	private void fillProductionSiteSpinner() {
-		new LoadSpinnerDataTask().execute(ProductionSiteDB.TABLE_NAME);
+		new LoadProductionSiteSpinnerDataTask().execute(ProductionSiteDB.TABLE_NAME);
 	}
 	
 	private void fillIndividSpinner() {
 		// TODO
-		// first check if there is a site selected in ProductionSiteSpinner
-		String siteString = (String) productionSiteSpinner.getSelectedItem();
-		// if there is a site selected (and not just the title for the spinner)
-		if(siteString != null && !siteString.equalsIgnoreCase(ProductionSiteDB.TABLE_NAME)) {
-			// get the sitenr
-			String siteNr = siteString.split("\\s*")[0]; // get the nr part of the line
+		if(currentSite != null) {
 			//TODO kick of the background task to load the spinner data
 //			new LoadSpinnerDataTask().execute(IndividDB.TABLE_NAME, siteNr);
 		}
-		
+	}
+	
+	
+	/**
+	 * Get the number of the site that is selected in the ProductionSite spinner.
+	 * @return	A ProductionSiteNr or null if none selected
+	 */
+	private ProductionSite getSelectedProductionSite() {
+		// first check if there is a site selected in ProductionSiteSpinner
+		String siteString = (String) productionSiteSpinner.getSelectedItem();
+		ProductionSite site = null;
+		String siteNr = null;
+		// if there is a site selected (and not just the title for the spinner)
+		if(siteString != null && !siteString.equalsIgnoreCase(getString(R.string.production_site))) {
+			Log.d(TAG, "The line in spinner: " + siteString);
+			// get the sitenr
+			siteNr = siteString.split("\\s+")[0]; // get the nr part of the line
+			Log.d(TAG, "The number part: " + siteNr);
+			for(ProductionSite ps : productionSites) {
+				Log.d(TAG, "comparing: " + siteNr + " to " + ps.getSiteNr().toString());
+				if(ps.getSiteNr().toString().equals(siteNr)) {
+					site = ps;
+					break;
+				}
+			}
+		}
+		return site;
 	}
 
 	@Override
@@ -117,16 +157,27 @@ public class MainActivity extends ActionBarActivity
 
 	private void setupClickListeners() {
 		clickListener = new OnClickListener() {
+			Intent intent;
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
-				case R.id.main_btn_production_site:
-					Intent psIntent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
-					startActivity(psIntent);
+				case R.id.main_btn_production_site_edit:
+					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
+					Log.d(TAG, "sending serializable: " + currentSite);
+					if(currentSite != null) {
+						intent.putExtra(ProductionSiteActivity.EXTRA_PRODUCTION_SITE, currentSite);
+					}
+					startActivity(intent);
+					break;
+				case R.id.main_btn_production_site_new:
+					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
+					startActivity(intent);
+					break;
 				}
 			}
 		};
-		productionSiteButton.setOnClickListener(clickListener);
+		productionSiteButtonEdit.setOnClickListener(clickListener);
+		productionSiteButtonNew.setOnClickListener(clickListener);
 	}
 	
 	private void setUpSpinnerListeners() {
@@ -136,17 +187,29 @@ public class MainActivity extends ActionBarActivity
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				String selected = (String) parent.getItemAtPosition(position);
-				if(!selected.equals(ProductionSiteDB.TABLE_NAME)) {
-					// we have a selected item, fill the corresponding individs
+				Log.d(TAG, "PS Spinner Listener selected: " + selected);
+				if(!selected.equals(getString(R.string.production_site))) {
+					Log.d(TAG, "PS Spinner Title: " + ProductionSiteDB.TABLE_NAME);
+					Log.d(TAG, "Equals: " + selected.equals(getString(R.string.production_site)));
+					// we have a selected item
+					productionSiteButtonEdit.setEnabled(true);
+//					productionSiteButtonEdit.setClickable(true);
+					currentSite = getSelectedProductionSite();
 					fillIndividSpinner();
 				}
-				
+				else {
+					productionSiteButtonEdit.setEnabled(false);
+//					productionSiteButtonEdit.setClickable(false);
+				}
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				// nothing
-				}
+				currentSite = null;
+				productionSiteButtonEdit.setEnabled(false);
+//				productionSiteButtonEdit.setClickable(false);
+				// TODO disable individ spinner
+			}
 		};
 		productionSiteSpinner.setOnItemSelectedListener(productionSiteSpinnerListener);
 	}
@@ -155,14 +218,15 @@ public class MainActivity extends ActionBarActivity
 	/**
 	 * Load the data for the spinners in a background task.
 	 */
-	private class LoadSpinnerDataTask extends AsyncTask<String, Long, List<String>> {
+	private class LoadProductionSiteSpinnerDataTask extends AsyncTask<String, Long, List<ProductionSite>> {
 		
 		private Spinner currentSpinner;
 		private ArrayAdapter<String> currentAdapter;
+//		private List<String> currentList;
 
 		@Override
-		protected List<String> doInBackground(String... params) {
-			List<String> spinnerList = new ArrayList<String>();
+		protected List<ProductionSite> doInBackground(String... params) {
+			List<ProductionSite> currentList = new ArrayList<ProductionSite>();
 			
 			// Which spinner to load, the ProductionSite or the Individ?
 			switch(params[0]) {
@@ -170,50 +234,61 @@ public class MainActivity extends ActionBarActivity
 				// load the production site names and nrs
 				currentSpinner = productionSiteSpinner;
 				currentAdapter = productionSiteSpinnerAdapter;
-				spinnerList = loadProductionSiteTitles();
+				currentList = loadProductionSites();
 				break;
 //			case IndividDB.TABLE_NAME:
 				// load the Individs in agiven ProductionSite
 			}
-			return spinnerList;
+			return currentList;
 		}
 		
 		@Override
-		protected void onPostExecute(List<String> result) {
-			Log.d(TAG, "buidling spinner with data: " + result);
-			// set the contents of the spinner
-			currentAdapter = new ArrayAdapter<String>(getApplicationContext(), 
-							android.R.layout.simple_spinner_item, result);
-			currentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			currentSpinner.setAdapter(currentAdapter);
+		protected void onPostExecute(List<ProductionSite> result) {
+			productionSites = result;
+			buildProductionSiteAdapter(productionSites);
 		}
 
 		/**
-		 * Load the ProductionSites from db, build their titles as
-		 * name + number, like "SE-012345 (Nygården)"
-		 * @return 	A string of the ProductionSites name and nr.
+		 * Load the ProductionSites from db
+		 * @return 	All production sites
 		 */
-		private List<String> loadProductionSiteTitles() {
+		private List<ProductionSite> loadProductionSites() {
 			ProductionSiteDB db = new ProductionSiteDB(getApplicationContext());
 			db.open();
 			List<ProductionSite> sites = db.getAllProductionSites();
 			db.close();
-			Log.d(TAG, "fetched sites from db: " + sites);
-			// extract the name and nr
-			ArrayList<String> siteTitles = new ArrayList<String>();
-			for(ProductionSite site : sites) {
-				String title = site.getSiteNr().toString() + "(" + site.getName()+ ")";
-				siteTitles.add(title);
-				Log.d(TAG, "adding Site: " + title);
-			}
-			// sort the titles
-			Collections.sort(siteTitles);
-			// Set the first item to a Title for the spinner, i.e. Produktionsplats
-			String spinnerTitle = getString(R.string.production_site);
-			siteTitles.add(0, spinnerTitle);
-			return siteTitles;
+			return sites;
 		}
 	}
 
-
+	/**
+	 * Build a list of lines to put in ProductionSiteSpinner, 
+	 * like "SE-012345 (Nygarden)", and set the list as source for the spinner.
+	 * @param result
+	 */
+	public void buildProductionSiteAdapter(List<ProductionSite> sites) {
+		// build the title lines
+		ArrayList<String> siteTitles = new ArrayList<String>();
+		for(ProductionSite site : sites) {
+			siteTitles.add(site.getTitle());
+			Log.d(TAG, "adding Site: " + site.getTitle());
+		}
+		// sort the titles
+		Collections.sort(siteTitles);
+		// Set the first item to a Title for the spinner, i.e. Produktionsplats
+		String spinnerTitle = getString(R.string.production_site);
+		siteTitles.add(0, spinnerTitle);
+		
+		// create the adapter
+		productionSiteSpinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), 
+				R.layout.simple_spinner_item, siteTitles);
+		productionSiteSpinner.setAdapter(productionSiteSpinnerAdapter);
+		// set the selected item
+		if(updatedSite != null) {
+			int pos = productionSiteSpinnerAdapter.getPosition(updatedSite.getTitle());
+			productionSiteSpinner.setSelection(pos);	
+		}
+		
+	}
+	
 }

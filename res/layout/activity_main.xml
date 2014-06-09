@@ -10,16 +10,28 @@
     
     <Spinner 
         android:id="@+id/main_spinner_production_site"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         />
 
     <Button
-        android:id="@+id/main_btn_production_site"
+        android:id="@+id/main_btn_production_site_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/main_spinner_production_site"
-        android:text="@string/production_site" />
+        android:layout_below="@id/main_spinner_production_site"
+        android:layout_toLeftOf="@+id/main_btn_production_site_new"
+        android:text="@string/button_edit_short" 
+        />
 
+    <Button
+        android:id="@id/main_btn_production_site_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_spinner_production_site"
+        android:layout_alignParentRight="true"
+        android:text="@string/button_new_short" 
+        />
+   
+    
 </RelativeLayout>

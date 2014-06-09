@@ -122,11 +122,23 @@ public class ProductionSiteDB implements BaseColumns
 	/**
 	 * Delete a ProductionSite.
 	 * @param	site	The ProductionSite to delete
+	 * @return	The number of rows deleted (should be only 1)
 	 */
-	public void deleteProductionSite(ProductionSite site) {
+	public int deleteProductionSite(ProductionSite site) {
 		String selection = BaseColumns._ID + " LIKE ?";
 		String[] selectionArgs = {String.valueOf(site.get_id())};
-		database.delete(TABLE_NAME, selection, selectionArgs);
+		return database.delete(TABLE_NAME, selection, selectionArgs);
+	}
+	
+	/**
+	 * Delete a ProductionSite.
+	 * @param	siteNr	The Number of the ProductionSite to delete
+	 * @return	The number of rows deleted (should be only 1)
+	 */
+	public int deleteProductionSite(ProductionSiteNr siteNr) {
+		String selection = BaseColumns._ID + " LIKE ?";
+		String[] selectionArgs = {siteNr.toString()};
+		return database.delete(TABLE_NAME, selection, selectionArgs);
 	}
 	
 	/**

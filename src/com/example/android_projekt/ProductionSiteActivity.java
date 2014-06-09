@@ -28,13 +28,14 @@ import android.os.Build;
 public class ProductionSiteActivity extends ActionBarActivity 
 {
 	public final static String TAG = "Brunst: ProductionSiteActivity";
-	public final static String EXTRA_PRODUCTION_SITE_ID = "brunst.extra.ProductionSiteActivity.id";
-	public final static String EXTRA_PRODUCTION_SITE_PPNR_STRING = "brunst.extra.ProductionSiteActivity.ppnrString";
-	public final static String EXTRA_PRODUCTION_SITE_NAME = "brunst.extra.ProductionSiteActivity.name";
-	public final static String EXTRA_PRODUCTION_SITE_ADDRESS = "brunst.extra.ProductionSiteActivity.address";
-	public final static String EXTRA_PRODUCTION_SITE_POSTNR  = "brunst.extra.ProductionSiteActivity.postnr";
-	public final static String EXTRA_PRODUCTION_SITE_POSTADDRESS  = "brunst.extra.ProductionSiteActivity.postaddress";
-	public final static String EXTRA_PRODUCTION_SITE_COORD  = "brunst.extra.ProductionSiteActivity.coord";
+	public final static String EXTRA_PRODUCTION_SITE = "brunst.extra.ProductionSiteActivity.object";
+//	public final static String EXTRA_PRODUCTION_SITE_ID = "brunst.extra.ProductionSiteActivity.id";
+//	public final static String EXTRA_PRODUCTION_SITE_PPNR_STRING = "brunst.extra.ProductionSiteActivity.ppnrString";
+//	public final static String EXTRA_PRODUCTION_SITE_NAME = "brunst.extra.ProductionSiteActivity.name";
+//	public final static String EXTRA_PRODUCTION_SITE_ADDRESS = "brunst.extra.ProductionSiteActivity.address";
+//	public final static String EXTRA_PRODUCTION_SITE_POSTNR  = "brunst.extra.ProductionSiteActivity.postnr";
+//	public final static String EXTRA_PRODUCTION_SITE_POSTADDRESS  = "brunst.extra.ProductionSiteActivity.postaddress";
+//	public final static String EXTRA_PRODUCTION_SITE_COORD  = "brunst.extra.ProductionSiteActivity.coord";
 	
 	private EditText etOrg;
 	private EditText etPpnr;
@@ -45,6 +46,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 	private EditText etCoord;
 	private ImageButton ibMap;
 	private ImageButton ibHere;
+	private Button btnDelete;
 	private Button btnSave;
 	
 	private boolean updating = false;
@@ -65,13 +67,17 @@ public class ProductionSiteActivity extends ActionBarActivity
 		productionSiteDB.open();
 		
 		// find out if it as new ProductionSite or update of existing.
-		if(getIntent().hasExtra(EXTRA_PRODUCTION_SITE_PPNR_STRING)) {
+		if(getIntent().hasExtra(EXTRA_PRODUCTION_SITE)) {
 			setupUpdate();
 		}
 		// try to set focus, no effect if updating
 		etPpnr.requestFocus();
 		// disable direct entry of coordinates
 		disableEntry(etCoord);
+		
+		if(!updating) {
+			btnDelete.setEnabled(false);
+		}
 	}
 	
 	@Override
@@ -112,6 +118,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		Log.d(TAG, "Save form.");
 		boolean savedOK = false;
 		if(updating) {
+			getOptionalFields();
 			savedOK = productionSiteDB.saveProductionSite(site);
 			Log.d(TAG, "Updated the ProductionSite " + site.toString() + ": " + savedOK);
 		}
@@ -123,12 +130,13 @@ public class ProductionSiteActivity extends ActionBarActivity
 				Log.d(TAG,  "Has created site from form: " + site.get_id() + ", " + site.toString());
 				savedOK = productionSiteDB.saveProductionSite(site);
 			}
-			Log.d(TAG, "Save the ProductionSite: " + site.toString() + ": " + savedOK);
 		}
 		
 		// TODO Return to Main on success
 		if(savedOK) {
-			startActivity(new Intent(getApplicationContext(), MainActivity.class));
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			intent.putExtra(MainActivity.EXTRA_SITE_UPDATED, site);
+			startActivity(intent);
 		}
 		else {
 			Toast.makeText(getApplicationContext(), "Could not save Site", Toast.LENGTH_SHORT).show();
@@ -159,6 +167,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		etCoord = (EditText) findViewById(R.id.production_site_entry_coord);
 		ibMap = (ImageButton) findViewById(R.id.production_site_imgbutton_map);
 		ibHere = (ImageButton) findViewById(R.id.production_site_imgbutton_here);
+		btnDelete = (Button) findViewById(R.id.production_site_button_delete);
 		btnSave = (Button) findViewById(R.id.production_site_button_save);
 	}
 	
@@ -168,6 +177,9 @@ public class ProductionSiteActivity extends ActionBarActivity
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
+				case R.id.production_site_button_delete:
+					deleteProductionSite();
+					break;
 				case R.id.production_site_button_save:
 					saveForm();
 					break;
@@ -183,60 +195,50 @@ public class ProductionSiteActivity extends ActionBarActivity
 		
 		ibMap.setOnClickListener(clickListener);
 		ibHere.setOnClickListener(clickListener);
+		btnDelete.setOnClickListener(clickListener);
 		btnSave.setOnClickListener(clickListener);
 	}
 	
+	protected void deleteProductionSite() {
+		// ask for confirmation
+		boolean goOn = true;
+		
+		int rowsAffected = 0;
+		//
+		if(goOn) {
+			ProductionSiteDB db = new ProductionSiteDB(getApplicationContext());
+			db.open();
+			rowsAffected = db.deleteProductionSite(site);
+			db.close();
+			Log.d(TAG, "deleted nr of rows: " + rowsAffected);
+		}
+	}
+
 	/** Fill fields with intent-extras, disable input on ProductionSiteNr. */
 	private void setupUpdate() {
+		updating = true;
 		Intent intent = getIntent();
 		
-		String ppnrString = intent.getStringExtra(EXTRA_PRODUCTION_SITE_PPNR_STRING);
-		site = new ProductionSite(ppnrString);
+//		String ppnrString = intent.getStringExtra(EXTRA_PRODUCTION_SITE);
+		site = (ProductionSite) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE);
+		Log.d(TAG, "received serializable site id: " + site.get_id());
+//		site = new ProductionSite(ppnrString);
 		etOrg.setText(site.getSiteNr().getOrg());
 		etPpnr.setText(site.getSiteNr().getPpnr());
 		// disable input
 		disableEntry(etOrg);
 		disableEntry(etPpnr);
 		
-		// _ID field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_ID)) {
-			long id = intent.getLongExtra(EXTRA_PRODUCTION_SITE_ID, ProductionSite.UNSAVED_ID);
-			site.set_id(id);
-		}
-		// name field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_NAME)) {
-			String name = intent.getStringExtra(EXTRA_PRODUCTION_SITE_NAME);
-			etName.setText(name);
-			site.setName(name);
-		}
-		
-		// address field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_ADDRESS)) {
-			String address = intent.getStringExtra(EXTRA_PRODUCTION_SITE_ADDRESS);
-			etAddress.setText(address);
-			site.setAddress(address);
-		}
-		
-		// postnr field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_POSTNR)) {
-			String postnr = intent.getStringExtra(EXTRA_PRODUCTION_SITE_POSTNR);
-			etPostnr.setText(postnr);
-			site.setPostnr(postnr);
-		}
-		
-		// postaddress field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_POSTADDRESS)) {
-			String postaddress = intent.getStringExtra(EXTRA_PRODUCTION_SITE_POSTADDRESS);
-			etPostaddress.setText(postaddress);
-			site.setPostaddress(postaddress);
-		}
-		
-		// coordinates field
-		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_COORD)) {
-			String coord = intent.getStringExtra(EXTRA_PRODUCTION_SITE_COORD);
-			etCoord.setText(coord);
-			site.setCoordinates(coord);
-		}
+		if(site.hasName())
+			etName.setText(site.getName());
+		if(site.hasAddress())
+			etAddress.setText(site.getAddress());
+		if(site.hasPostnr())
+			etPostnr.setText(site.getPostnr());
+		if(site.hasPostaddress())
+			etPostaddress.setText(site.getPostaddress());
+		if(site.hasCoordinates())
+			etCoord.setText(site.getCoordinates());
 		
 		// save button =  update button
 		btnSave.setText(R.string.button_update);
@@ -275,6 +277,13 @@ public class ProductionSiteActivity extends ActionBarActivity
 		site = new ProductionSite(orgStr, ppnrStr);
 		
 		// get the optional fields
+		getOptionalFields();
+	}
+	
+	/**
+	 * Read the optional fields in the form and fill in the site
+	 */
+	private void getOptionalFields() {
 		site.setName(etName.getText().toString());
 		site.setAddress(etAddress.getText().toString());
 		site.setPostnr(etPostnr.getText().toString());
