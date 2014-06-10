@@ -12,6 +12,10 @@
     <string name="button_edit_short">R</string>
     <string name="button_delete_short">X</string>
     
+    <string name="dialog_yes">Ja</string>
+    <string name="dialog_no">Nej</string>
+    <string name="dialog_ask_delete_site">Ta bort </string>
+    
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>
     <string name="production_site_label_number">Produktionsplatsnummer</string>

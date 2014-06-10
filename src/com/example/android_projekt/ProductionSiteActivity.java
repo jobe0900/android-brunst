@@ -2,9 +2,14 @@ package com.example.android_projekt;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +34,8 @@ public class ProductionSiteActivity extends ActionBarActivity
 {
 	public final static String TAG = "Brunst: ProductionSiteActivity";
 	public final static String EXTRA_PRODUCTION_SITE = "brunst.extra.ProductionSiteActivity.object";
+	private final static int DIALOG_DELETE_SITE = 10;	// id for a dialog to confirm delete
+	
 //	public final static String EXTRA_PRODUCTION_SITE_ID = "brunst.extra.ProductionSiteActivity.id";
 //	public final static String EXTRA_PRODUCTION_SITE_PPNR_STRING = "brunst.extra.ProductionSiteActivity.ppnrString";
 //	public final static String EXTRA_PRODUCTION_SITE_NAME = "brunst.extra.ProductionSiteActivity.name";
@@ -63,7 +70,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		findViews();
 		setupClickListeners();
 		
-		productionSiteDB = new ProductionSiteDB(getApplicationContext());
+		productionSiteDB = new ProductionSiteDB(this);
 		productionSiteDB.open();
 		
 		// find out if it as new ProductionSite or update of existing.
@@ -134,17 +141,17 @@ public class ProductionSiteActivity extends ActionBarActivity
 		
 		// TODO Return to Main on success
 		if(savedOK) {
-			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			Intent intent = new Intent(this, MainActivity.class);
 			intent.putExtra(MainActivity.EXTRA_SITE_UPDATED, site);
 			startActivity(intent);
 		}
 		else {
-			Toast.makeText(getApplicationContext(), "Could not save Site", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Could not save Site", Toast.LENGTH_SHORT).show();
 		}
 	}
 
 
-	/** Have hte user place the ProductionSite on a map. */
+	/** Have the user place the ProductionSite on a map. */
 	protected void placeOnMap() {
 		// TODO Auto-generated method stub
 		Log.d(TAG, "Place site on map");	
@@ -178,7 +185,9 @@ public class ProductionSiteActivity extends ActionBarActivity
 			public void onClick(View v) {
 				switch(v.getId()) {
 				case R.id.production_site_button_delete:
-					deleteProductionSite();
+					showDialogDelete();
+//					deleteProductionSite();
+//					showDialog(DIALOG_DELETE_SITE);
 					break;
 				case R.id.production_site_button_save:
 					saveForm();
@@ -199,30 +208,107 @@ public class ProductionSiteActivity extends ActionBarActivity
 		btnSave.setOnClickListener(clickListener);
 	}
 	
-	protected void deleteProductionSite() {
-		// ask for confirmation
-		boolean goOn = true;
-		
-		int rowsAffected = 0;
-		//
-		if(goOn) {
-			ProductionSiteDB db = new ProductionSiteDB(getApplicationContext());
-			db.open();
-			rowsAffected = db.deleteProductionSite(site);
-			db.close();
-			Log.d(TAG, "deleted nr of rows: " + rowsAffected);
-		}
+	private void showDialogDelete() {
+		// ask for confirmation first
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(getString(R.string.dialog_ask_delete_site) + " " + site.getTitle() + "?");
+		builder.setCancelable(true);
+		// YES button
+		builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				deleteProductionSite();	
+			}
+		});
+		// NO button
+		builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// nothing?
+			}
+		});
+
+		builder.show();
 	}
+	
+	/**
+	 * Perform the actual deletion of the production site.
+	 */
+	protected void deleteProductionSite() {
+		int rowsAffected = 0;
+
+//		ProductionSiteDB db = new ProductionSiteDB(getApplicationContext());
+//		db.open();
+		rowsAffected = productionSiteDB.deleteProductionSite(site);
+//		db.close();
+		Log.d(TAG, "deleted nr of rows: " + rowsAffected);
+		
+		// back to main
+		Intent intent = new Intent(this, MainActivity.class);;
+		startActivity(intent);
+	}
+	
+//	public class DeleteDialog extends DialogFragment {
+//		@Override
+//		public Dialog onCreateDialog(Bundle savedInstanceState) {
+//			AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+//			builder.setMessage(getString(R.string.dialog_ask_delete_site) + " " + site.getTitle() + "?");
+//			builder.setCancelable(true);
+//			// YES button
+//			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					deleteProductionSite();	
+//				}
+//			});
+//			// NO button
+//			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					// nothing?
+//				}
+//			});
+//			
+//			return builder.create();
+//		}
+//	}
+	
+//	@Override
+//	protected Dialog onCreateDialog(int id) {
+//		switch(id) {
+//		case DIALOG_DELETE_SITE:
+//			Builder builder = new AlertDialog.Builder(getApplicationContext());
+//			builder.setMessage(getString(R.string.dialog_ask_delete_site) + " " + site.getTitle() + "?");
+//			builder.setCancelable(true);
+//			builder.setPositiveButton(R.string.dialog_yes, new OkOnClickListener());
+//			builder.setNegativeButton(R.string.dialog_no, new CancelOnClickListener());
+//			AlertDialog dialog = builder.create();
+//			dialog.show();
+//		}
+//		return super.onCreateDialog(id);
+//	}
+//	
+////	private final class CancelOnClickListener implements
+//	DialogInterface.OnClickListener {
+//		public void onClick(DialogInterface dialog, int which) {
+//			//do nothing
+//		}
+//	}
+//
+//	private final class OkOnClickListener implements
+//	DialogInterface.OnClickListener {
+//		public void onClick(DialogInterface dialog, int which) {
+//			deleteProductionSite();
+//		}
+//	}
 
 	/** Fill fields with intent-extras, disable input on ProductionSiteNr. */
 	private void setupUpdate() {
 		updating = true;
 		Intent intent = getIntent();
 		
-//		String ppnrString = intent.getStringExtra(EXTRA_PRODUCTION_SITE);
 		site = (ProductionSite) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE);
 		Log.d(TAG, "received serializable site id: " + site.get_id());
-//		site = new ProductionSite(ppnrString);
 		etOrg.setText(site.getSiteNr().getOrg());
 		etPpnr.setText(site.getSiteNr().getPpnr());
 		// disable input
