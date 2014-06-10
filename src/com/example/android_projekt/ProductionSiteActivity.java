@@ -99,140 +99,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 		}
 	}
 	
-	/**
-	 * Set the contents om the Thumbnail image button
-	 */
-	private void setThumbnail() {
-		if(imageUri != null) {
-//			String thumbPath = getThumbnailPath(imageUri);
-//			Log.d(TAG, "path to thumbnail: " + thumbPath);
-//			if(thumbPath != null && !thumbPath.equals("")) {
-//				File imgFile = new File(thumbPath);
-//				if(imgFile.exists()) {
-//					Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//					ibThumb.setImageBitmap(bitmap);
-//				}
-//				
-//			}
-			
-			Bitmap thumb = getThumbnail(imageUri);
-			Log.d(TAG, "setting thumbnail : " + thumb);
-			if(thumb != null) {
-				ibThumb.setImageBitmap(thumb);
-			}
-			
-//			Bitmap thumb = getThumbnailBitmap(imageUri);
-//			Log.d(TAG, "setting thumbnail : " + thumb);
-//			if(thumb != null) {
-//				ibThumb.setImageBitmap(thumb);
-//			}
-		}	
-	}
-	
-	public Bitmap getThumbnail(Uri uri) {
-	    String[] projection = { MediaStore.Images.Media._ID };
-	    String result = null;
-	    Cursor cursor = managedQuery(uri, projection, null, null, null);
-	    
-	    Log.d(TAG, "cursor: " + cursor);
-	    
-	    int column_index = cursor
-	            .getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-	    
-	    Log.d(TAG, "column: " + column_index);
-
-	    cursor.moveToFirst();
-	    long imageId = cursor.getLong(column_index);
-//	    cursor.close();
-	    
-	    Log.d(TAG, "imageID: " + imageId);
-
-	    Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
-	            getContentResolver(), imageId,
-//	            MediaStore.Images.Thumbnails.MINI_KIND,
-	            MediaStore.Images.Thumbnails.MICRO_KIND,
-	            null);
-	    
-	    Log.d(TAG, "bitmap: " + bitmap);
-	    
-//	    if (cursor != null && cursor.getCount() > 0) {
-//	    	Log.d(TAG, "cursor has a hit");
-//	        cursor.moveToFirst();
-//	        result = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
-//	        Log.d(TAG, "cursor result: " + result);
-//	        cursor.close();
-//	    }
-	    return bitmap;
-	}
-	
-	public String getThumbnailPath(Uri uri) {
-	    String[] projection = { MediaStore.Images.Media._ID };
-	    String result = null;
-	    Cursor cursor = managedQuery(uri, projection, null, null, null);
-	    
-	    Log.d(TAG, "cursor: " + cursor);
-	    
-	    int column_index = cursor
-	            .getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-	    
-	    Log.d(TAG, "column: " + column_index);
-
-	    cursor.moveToFirst();
-	    long imageId = cursor.getLong(column_index);
-	    cursor.close();
-	    
-	    Log.d(TAG, "imageID: " + imageId);
-
-	    cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-	            getContentResolver(), imageId,
-//	            MediaStore.Images.Thumbnails.MINI_KIND,
-	            MediaStore.Images.Thumbnails.MICRO_KIND,
-	            null);
-	    
-	    Log.d(TAG, "cursor: " + cursor);
-	    
-	    if (cursor != null && cursor.getCount() > 0) {
-	    	Log.d(TAG, "cursor has a hit");
-	        cursor.moveToFirst();
-	        result = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
-	        Log.d(TAG, "cursor result: " + result);
-	        cursor.close();
-	    }
-	    return result;
-	}
-	
-	/**
-	 * Get a thumbnail bitmap 96x96 of an image.
-	 * Based on http://stackoverflow.com/a/24136023
-	 * @param 	uri		Uri to the fullsize image
-	 * @return	Bitmap or null
-	 */
-	private Bitmap getThumbnailBitmap(Uri uri){
-	    String[] proj = { MediaStore.Images.Media.DATA };
-
-	    CursorLoader cursorLoader = new CursorLoader(this, uri, proj, null, null, null);
-	    Cursor cursor = cursorLoader.loadInBackground();
-
-	    int column_index = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-	    
-	    if(column_index == -1) {
-	    	Log.d(TAG, "Could not load cursor");
-	    	return null;
-	    }
-
-	    cursor.moveToFirst();
-	    long imageId = cursor.getLong(column_index);
-	    //cursor.close();
-
-	    Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
-	            getContentResolver(), imageId,
-	            MediaStore.Images.Thumbnails.MICRO_KIND,
-	            (BitmapFactory.Options) null );
-
-	    Log.d(TAG, "Loaded bitmap: " + bitmap);
-	    return bitmap;
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -252,6 +118,23 @@ public class ProductionSiteActivity extends ActionBarActivity
 		return super.onOptionsItemSelected(item);
 	}
 	
+	// Handle results from picking image in gallery
+	@Override
+	protected void onActivityResult(int request, int result, Intent data) {
+		super.onActivityResult(request, result, data);
+		
+		Log.d(TAG, "Return from gallery");
+		switch(request) {
+		case INTENT_PICK_IMAGE:
+			if(data != null) {
+				imageUri = data.getData();
+				Log.d(TAG, "Has URI: " + imageUri.toString());
+				setThumbnail();
+			}
+			break;
+		}
+	}
+	
 	@Override
 	protected void onResume() {
 		productionSiteDB.open();
@@ -264,6 +147,54 @@ public class ProductionSiteActivity extends ActionBarActivity
 		productionSiteDB.close();
 		super.onPause();
 	}
+	
+	/**
+	 * Set the contents om the Thumbnail image button
+	 */
+	private void setThumbnail() {
+		if(imageUri != null) {
+			Bitmap thumb = getThumbnail(imageUri);
+			Log.d(TAG, "setting thumbnail : " + thumb);
+			if(thumb != null) {
+				ibThumb.setImageBitmap(thumb);
+			}
+		}	
+	}
+	
+	/**
+	 * Get a micro (96x96) thumbnail from the image at the Uri.
+	 * The method is a mix of solutions from this thread on SO:
+	 * http://stackoverflow.com/questions/5548645/get-thumbnail-uri-path-of-the-image-stored-in-sd-card-android
+	 * @param	uri		Uri to the image
+	 * @return	Bitmap or null
+	 */
+	private Bitmap getThumbnail(Uri uri) {
+	    String[] projection = { MediaStore.Images.Media._ID };
+	    String result = null;
+	    Cursor cursor = managedQuery(uri, projection, null, null, null);
+	    
+	    Log.d(TAG, "cursor: " + cursor);
+	    
+	    int column_index = cursor
+	            .getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+	    
+	    Log.d(TAG, "column: " + column_index);
+
+	    cursor.moveToFirst();
+	    long imageId = cursor.getLong(column_index);
+//	    cursor.close();		// can't close or else it crashes on a second attempt at changing pic
+	    Log.d(TAG, "imageID: " + imageId);
+
+	    Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
+	            getContentResolver(), imageId,
+	            MediaStore.Images.Thumbnails.MICRO_KIND,
+	            null);
+	    
+	    Log.d(TAG, "bitmap: " + bitmap);
+	    return bitmap;
+	}
+
+	
 	
 	/** Save the ProductionSite to DB. */
 	protected void saveForm() {
@@ -369,21 +300,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		startActivityForResult(Intent.createChooser(intent, getString(R.string.dialog_pick_image)), INTENT_PICK_IMAGE);
 	}
 	
-	@Override
-	protected void onActivityResult(int request, int result, Intent data) {
-		super.onActivityResult(request, result, data);
-		
-		Log.d(TAG, "Return from gallery");
-		switch(request) {
-		case INTENT_PICK_IMAGE:
-			if(data != null) {
-				imageUri = data.getData();
-				Log.d(TAG, "Has URI: " + imageUri.toString());
-				setThumbnail();
-			}
-			break;
-		}
-	}
+	
 
 	/**
 	 * Show a dialog, confirming the user's wish to delete a ProductionSite.
