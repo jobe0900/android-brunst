@@ -19,6 +19,7 @@ public class ProductionSite implements Serializable
 	private String postnr;
 	private String postaddress;
 	private String coordinates;
+	private String imageUriStr;
 	
 	/** Constructor. */
 	ProductionSite(ProductionSiteNr ppnr) {
@@ -74,6 +75,10 @@ public class ProductionSite implements Serializable
 		return coordinates != null && !coordinates.equals("");
 	}
 	
+	public boolean hasImageUriStr() {
+		return imageUriStr != null && !imageUriStr.equals("");
+	}
+	
 	/* Setters and Getters. ***************************************************/
 	
 	public long get_id() {
@@ -126,5 +131,15 @@ public class ProductionSite implements Serializable
 
 	public ProductionSiteNr getSiteNr() {
 		return sitenr;
-	}	
+	}
+	
+	public void setImageUriStr(String uriStr) {
+		this.imageUriStr = uriStr;
+	}
+
+	public String getImageUriStr() {
+		return imageUriStr;
+	}
+
+		
 }

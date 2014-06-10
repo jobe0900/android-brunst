@@ -20,15 +20,17 @@ public class ProductionSiteDB implements BaseColumns
 	public static final String TABLE_NAME = "ProductionSite";
 	// _ID comes from BaseColumns?
 	public static final String COLUMN_SITENR = "sitenr";
-	public static final String COLUMN_NAME ="name";
-	public static final String COLUMN_ADDRESS ="address";
-	public static final String COLUMN_POSTNR ="postnr";
-	public static final String COLUMN_POSTADDRESS ="postaddress";
-	public static final String COLUMN_COORDINATES ="coordinates";
-	public static final String[] SQL_PROJECTION_SITENR = {
-		BaseColumns._ID,
-		COLUMN_SITENR
-	};
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_ADDRESS = "address";
+	public static final String COLUMN_POSTNR = "postnr";
+	public static final String COLUMN_POSTADDRESS = "postaddress";
+	public static final String COLUMN_COORDINATES = "coordinates";
+	public static final String COLUMN_IMAGEURI = "imageuri";
+	
+//	public static final String[] SQL_PROJECTION_SITENR = {
+//		BaseColumns._ID,
+//		COLUMN_SITENR
+//	};
 	
 	private static final String[] ALL_COLUMNS = {
 		BaseColumns._ID,
@@ -37,7 +39,8 @@ public class ProductionSiteDB implements BaseColumns
 		COLUMN_ADDRESS,
 		COLUMN_POSTNR,
 		COLUMN_POSTADDRESS,
-		COLUMN_COORDINATES
+		COLUMN_COORDINATES,
+		COLUMN_IMAGEURI
 	};
 	
 	private static final String SQL_CREATE_TABLE = 
@@ -48,7 +51,8 @@ public class ProductionSiteDB implements BaseColumns
 			COLUMN_ADDRESS 		+ " VARCHAR(25), " +
 			COLUMN_POSTNR		+ " CHAR(5), " +
 			COLUMN_POSTADDRESS	+ " VARCHAR(20), " +
-			COLUMN_COORDINATES	+ " VARCHAR(40) " +
+			COLUMN_COORDINATES	+ " VARCHAR(40), " +
+			COLUMN_IMAGEURI	+ " VARCHAR(255) " +
 		" ) ";
 
 	private static final String SQL_DROP_TABLE = 
@@ -91,6 +95,7 @@ public class ProductionSiteDB implements BaseColumns
 		if(site.hasPostnr()) values.put(COLUMN_POSTNR, site.getPostnr());
 		if(site.hasPostaddress()) values.put(COLUMN_POSTADDRESS, site.getPostaddress());
 		if(site.hasCoordinates()) values.put(COLUMN_COORDINATES, site.getCoordinates());
+		if(site.hasImageUriStr()) values.put(COLUMN_IMAGEURI, site.getImageUriStr());
 		
 		Log.d(TAG, "values to save to DB: " + values);
 		Log.d(TAG, "site has ID: " + site.get_id());
@@ -177,6 +182,7 @@ public class ProductionSiteDB implements BaseColumns
 		if(!cursor.isNull(4)) site.setPostnr(cursor.getString(4));
 		if(!cursor.isNull(5)) site.setPostaddress(cursor.getString(5));
 		if(!cursor.isNull(6)) site.setCoordinates(cursor.getString(6));
+		if(!cursor.isNull(7)) site.setImageUriStr(cursor.getString(7));
 		
 		return site;
 	}

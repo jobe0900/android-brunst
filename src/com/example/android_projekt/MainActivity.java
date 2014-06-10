@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,8 +53,6 @@ public class MainActivity extends ActionBarActivity
 	private ProductionSite currentSite;
 //	private String currentSiteNr = null;
 	private ProductionSite updatedSite = null;
-	
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,6 @@ public class MainActivity extends ActionBarActivity
 		productionSiteButtonNew = (Button) findViewById(R.id.main_btn_production_site_new);
 		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
 		
-		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
 		}
@@ -76,7 +74,6 @@ public class MainActivity extends ActionBarActivity
 		setUpSpinnerListeners();
 		
 		productionSiteButtonEdit.setEnabled(false);
-//		productionSiteButtonEdit.setClickable(false);
 		
 	}
 
@@ -87,20 +84,24 @@ public class MainActivity extends ActionBarActivity
 //		fillSpinners();	// need this?
 	}
 
+	/**
+	 * Fill the spinners with data from the database.
+	 */
 	private void fillSpinners() {
-//		getLoaderManager().initLoader(DB_LOADER, null, (LoaderCallbacks<Cursor>) this);
 		fillProductionSiteSpinner();
 //		fillIndividSpinner();
 	}
 
-	// TODO create a background task,
-	// call PSDB to select columns, and put them in a arrayadapter
-	// to present in the spinner
-	// http://stackoverflow.com/questions/2784081/android-create-spinner-programmatically-from-array
+	/**
+	 * Kick off an AsyncTask to load ProductionSite data.
+	 */
 	private void fillProductionSiteSpinner() {
 		new LoadProductionSiteSpinnerDataTask().execute(ProductionSiteDB.TABLE_NAME);
 	}
 	
+	/**
+	 * Kick off an AsyncTask to load Individ data for current site.
+	 */
 	private void fillIndividSpinner() {
 		// TODO
 		if(currentSite != null) {
@@ -111,8 +112,8 @@ public class MainActivity extends ActionBarActivity
 	
 	
 	/**
-	 * Get the number of the site that is selected in the ProductionSite spinner.
-	 * @return	A ProductionSiteNr or null if none selected
+	 * Get the site that is selected in the ProductionSite spinner.
+	 * @return	A ProductionSite or null if none selected
 	 */
 	private ProductionSite getSelectedProductionSite() {
 		// first check if there is a site selected in ProductionSiteSpinner
@@ -155,6 +156,9 @@ public class MainActivity extends ActionBarActivity
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Set up OnClickListeners for the buttons
+	 */
 	private void setupClickListeners() {
 		clickListener = new OnClickListener() {
 			Intent intent;
@@ -180,6 +184,9 @@ public class MainActivity extends ActionBarActivity
 		productionSiteButtonNew.setOnClickListener(clickListener);
 	}
 	
+	/**
+	 * Set up OnItemSelectedListeners for the spinners.
+	 */
 	private void setUpSpinnerListeners() {
 		// Listener for the ProductionSiteSpinner
 		productionSiteSpinnerListener = new OnItemSelectedListener() {
@@ -266,7 +273,7 @@ public class MainActivity extends ActionBarActivity
 	 * like "SE-012345 (Nygarden)", and set the list as source for the spinner.
 	 * @param result
 	 */
-	public void buildProductionSiteAdapter(List<ProductionSite> sites) {
+	protected void buildProductionSiteAdapter(List<ProductionSite> sites) {
 		// build the title lines
 		ArrayList<String> siteTitles = new ArrayList<String>();
 		for(ProductionSite site : sites) {

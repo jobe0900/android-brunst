@@ -35,9 +35,20 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/production_site_entry_org"
         android:layout_toRightOf="@id/production_site_entry_org"
-        android:ems="6"
+        android:ems="5"
         android:maxLength="6"
         android:inputType="number"
+        />
+    
+    <ImageButton
+        android:id="@+id/production_site_imgbutton_thumb"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_alignTop="@id/production_site_label_number"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_place"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop" 
         />
 
     <TextView
@@ -45,8 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/production_site_entry_org"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/production_site_imgbutton_thumb"
         android:layout_marginRight="8dp"
         android:text="@string/production_site_label_name"
         />
@@ -90,7 +100,8 @@
         android:layout_alignBottom="@id/production_site_entry_address"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_place"
-        android:background="@drawable/button_bg_green" />
+        android:background="@drawable/button_bg_green" 
+        />
 
     <EditText
         android:id="@+id/production_site_entry_postnr"
@@ -139,7 +150,8 @@
         android:layout_alignBottom="@id/production_site_entry_coord"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_location_found"
-        android:background="@drawable/button_bg_green" />
+        android:background="@drawable/button_bg_green" 
+        />
 
     <Button
         android:id="@+id/production_site_button_delete"
