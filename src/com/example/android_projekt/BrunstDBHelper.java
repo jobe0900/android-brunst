@@ -1,5 +1,7 @@
 package com.example.android_projekt;
 
+import com.example.android_projekt.productionsite.ProductionSiteDB;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -20,9 +22,13 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Create the tables.
-		db.execSQL("PRAGMA foreign_keys=ON");
 		ProductionSiteDB.onCreate(db);
 	}
+	
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		db.execSQL("PRAGMA foreign_keys=ON");
+	};
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

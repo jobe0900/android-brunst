@@ -2,9 +2,7 @@
 <resources>
 
     <string name="app_name">Brunstkalender</string>
-    
     <string name="action_settings">Inställningar</string>
-    
     <string name="button_save">Spara</string>
     <string name="button_update">Uppdatera</string>
     <string name="button_delete">Ta bort</string>
@@ -16,6 +14,11 @@
     <string name="dialog_no">Nej</string>
     <string name="dialog_ask_delete_site">Ta bort</string>
     <string name="dialog_pick_image">Välj en bild</string>
+    
+    <string name="individual">Individ</string>
+    <string name="individual_activity_title">Individ</string>
+    <string name="individual_label_idnr">ID-nummer</string>
+    <string name="individual_label_shortnr">Kortnr</string>
     
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>
@@ -30,6 +33,5 @@
     <string name="production_site_org_default">SE</string>
     
     <string name="toast_could_not_save">Kunde inte spara</string>
-
-
+    
 </resources>

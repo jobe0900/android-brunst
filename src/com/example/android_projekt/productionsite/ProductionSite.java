@@ -1,4 +1,4 @@
-package com.example.android_projekt;
+package com.example.android_projekt.productionsite;
 
 import java.io.Serializable;
 

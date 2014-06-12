@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.android_projekt.individ.IndividualActivity;
+import com.example.android_projekt.productionsite.ProductionSite;
+import com.example.android_projekt.productionsite.ProductionSiteActivity;
+import com.example.android_projekt.productionsite.ProductionSiteDB;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -43,6 +48,7 @@ public class MainActivity extends ActionBarActivity
 	
 	private Button productionSiteButtonNew;
 	private Button productionSiteButtonEdit;
+	private Button individualButtonNew;
 	
 	private OnClickListener clickListener;
 	private OnItemSelectedListener productionSiteSpinnerListener;
@@ -63,6 +69,7 @@ public class MainActivity extends ActionBarActivity
 		
 		productionSiteButtonNew = (Button) findViewById(R.id.main_btn_production_site_new);
 		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
+		individualButtonNew = (Button) findViewById(R.id.main_btn_individual_new);
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
@@ -100,13 +107,13 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	/**
-	 * Kick off an AsyncTask to load Individ data for current site.
+	 * Kick off an AsyncTask to load Individual data for current site.
 	 */
 	private void fillIndividSpinner() {
 		// TODO
 		if(currentSite != null) {
 			//TODO kick of the background task to load the spinner data
-//			new LoadSpinnerDataTask().execute(IndividDB.TABLE_NAME, siteNr);
+//			new LoadSpinnerDataTask().execute(IndividualDB.TABLE_NAME, siteNr);
 		}
 	}
 	
@@ -177,11 +184,19 @@ public class MainActivity extends ActionBarActivity
 					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
 					startActivity(intent);
 					break;
+				case R.id.main_btn_individual_new:
+					intent = new Intent(getApplicationContext(), IndividualActivity.class);
+					if(currentSite != null) {
+						intent.putExtra(IndividualActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
+					}
+					startActivity(intent);
+					break;
 				}
 			}
 		};
 		productionSiteButtonEdit.setOnClickListener(clickListener);
 		productionSiteButtonNew.setOnClickListener(clickListener);
+		individualButtonNew.setOnClickListener(clickListener);
 	}
 	
 	/**
@@ -199,20 +214,19 @@ public class MainActivity extends ActionBarActivity
 					Log.d(TAG, "PS Spinner Title: " + ProductionSiteDB.TABLE_NAME);
 					Log.d(TAG, "Equals: " + selected.equals(getString(R.string.production_site)));
 					// we have a selected item
-					productionSiteButtonEdit.setEnabled(true);
-//					productionSiteButtonEdit.setClickable(true);
+					enablWidgetsOnSelectedSite(true);
 					currentSite = getSelectedProductionSite();
 					fillIndividSpinner();
 				}
 				else {
-					productionSiteButtonEdit.setEnabled(false);
-//					productionSiteButtonEdit.setClickable(false);
+					enablWidgetsOnSelectedSite(false);
 				}
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 				currentSite = null;
+				enablWidgetsOnSelectedSite(false);
 				productionSiteButtonEdit.setEnabled(false);
 //				productionSiteButtonEdit.setClickable(false);
 				// TODO disable individ spinner
@@ -221,6 +235,14 @@ public class MainActivity extends ActionBarActivity
 		productionSiteSpinner.setOnItemSelectedListener(productionSiteSpinnerListener);
 	}
 	
+	/**
+	 * Enable widgets depending on if there is a selected production site or not
+	 * @param enable
+	 */
+	private void enablWidgetsOnSelectedSite(boolean enable) {
+		productionSiteButtonEdit.setEnabled(enable);
+		individualButtonNew.setEnabled(enable);
+	}
 
 	/**
 	 * Load the data for the spinners in a background task.
@@ -235,7 +257,7 @@ public class MainActivity extends ActionBarActivity
 		protected List<ProductionSite> doInBackground(String... params) {
 			List<ProductionSite> currentList = new ArrayList<ProductionSite>();
 			
-			// Which spinner to load, the ProductionSite or the Individ?
+			// Which spinner to load, the ProductionSite or the Individual?
 			switch(params[0]) {
 			case ProductionSiteDB.TABLE_NAME:
 				// load the production site names and nrs
@@ -243,7 +265,7 @@ public class MainActivity extends ActionBarActivity
 				currentAdapter = productionSiteSpinnerAdapter;
 				currentList = loadProductionSites();
 				break;
-//			case IndividDB.TABLE_NAME:
+//			case IndividualDB.TABLE_NAME:
 				// load the Individs in agiven ProductionSite
 			}
 			return currentList;

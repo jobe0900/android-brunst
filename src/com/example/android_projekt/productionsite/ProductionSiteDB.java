@@ -1,7 +1,9 @@
-package com.example.android_projekt;
+package com.example.android_projekt.productionsite;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.android_projekt.BrunstDBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.util.Log;
 
 /**
  * Helper class, "contract", handling the database work for the ProductionSite.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class ProductionSiteDB implements BaseColumns 
 {
@@ -26,11 +29,6 @@ public class ProductionSiteDB implements BaseColumns
 	public static final String COLUMN_POSTADDRESS = "postaddress";
 	public static final String COLUMN_COORDINATES = "coordinates";
 	public static final String COLUMN_IMAGEURI = "imageuri";
-	
-//	public static final String[] SQL_PROJECTION_SITENR = {
-//		BaseColumns._ID,
-//		COLUMN_SITENR
-//	};
 	
 	private static final String[] ALL_COLUMNS = {
 		BaseColumns._ID,
@@ -52,7 +50,7 @@ public class ProductionSiteDB implements BaseColumns
 			COLUMN_POSTNR		+ " CHAR(5), " +
 			COLUMN_POSTADDRESS	+ " VARCHAR(20), " +
 			COLUMN_COORDINATES	+ " VARCHAR(40), " +
-			COLUMN_IMAGEURI	+ " VARCHAR(255) " +
+			COLUMN_IMAGEURI		+ " VARCHAR(255) " +
 		" ) ";
 
 	private static final String SQL_DROP_TABLE = 
@@ -76,6 +74,17 @@ public class ProductionSiteDB implements BaseColumns
 	/** Close the database again. */
 	public void close() {
 		dbHelper.close();
+	}
+	
+	/** Create this table in the DB. */
+	public static void onCreate(SQLiteDatabase database) {
+		database.execSQL(SQL_CREATE_TABLE);
+	}
+	
+	/** Upgrade this table to a new verison in the DB. */
+	public static void onUpgrade(SQLiteDatabase database) {
+		// TODO
+		// nothing for now.
 	}
 	
 	/**
@@ -141,7 +150,7 @@ public class ProductionSiteDB implements BaseColumns
 	 * @return	The number of rows deleted (should be only 1)
 	 */
 	public int deleteProductionSite(ProductionSiteNr siteNr) {
-		String selection = BaseColumns._ID + " LIKE ?";
+		String selection = COLUMN_SITENR + " LIKE ?";
 		String[] selectionArgs = {siteNr.toString()};
 		return database.delete(TABLE_NAME, selection, selectionArgs);
 	}
@@ -187,14 +196,5 @@ public class ProductionSiteDB implements BaseColumns
 		return site;
 	}
 	
-	/** Create this table in the DB. */
-	public static void onCreate(SQLiteDatabase database) {
-		database.execSQL(SQL_CREATE_TABLE);
-	}
 	
-	/** Upgrade this table to a new verison in the DB. */
-	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
-		// nothing for now.
-	}
 }

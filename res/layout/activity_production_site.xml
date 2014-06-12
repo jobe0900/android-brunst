@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android_projekt.ProductionSiteActivity" >
+    tools:context="com.example.android_projekt.productionsite.ProductionSiteActivity" >
 
     <!-- android:textAppearance="?android:attr/textAppearanceMedium" -->
     <TextView
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/production_site_label_number"
         android:layout_below="@id/production_site_label_number"
-        android:ems="3"
+        android:minEms="2"
         android:maxLength="2"
         android:text="@string/production_site_org_default"
         />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/production_site_entry_org"
         android:layout_toRightOf="@id/production_site_entry_org"
-        android:ems="5"
+        android:minEms="4"
         android:maxLength="6"
         android:inputType="number"
         />

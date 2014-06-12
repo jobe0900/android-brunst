@@ -1,6 +1,13 @@
-package com.example.android_projekt;
+package com.example.android_projekt.productionsite;
 
 import java.io.File;
+
+import com.example.android_projekt.MainActivity;
+import com.example.android_projekt.R;
+import com.example.android_projekt.R.id;
+import com.example.android_projekt.R.layout;
+import com.example.android_projekt.R.menu;
+import com.example.android_projekt.R.string;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -42,7 +49,7 @@ import android.provider.MediaStore;
 public class ProductionSiteActivity extends ActionBarActivity 
 {
 	public final static String TAG = "Brunst: ProductionSiteActivity";
-	public final static String EXTRA_PRODUCTION_SITE = "brunst.extra.ProductionSiteActivity.object";
+	public final static String EXTRA_PRODUCTION_SITE = "brunst.extra.ProductionSiteActivity.ProductionSite";
 //	private final static int DIALOG_DELETE_SITE = 10;	// id for a dialog to confirm delete
 	private final static int INTENT_PICK_IMAGE = 10;	// id for the gallery intent
 	
@@ -193,8 +200,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 	    Log.d(TAG, "bitmap: " + bitmap);
 	    return bitmap;
 	}
-
-	
 	
 	/** Save the ProductionSite to DB. */
 	protected void saveForm() {

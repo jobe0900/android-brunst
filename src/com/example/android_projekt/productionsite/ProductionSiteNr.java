@@ -1,4 +1,4 @@
-package com.example.android_projekt;
+package com.example.android_projekt.productionsite;
 
 import java.io.Serializable;
 
@@ -36,11 +36,20 @@ public class ProductionSiteNr implements Serializable
 	}
 	
 	/**
+	 * Copy constructor.
+	 * @param orig
+	 */
+	public ProductionSiteNr(ProductionSiteNr orig) {
+		this.org = new String(orig.org);
+		this.ppnr = new String(orig.ppnr);
+	}
+	
+	/**
 	 * Get the organisation part of the ProductionSiteNr.
 	 * @return	the organisation string
 	 */
 	public String getOrg() {
-		return org;
+		return new String(org);
 	}
 	
 	/**
@@ -48,7 +57,7 @@ public class ProductionSiteNr implements Serializable
 	 * @return the unique nr
 	 */
 	public String getPpnr() {
-		return ppnr;
+		return new String(ppnr);
 	}
 	
 	/**
