@@ -159,27 +159,43 @@ public class IndividualDB implements BaseColumns
 		return retval;
 	}
 	
+	// 
 	/**
-	 * Delete an Individual.
-	 * @param	individ		The Individual to delete
-	 * @return	The number of Individuals deleted (should be 1)
-	 */
-	public int deleteIndividual(Individual individ) {
-		String selection = BaseColumns._ID + " LIKE ?";
-		String[] selectionArgs = {String.valueOf(individ.get_id())};
-		return database.delete(TABLE_NAME, selection, selectionArgs);
-	}
-	
-	/**
-	 * Delete an Individual.
-	 * @param	idNr		The IdNr of the Individual to delete
-	 * @return	The number of Individuals deleted (should be 1)
+	 * Don't actually delete, just mark as not active, meaning the information
+	 * for the Individual is available in the future if necessary.
+	 * @param idNr
+	 * @return
 	 */
 	public int deleteIndividual(IdNr idNr) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_ACTIVE, "FALSE");
+		
 		String selection = COLUMN_IDNR + " LIKE ?";
 		String[] selectionArgs = {idNr.toString()};
-		return database.delete(TABLE_NAME, selection, selectionArgs);
+		return database.update(TABLE_NAME, values, selection, selectionArgs);
 	}
+	
+//	/**
+//	 * Delete an Individual.
+//	 * @param	individ		The Individual to delete
+//	 * @return	The number of Individuals deleted (should be 1)
+//	 */
+//	public int deleteIndividual(Individual individ) {
+//		String selection = BaseColumns._ID + " LIKE ?";
+//		String[] selectionArgs = {String.valueOf(individ.get_id())};
+//		return database.delete(TABLE_NAME, selection, selectionArgs);
+//	}
+//	
+//	/**
+//	 * Delete an Individual.
+//	 * @param	idNr		The IdNr of the Individual to delete
+//	 * @return	The number of Individuals deleted (should be 1)
+//	 */
+//	public int deleteIndividual(IdNr idNr) {
+//		String selection = COLUMN_IDNR + " LIKE ?";
+//		String[] selectionArgs = {idNr.toString()};
+//		return database.delete(TABLE_NAME, selection, selectionArgs);
+//	}
 	
 	/**
 	 * Get a single individual from the DB.
@@ -187,8 +203,8 @@ public class IndividualDB implements BaseColumns
 	 * @return		Individual or null
 	 */
 	public Individual getIndividual(IdNr idNr) {
-		String selection = COLUMN_IDNR + " LIKE ?";
-		String[] selectionArgs = {idNr.toString()};
+		String selection = COLUMN_IDNR + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
+		String[] selectionArgs = {idNr.toString(), "TRUE"};
 		
 		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
 		Individual individ = null;
@@ -208,8 +224,8 @@ public class IndividualDB implements BaseColumns
 	public List<Individual> getAllIndividualsAtSite(ProductionSite site) {
 		List<Individual> individs = new ArrayList<Individual>();
 		
-		String selection = COLUMN_HOMESITE + " LIKE ?";
-		String[] selectionArgs = {site.getSiteNr().toString()};
+		String selection = COLUMN_HOMESITE + " LIKE ? AND" + COLUMN_ACTIVE + " LIKE ?";
+		String[] selectionArgs = {site.getSiteNr().toString(), "TRUE"};
 		String sortorder = COLUMN_SHORTNR + " ASC";
 		
 		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, sortorder);

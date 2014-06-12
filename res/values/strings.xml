@@ -17,8 +17,15 @@
     
     <string name="individual">Individ</string>
     <string name="individual_activity_title">Individ</string>
-    <string name="individual_label_idnr">ID-nummer</string>
+    <string name="individual_label_idnr">ID-nr</string>
     <string name="individual_label_shortnr">Kortnr</string>
+    <string name="individual_label_name">Namn</string>
+    <string name="individual_label_active">Aktiv</string>
+    <string name="individual_label_sex">Kön</string>
+    <string name="individual_label_heatcyclus">Brunstcykel</string>
+    <string name="individual_label_lactationnr">Laktationsnr</string>
+    <string name="individual_sex_male">Tjur</string>
+    <string name="individual_sex_female">Ko</string>
     
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>

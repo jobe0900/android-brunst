@@ -20,14 +20,19 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.os.Build;
 
-public class IndividualActivity extends ActionBarActivity 
+
+public class IndividualEditActivity extends ActionBarActivity 
 {
-	private final static String TAG = "Brunst: IndividualActivity";
+	private final static String TAG = "Brunst: IndividualEditActivity";
 	
 	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualActivity.ProductionSiteNr";
 	
@@ -37,20 +42,26 @@ public class IndividualActivity extends ActionBarActivity
 	private EditText etIdnrIndividnr;
 	private EditText etIdnrChecknr;
 	private EditText etShortnr;
+	private Spinner  spinSex;
 	
 	private ProductionSiteNr currentSiteNr;
 	private boolean updating = false;
+	private boolean female = true;
+	
+	private IndividualDB individualDB;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_individual);
+		setContentView(R.layout.activity_individual_edit);
 		
 		Intent intent = getIntent();
 		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_NR)) {
 			currentSiteNr = (ProductionSiteNr) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE_NR);
 			Log.d(TAG, "received current site nr: " + currentSiteNr.toString());
 		}
+		
+//		individualDB = new IndividualDB(this);
 		
 		findViews();
 		prepareViews();
@@ -79,6 +90,18 @@ public class IndividualActivity extends ActionBarActivity
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	protected void onResume() {
+//		individualDB.open();
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+//		individualDB.close();
+		super.onPause();
+	}
+	
 	/**
 	 * Get handles to the different widgets
 	 */
@@ -88,15 +111,20 @@ public class IndividualActivity extends ActionBarActivity
 		etIdnrIndividnr = (EditText) findViewById(R.id.individual_entry_id_individnr);
 		etIdnrChecknr = (EditText) findViewById(R.id.individual_entry_id_checknr);
 		etShortnr = (EditText) findViewById(R.id.individual_entry_shortnr);
+		spinSex = (Spinner) findViewById(R.id.individual_spinner_sex);
 	}
 	
 	/**
 	 * Pre-fill some information and set enabled state of widgets
 	 */
 	private void prepareViews() {
+		setupSpinners();
 		if(currentSiteNr != null && !updating) {
 			etIdnrOrg.setText(currentSiteNr.getOrg());
 			etIdnrPpnr.setText(currentSiteNr.getPpnr());
+		}
+		if(updating) {
+			spinSex.setEnabled(false); 	// should not be able to change sex...
 		}
 	}
 	
@@ -104,9 +132,18 @@ public class IndividualActivity extends ActionBarActivity
 	 * Prepare different listeners on widgets for events.
 	 */
 	private void setupListeners() {
-//		setupOnEditorActionListeners();
 		setupOnFocusChangeListeners();
-		
+		setupOnItemSelectedListeners();
+	}
+
+	/**
+	 * Populate spinners from arrays.
+	 */
+	private void setupSpinners() {
+		// SEX
+		ArrayAdapter<CharSequence> sexAdapter = ArrayAdapter.createFromResource(
+				this, R.array.sex, R.layout.simple_spinner_item);
+		spinSex.setAdapter(sexAdapter);
 	}
 
 	/**
@@ -123,24 +160,41 @@ public class IndividualActivity extends ActionBarActivity
 			}
 		});
 	}
+	
+	/**
+	 * Listen for selection in spinners.
+	 */
+	private void setupOnItemSelectedListeners() {
+		spinSex.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				String selected = (String) parent.getItemAtPosition(position);
+				if(selected.equals(getString(R.string.individual_sex_male))) {
+					female = false;
+				}
+				else {
+					female = true;
+				}
+				// update visibility of widgets
+				setWidgetVisibility();
+			}
 
-//	/**
-//	 * Have widgets reposnd to certain events in the keyboard.
-//	 */
-//	private void setupOnEditorActionListeners() {
-//		etIdnrIndividnr.setOnEditorActionListener(new OnEditorActionListener() {
-//			@Override
-//			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//				boolean handled = false;
-//				if(actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE) {
-//					createShortnr();
-//					handled = true;
-//				}
-//				return handled;
-//			}
-//		});
-//		
-//	}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// NOTHING
+			}
+		});
+		
+	}
+
+	/**
+	 * Disable all widgets not relevant for a Male Individual.
+	 */
+	protected void setWidgetVisibility() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * Create a shortnr from the Individnr and set the shortnr field
@@ -154,6 +208,14 @@ public class IndividualActivity extends ActionBarActivity
 		catch (NumberFormatException ignore) {
 			Log.d(TAG, ignore.getMessage());
 		};
+	}
+	
+	/**
+	 * Find if the Individual is Male or Female.
+	 * @return
+	 */
+	private boolean isFemale() {
+		return female;
 	}
 
 }

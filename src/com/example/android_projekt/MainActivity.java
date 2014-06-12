@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.android_projekt.individ.IndividualActivity;
+import com.example.android_projekt.individ.IndividualEditActivity;
 import com.example.android_projekt.productionsite.ProductionSite;
 import com.example.android_projekt.productionsite.ProductionSiteActivity;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -185,9 +185,9 @@ public class MainActivity extends ActionBarActivity
 					startActivity(intent);
 					break;
 				case R.id.main_btn_individual_new:
-					intent = new Intent(getApplicationContext(), IndividualActivity.class);
+					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
 					if(currentSite != null) {
-						intent.putExtra(IndividualActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
+						intent.putExtra(IndividualEditActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
 					}
 					startActivity(intent);
 					break;
