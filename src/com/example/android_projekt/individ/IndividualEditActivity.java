@@ -1,5 +1,7 @@
 package com.example.android_projekt.individ;
 
+import java.util.Calendar;
+
 import com.example.android_projekt.R;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
@@ -9,8 +11,11 @@ import com.example.android_projekt.productionsite.ProductionSiteNr;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -28,6 +33,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;

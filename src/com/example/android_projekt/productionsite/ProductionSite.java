@@ -22,19 +22,19 @@ public class ProductionSite implements Serializable
 	private String imageUriStr;
 	
 	/** Constructor. */
-	ProductionSite(ProductionSiteNr ppnr) {
+	public ProductionSite(ProductionSiteNr ppnr) {
 		_id = UNSAVED_ID;	// signal that this has not been saved
 		sitenr = ppnr;
 	}
 	
 	/** Constructor. */
-	ProductionSite(String ppnrString) {
+	public ProductionSite(String ppnrString) {
 		this(new ProductionSiteNr(ppnrString));
 //		sitenr = new ProductionSiteNr(ppnrString);
 	}
 	
 	/** Constructor. */
-	ProductionSite(String org, String ppnr) {
+	public ProductionSite(String org, String ppnr) {
 		this(new ProductionSiteNr(org, ppnr));
 	}
 	
