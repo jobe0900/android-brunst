@@ -4,12 +4,17 @@ import com.example.android_projekt.R;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
+import com.example.android_projekt.Utils;
 import com.example.android_projekt.productionsite.ProductionSiteNr;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,17 +29,20 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.os.Build;
+import android.provider.MediaStore;
 
 
 public class IndividualEditActivity extends ActionBarActivity 
 {
 	private final static String TAG = "Brunst: IndividualEditActivity";
 	
-	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualActivity.ProductionSiteNr";
+	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualEditActivity.ProductionSiteNr";
+	public final static String EXTRA_INDIVIDUAL_UPDATE = "brunst.extra.IndividualEditActivity.IndividualUpdate";
 	
 	// WIDGETS
 	private EditText etIdnrOrg;
@@ -42,9 +50,30 @@ public class IndividualEditActivity extends ActionBarActivity
 	private EditText etIdnrIndividnr;
 	private EditText etIdnrChecknr;
 	private EditText etShortnr;
+	private EditText etName;
+	private EditText etBirthdate;
+	private EditText etMotherOrg;
+	private EditText etMotherPpnr;
+	private EditText etMotherIndividnr;
+	private EditText etMotherChecknr;
+	private EditText etFatherOrg;
+	private EditText etFatherPpnr;
+	private EditText etFatherIndividnr;
+	private EditText etFatherChecknr;
+	private EditText etHeatCyclus;
+	private EditText etLactationNr;
+	private EditText etLastBirth;
+	private ImageButton ibThumb;
+	private ImageButton ibBirthdateCalendar;
+	private ImageButton ibHeatCyclus;
+	private ImageButton ibLactationNr;
+	private ImageButton ibLastBirthCalendar;
 	private Spinner  spinSex;
 	
 	private ProductionSiteNr currentSiteNr;
+	private Individual individual;
+	private ArrayAdapter<CharSequence> sexAdapter;
+	private Uri imageUri;
 	private boolean updating = false;
 	private boolean female = true;
 	
@@ -59,6 +88,12 @@ public class IndividualEditActivity extends ActionBarActivity
 		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_NR)) {
 			currentSiteNr = (ProductionSiteNr) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE_NR);
 			Log.d(TAG, "received current site nr: " + currentSiteNr.toString());
+		}
+		if(intent.hasExtra(EXTRA_INDIVIDUAL_UPDATE)) {
+			individual = (Individual) intent.getSerializableExtra(EXTRA_INDIVIDUAL_UPDATE);
+			currentSiteNr = individual.getHomesiteNr();
+			updating = true;
+			Log.d(TAG, "received Individual: " + individual.toString());
 		}
 		
 //		individualDB = new IndividualDB(this);
@@ -111,6 +146,23 @@ public class IndividualEditActivity extends ActionBarActivity
 		etIdnrIndividnr = (EditText) findViewById(R.id.individual_edit_entry_id_individnr);
 		etIdnrChecknr = (EditText) findViewById(R.id.individual_edit_entry_id_checknr);
 		etShortnr = (EditText) findViewById(R.id.individual_edit_entry_shortnr);
+		etName = (EditText) findViewById(R.id.individual_edit_entry_name);
+		etBirthdate = (EditText) findViewById(R.id.individual_edit_entry_birthdate);
+		etMotherOrg = (EditText) findViewById(R.id.individual_edit_entry_mother_org);
+		etMotherPpnr = (EditText) findViewById(R.id.individual_edit_entry_mother_ppnr);
+		etMotherIndividnr = (EditText) findViewById(R.id.individual_edit_entry_mother_individnr);
+		etMotherChecknr = (EditText) findViewById(R.id.individual_edit_entry_mother_checknr);
+		etFatherOrg = (EditText) findViewById(R.id.individual_edit_entry_father_org);
+		etFatherPpnr = (EditText) findViewById(R.id.individual_edit_entry_father_ppnr);
+		etFatherIndividnr = (EditText) findViewById(R.id.individual_edit_entry_father_individnr);
+		etFatherChecknr = (EditText) findViewById(R.id.individual_edit_entry_father_checknr);
+		etHeatCyclus = (EditText) findViewById(R.id.individual_edit_entry_heatcyclus);
+		etLactationNr = (EditText) findViewById(R.id.individual_edit_entry_lactationnr);
+		etLastBirth = (EditText) findViewById(R.id.individual_edit_entry_lastbirth);
+		ibBirthdateCalendar = (ImageButton) findViewById(R.id.individual_edit_imgbutton_birthdate_calendar);
+		ibHeatCyclus = (ImageButton) findViewById(R.id.individual_edit_imgbutton_heatcyclus_edit);
+		ibLactationNr = (ImageButton) findViewById(R.id.individual_edit_imgbutton_lactationnr_edit);
+		ibLastBirthCalendar = (ImageButton) findViewById(R.id.individual_edit_imgbutton_lastbirth_calendar);
 		spinSex = (Spinner) findViewById(R.id.individual_edit_spinner_sex);
 	}
 	
@@ -119,15 +171,142 @@ public class IndividualEditActivity extends ActionBarActivity
 	 */
 	private void prepareViews() {
 		setupSpinners();
+		
+		//disable some EditTexts
+		disableEntry(etBirthdate);
+		disableEntry(etHeatCyclus);
+		disableEntry(etLactationNr);
+		
+		// if NEW
 		if(currentSiteNr != null && !updating) {
-			etIdnrOrg.setText(currentSiteNr.getOrg());
-			etIdnrPpnr.setText(currentSiteNr.getPpnr());
+			String org = currentSiteNr.getOrg();
+			String ppnr = currentSiteNr.getPpnr();
+			etIdnrOrg.setText(org);
+			etIdnrPpnr.setText(ppnr);
+			etMotherOrg.setText(org);
+			etMotherPpnr.setText(ppnr);
+			etFatherOrg.setText(org);
+			etFatherPpnr.setText(ppnr);
 		}
+		// if UPDATING
 		if(updating) {
 			spinSex.setEnabled(false); 	// should not be able to change sex...
+			populateViews();
 		}
 	}
 	
+	/**
+	 * Fill in the different forms with data from the updating Individual.
+	 */
+	private void populateViews() {
+		if(individual != null) {
+			IdNr idnr = individual.getIdNr();
+			ProductionSiteNr birthsiteNr = idnr.getBirthSiteNr();
+			
+			etIdnrOrg.setText(birthsiteNr.getOrg());
+			etIdnrPpnr.setText(birthsiteNr.getPpnr());
+			etIdnrIndividnr.setText(idnr.getIndividNr());
+			etIdnrChecknr.setText(idnr.getCheckNr());
+			
+			etShortnr.setText(individual.getShortNr() + "");
+			
+			if(individual.hasName()) {
+				etName.setText(individual.getName());
+			}
+			
+			if(individual.hasBirthdate()) {
+				etName.setText(Utils.dateToString(individual.getBirthdate()));
+			}
+			
+			if(individual.hasMotherIdNr()) {
+				IdNr motherId = individual.getMotherIdNr();
+				etMotherOrg.setText(motherId.getBirthSiteNr().getOrg());
+				etMotherPpnr.setText(motherId.getBirthSiteNr().getPpnr());
+				etMotherIndividnr.setText(motherId.getIndividNr());
+				etMotherChecknr.setText(motherId.getCheckNr());
+			}
+			
+			if(individual.hasFatherIdNr()) {
+				IdNr fatherId = individual.getFatherIdNr();
+				etFatherOrg.setText(fatherId.getBirthSiteNr().getOrg());
+				etFatherPpnr.setText(fatherId.getBirthSiteNr().getPpnr());
+				etFatherIndividnr.setText(fatherId.getIndividNr());
+				etFatherChecknr.setText(fatherId.getCheckNr());
+			}
+			
+			if(sexAdapter != null) {
+				// get the
+				String sex;
+				if(individual.getSex() == Individual.Sex.F) {
+					sex = getString(R.string.individual_sex_female);
+				}
+				else {
+					sex = getString(R.string.individual_sex_male);
+				}
+				spinSex.setSelection(sexAdapter.getPosition(sex));
+			}
+			
+			etHeatCyclus.setText(individual.getHeatcyclus() + "");
+			
+			etLactationNr.setText(individual.getLactationNr() + "");
+			
+			if(individual.hasLastBirth()) {
+				etName.setText(Utils.dateToString(individual.getLastBirth()));
+			}
+			
+			if(individual.hasImageUri()) {
+				imageUri = Uri.parse(individual.getImageUri());
+				setThumbnail();
+			}
+		}
+	}
+	
+	/**
+	 * Set the contents of the Thumbnail image button
+	 */
+	private void setThumbnail() {
+		if(imageUri != null) {
+			Bitmap thumb = getThumbnail(imageUri);
+			Log.d(TAG, "setting thumbnail : " + thumb);
+			if(thumb != null) {
+				ibThumb.setImageBitmap(thumb);
+			}
+		}	
+	}
+	
+	/**
+	 * Get a micro (96x96) thumbnail from the image at the Uri.
+	 * The method is a mix of solutions from this thread on SO:
+	 * http://stackoverflow.com/questions/5548645/get-thumbnail-uri-path-of-the-image-stored-in-sd-card-android
+	 * @param	uri		Uri to the image
+	 * @return	Bitmap or null
+	 */
+	private Bitmap getThumbnail(Uri uri) {
+	    String[] projection = { MediaStore.Images.Media._ID };
+	    String result = null;
+	    Cursor cursor = managedQuery(uri, projection, null, null, null);
+	    
+	    Log.d(TAG, "cursor: " + cursor);
+	    
+	    int column_index = cursor
+	            .getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+	    
+	    Log.d(TAG, "column: " + column_index);
+
+	    cursor.moveToFirst();
+	    long imageId = cursor.getLong(column_index);
+//	    cursor.close();		// can't close or else it crashes on a second attempt at changing pic
+	    Log.d(TAG, "imageID: " + imageId);
+
+	    Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
+	            getContentResolver(), imageId,
+	            MediaStore.Images.Thumbnails.MICRO_KIND,
+	            null);
+	    
+	    Log.d(TAG, "bitmap: " + bitmap);
+	    return bitmap;
+	}
+
 	/**
 	 * Prepare different listeners on widgets for events.
 	 */
@@ -141,7 +320,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	 */
 	private void setupSpinners() {
 		// SEX
-		ArrayAdapter<CharSequence> sexAdapter = ArrayAdapter.createFromResource(
+		sexAdapter = ArrayAdapter.createFromResource(
 				this, R.array.sex, R.layout.simple_spinner_item);
 		spinSex.setAdapter(sexAdapter);
 	}
@@ -216,6 +395,13 @@ public class IndividualEditActivity extends ActionBarActivity
 	 */
 	private boolean isFemale() {
 		return female;
+	}
+	
+	/** Disable an EditText-field. */
+	private void disableEntry(EditText entry) {
+		entry.setKeyListener(null);
+		entry.setFocusable(false);
+		entry.setInputType(InputType.TYPE_NULL);
 	}
 
 }

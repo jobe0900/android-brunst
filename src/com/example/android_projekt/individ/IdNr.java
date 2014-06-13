@@ -47,7 +47,7 @@ public class IdNr implements Serializable
 	/**
 	 * Get the ProductionSiteNr part of the IdNr, i.e. the birth site.
 	 */
-	public ProductionSiteNr getBirthSite() {
+	public ProductionSiteNr getBirthSiteNr() {
 		return new ProductionSiteNr(birthSite.toString());
 	}
 	
@@ -62,7 +62,7 @@ public class IdNr implements Serializable
 	 * Get the check nr part of the IdNr, as a 1 char string.
 	 * @return
 	 */
-	public String getcheckNr() {
+	public String getCheckNr() {
 		return checkNr;
 	}
 	
