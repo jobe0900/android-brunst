@@ -1,174 +1,167 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:fillViewport="true"
     tools:context="com.example.android_projekt.productionsite.ProductionSiteActivity" >
 
-    <!-- android:textAppearance="?android:attr/textAppearanceMedium" -->
-    <TextView
-        android:id="@+id/production_site_label_number"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/production_site_label_number"
-        />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <EditText
-        android:id="@+id/production_site_entry_org"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/production_site_label_number"
-        android:layout_below="@id/production_site_label_number"
-        android:minEms="2"
-        android:maxLength="2"
-        android:text="@string/production_site_org_default"
-        />
+        <ImageButton
+            android:id="@+id/production_site_imgbutton_thumb"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/button_bg_green"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_home_add_96" />
+        
+        <!-- Production Site number start -->
+        <TextView
+            android:id="@+id/production_site_label_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/production_site_imgbutton_thumb"
+            android:layout_alignTop="@id/production_site_imgbutton_thumb"
+            android:text="@string/production_site_label_number" />
 
-    <EditText
-        android:id="@+id/production_site_entry_ppnr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/production_site_entry_org"
-        android:layout_toRightOf="@id/production_site_entry_org"
-        android:minEms="4"
-        android:maxLength="6"
-        android:inputType="number"
-        />
-    
-    <ImageButton
-        android:id="@+id/production_site_imgbutton_thumb"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_alignTop="@id/production_site_label_number"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_place"
-        android:background="@drawable/button_bg_green"
-        android:scaleType="centerCrop" 
-        />
+        <EditText
+            android:id="@+id/production_site_entry_org"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/production_site_label_number"
+            android:layout_toRightOf="@id/production_site_imgbutton_thumb"
+            android:maxLength="2"
+            android:minEms="2"
+            android:text="@string/production_site_org_default" />
 
-    <TextView
-        android:id="@+id/production_site_label_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/production_site_imgbutton_thumb"
-        android:layout_marginRight="8dp"
-        android:text="@string/production_site_label_name"
-        />
+        <EditText
+            android:id="@+id/production_site_entry_ppnr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/production_site_entry_org"
+            android:layout_toRightOf="@id/production_site_entry_org"
+            android:inputType="number"
+            android:maxLength="6"
+            android:minEms="4" />
+        <!-- Production Site number end -->
 
-    <EditText
-        android:id="@+id/production_site_entry_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/production_site_label_name"
-        android:layout_alignLeft="@id/production_site_label_name"
-        android:layout_alignParentRight="true"
-        android:maxLength="30"
-        />
+        <!-- Name start -->
+        <EditText
+            android:id="@+id/production_site_entry_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/production_site_imgbutton_thumb"
+            android:layout_below="@id/production_site_entry_org"
+            android:layout_toRightOf="@id/production_site_imgbutton_thumb"
+            android:hint="@string/production_site_label_name"
+            android:inputType="text"
+            android:maxLength="30" />
+        <!-- Name end -->
 
-    <TextView
-        android:id="@+id/production_site_label_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/production_site_entry_name"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/production_site_label_address"
-        />
+        <TextView
+            android:id="@+id/production_site_label_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/production_site_entry_name"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/production_site_label_address" />
 
-    <EditText
-        android:id="@+id/production_site_entry_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/production_site_label_address"
-        android:layout_alignLeft="@id/production_site_label_address"
-        android:layout_toLeftOf="@+id/production_site_imgbutton_map"
-        android:hint="@string/production_site_hint_street_address" 
-        android:maxLength="25"
-        />
-    
-    <ImageButton
-        android:id="@id/production_site_imgbutton_map"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignBottom="@id/production_site_entry_address"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_place"
-        android:background="@drawable/button_bg_green" 
-        />
+        <EditText
+            android:id="@+id/production_site_entry_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/production_site_label_address"
+            android:layout_below="@id/production_site_label_address"
+            android:layout_toLeftOf="@+id/production_site_imgbutton_map"
+            android:hint="@string/production_site_hint_street_address"
+            android:maxLength="25" />
 
-    <EditText
-        android:id="@+id/production_site_entry_postnr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/production_site_entry_address"
-        android:layout_alignLeft="@id/production_site_entry_address"
-        android:ems="5"
-        android:maxLength="5"
-        android:hint="@string/production_site_hint_postnr"
-        android:inputType="number" />
+        <ImageButton
+            android:id="@id/production_site_imgbutton_map"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/production_site_entry_address"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_bg_green"
+            android:src="@drawable/ic_action_place" />
 
-    <EditText
-        android:id="@+id/production_site_entry_postaddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/production_site_entry_postnr"
-        android:layout_alignBaseline="@id/production_site_entry_postnr"
-        android:layout_alignParentRight="true"
-        android:maxLength="20"
-        android:hint="@string/production_site_hint_postaddress" />
+        <EditText
+            android:id="@+id/production_site_entry_postnr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/production_site_entry_address"
+            android:layout_below="@id/production_site_entry_address"
+            android:ems="5"
+            android:hint="@string/production_site_hint_postnr"
+            android:inputType="number"
+            android:maxLength="5" />
 
-    <TextView
-        android:id="@+id/production_site_label_coord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/production_site_entry_postnr"
-        android:layout_marginTop="20dp"
-        android:text="@string/production_site_label_coord"
-        />
+        <EditText
+            android:id="@+id/production_site_entry_postaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/production_site_entry_postnr"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/production_site_entry_postnr"
+            android:hint="@string/production_site_hint_postaddress"
+            android:maxLength="20" />
 
-    <EditText
-        android:id="@+id/production_site_entry_coord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/production_site_label_coord"
-        android:layout_below="@id/production_site_label_coord"
-        android:layout_toLeftOf="@+id/production_site_imgbutton_here"
-        android:hint="@string/production_site_hint_coord"
-        />
+        <TextView
+            android:id="@+id/production_site_label_coord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/production_site_entry_postnr"
+            android:layout_marginTop="20dp"
+            android:text="@string/production_site_label_coord" />
 
-    <ImageButton
-        android:id="@id/production_site_imgbutton_here"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignBottom="@id/production_site_entry_coord"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_location_found"
-        android:background="@drawable/button_bg_green" 
-        />
+        <EditText
+            android:id="@+id/production_site_entry_coord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/production_site_label_coord"
+            android:layout_below="@id/production_site_label_coord"
+            android:layout_toLeftOf="@+id/production_site_imgbutton_here"
+            android:hint="@string/production_site_hint_coord" />
 
-    <Button
-        android:id="@+id/production_site_button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/production_site_button_save"
-        android:layout_below="@id/production_site_entry_coord"
-        android:layout_marginTop="20dp"
-        android:text="@string/button_delete" />
-    
-    <Button
-        android:id="@id/production_site_button_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/production_site_entry_coord"
-        android:layout_marginTop="20dp"
-        android:text="@string/button_save" />
+        <ImageButton
+            android:id="@id/production_site_imgbutton_here"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/production_site_entry_coord"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_bg_green"
+            android:src="@drawable/ic_action_location_found" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/production_site_button_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/production_site_entry_coord"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/production_site_button_save"
+            android:text="@string/button_delete" />
+
+        <Button
+            android:id="@id/production_site_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/production_site_entry_coord"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_save" />
+    </RelativeLayout>
+
+</ScrollView>

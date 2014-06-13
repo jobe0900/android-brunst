@@ -16,65 +16,65 @@
         <!-- ID nr start -->
 
         <TextView
-            android:id="@+id/individual_label_idnr"
+            android:id="@+id/individual_edit_label_idnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/individual_entry_id_org"
+            android:layout_alignBaseline="@+id/individual_edit_entry_id_org"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp"
             android:minEms="3"
             android:text="@string/individual_label_idnr" />
 
         <EditText
-            android:id="@id/individual_entry_id_org"
+            android:id="@id/individual_edit_entry_id_org"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/individual_label_idnr"
+            android:layout_toRightOf="@id/individual_edit_label_idnr"
             android:imeOptions="actionNext"
             android:maxLength="2"
             android:minEms="2"
             android:text="@string/production_site_org_default" />
 
         <EditText
-            android:id="@+id/individual_entry_id_ppnr"
+            android:id="@+id/individual_edit_entry_id_ppnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_id_org"
-            android:layout_toRightOf="@id/individual_entry_id_org"
+            android:layout_alignBaseline="@id/individual_edit_entry_id_org"
+            android:layout_toRightOf="@id/individual_edit_entry_id_org"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="6"
             android:minEms="4" />
 
         <EditText
-            android:id="@+id/individual_entry_id_individnr"
+            android:id="@+id/individual_edit_entry_id_individnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_id_ppnr"
-            android:layout_toRightOf="@id/individual_entry_id_ppnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_id_ppnr"
+            android:layout_toRightOf="@id/individual_edit_entry_id_ppnr"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="4"
             android:minEms="3" />
 
         <EditText
-            android:id="@+id/individual_entry_id_checknr"
+            android:id="@+id/individual_edit_entry_id_checknr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_id_individnr"
-            android:layout_toRightOf="@id/individual_entry_id_individnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_id_individnr"
+            android:layout_toRightOf="@id/individual_edit_entry_id_individnr"
             android:inputType="number"
             android:maxLength="1"
             android:minEms="1" />
         <!-- ID nr end -->
 
         <ImageButton
-            android:id="@+id/individual_imgbutton_thumb"
+            android:id="@+id/individual_edit_imgbutton_thumb"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/individual_entry_id_org"
+            android:layout_below="@id/individual_edit_entry_id_org"
             android:layout_marginRight="8dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/button_bg_green"
@@ -84,22 +84,22 @@
         <!-- Short nr start -->
 
         <TextView
-            android:id="@+id/individual_label_shortnr"
+            android:id="@+id/individual_edit_label_shortnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/individual_entry_shortnr"
-            android:layout_alignBottom="@id/individual_entry_shortnr"
+            android:layout_alignBaseline="@+id/individual_edit_entry_shortnr"
+            android:layout_alignBottom="@id/individual_edit_entry_shortnr"
             android:layout_marginRight="8dp"
-            android:layout_toRightOf="@id/individual_imgbutton_thumb"
+            android:layout_toRightOf="@id/individual_edit_imgbutton_thumb"
             android:text="@string/individual_label_shortnr" />
 
         <EditText
-            android:id="@id/individual_entry_shortnr"
+            android:id="@id/individual_edit_entry_shortnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/individual_imgbutton_thumb"
-            android:layout_below="@id/individual_entry_id_org"
-            android:layout_toRightOf="@id/individual_label_shortnr"
+            android:layout_alignTop="@id/individual_edit_imgbutton_thumb"
+            android:layout_below="@id/individual_edit_entry_id_org"
+            android:layout_toRightOf="@id/individual_edit_label_shortnr"
             android:inputType="number"
             android:maxLength="4"
             android:minEms="2"
@@ -111,23 +111,23 @@
         <!-- Name start -->
 
         <TextView
-            android:id="@+id/individual_label_name"
+            android:id="@+id/individual_edit_label_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/individual_entry_name"
+            android:layout_alignBaseline="@+id/individual_edit_entry_name"
             android:layout_marginRight="8dp"
-            android:layout_toRightOf="@id/individual_imgbutton_thumb"
+            android:layout_toRightOf="@id/individual_edit_imgbutton_thumb"
             android:text="@string/individual_label_name" />
 
         <EditText
-            android:id="@id/individual_entry_name"
+            android:id="@id/individual_edit_entry_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/individual_imgbutton_thumb"
-            android:layout_alignLeft="@id/individual_entry_shortnr"
+            android:layout_alignBottom="@id/individual_edit_imgbutton_thumb"
+            android:layout_alignLeft="@id/individual_edit_entry_shortnr"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/individual_entry_shortnr"
-            android:layout_toRightOf="@id/individual_label_name"
+            android:layout_below="@id/individual_edit_entry_shortnr"
+            android:layout_toRightOf="@id/individual_edit_label_name"
             android:ellipsize="end"
             android:inputType="text"
             android:lines="1"
@@ -140,10 +140,10 @@
         <!-- DIVIDER -->
 
         <View
-            android:id="@+id/individual_hr1"
+            android:id="@+id/individual_edit_hr1"
             android:layout_width="fill_parent"
             android:layout_height="2dp"
-            android:layout_below="@id/individual_imgbutton_thumb"
+            android:layout_below="@id/individual_edit_imgbutton_thumb"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:background="@color/light_gray" />
@@ -151,28 +151,28 @@
         <!-- Birthdate start -->
 
         <TextView
-            android:id="@+id/individual_label_birthdate"
+            android:id="@+id/individual_edit_label_birthdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/individual_hr1"
+            android:layout_below="@id/individual_edit_hr1"
             android:text="@string/individual_label_birthdate" />
 
         <EditText
-            android:id="@+id/individual_entry_birthdate"
+            android:id="@+id/individual_edit_entry_birthdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_label_birthdate"
-            android:layout_below="@id/individual_label_birthdate"
+            android:layout_alignLeft="@id/individual_edit_label_birthdate"
+            android:layout_below="@id/individual_edit_label_birthdate"
             android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/individual_imgbutton_birthdate_calendar"
+            android:layout_toLeftOf="@+id/individual_edit_imgbutton_birthdate_calendar"
             android:inputType="number" />
 
         <ImageButton
-            android:id="@id/individual_imgbutton_birthdate_calendar"
+            android:id="@id/individual_edit_imgbutton_birthdate_calendar"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignBottom="@id/individual_entry_birthdate"
+            android:layout_alignBottom="@id/individual_edit_entry_birthdate"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_bg_green"
             android:scaleType="centerCrop"
@@ -183,55 +183,55 @@
         <!-- Mother ID start -->
 
         <TextView
-            android:id="@+id/individual_label_mother_idnr"
+            android:id="@+id/individual_edit_label_mother_idnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/individual_entry_mother_org"
+            android:layout_alignBaseline="@+id/individual_edit_entry_mother_org"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp"
             android:minEms="3"
             android:text="@string/individual_label_mother_idnr" />
 
         <EditText
-            android:id="@id/individual_entry_mother_org"
+            android:id="@id/individual_edit_entry_mother_org"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/individual_entry_birthdate"
+            android:layout_below="@id/individual_edit_entry_birthdate"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/individual_label_mother_idnr"
+            android:layout_toRightOf="@id/individual_edit_label_mother_idnr"
             android:imeOptions="actionNext"
             android:maxLength="2"
             android:minEms="2"
             android:text="@string/production_site_org_default" />
 
         <EditText
-            android:id="@+id/individual_entry_mother_ppnr"
+            android:id="@+id/individual_edit_entry_mother_ppnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_mother_org"
-            android:layout_toRightOf="@id/individual_entry_mother_org"
+            android:layout_alignBaseline="@id/individual_edit_entry_mother_org"
+            android:layout_toRightOf="@id/individual_edit_entry_mother_org"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="6"
             android:minEms="4" />
 
         <EditText
-            android:id="@+id/individual_entry_mother_individnr"
+            android:id="@+id/individual_edit_entry_mother_individnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_mother_ppnr"
-            android:layout_toRightOf="@id/individual_entry_mother_ppnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_mother_ppnr"
+            android:layout_toRightOf="@id/individual_edit_entry_mother_ppnr"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="4"
             android:minEms="3" />
 
         <EditText
-            android:id="@+id/individual_entry_mother_checknr"
+            android:id="@+id/individual_edit_entry_mother_checknr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_mother_individnr"
-            android:layout_toRightOf="@id/individual_entry_mother_individnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_mother_individnr"
+            android:layout_toRightOf="@id/individual_edit_entry_mother_individnr"
             android:inputType="number"
             android:maxLength="1"
             android:minEms="1" />
@@ -241,55 +241,55 @@
         <!-- Father ID start -->
 
         <TextView
-            android:id="@+id/individual_label_father_idnr"
+            android:id="@+id/individual_edit_label_father_idnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/individual_entry_father_org"
+            android:layout_alignBaseline="@+id/individual_edit_entry_father_org"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="8dp"
             android:minEms="3"
             android:text="@string/individual_label_father_idnr" />
 
         <EditText
-            android:id="@id/individual_entry_father_org"
+            android:id="@id/individual_edit_entry_father_org"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/individual_entry_mother_org"
+            android:layout_below="@id/individual_edit_entry_mother_org"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/individual_label_father_idnr"
+            android:layout_toRightOf="@id/individual_edit_label_father_idnr"
             android:imeOptions="actionNext"
             android:maxLength="2"
             android:minEms="2"
             android:text="@string/production_site_org_default" />
 
         <EditText
-            android:id="@+id/individual_entry_father_ppnr"
+            android:id="@+id/individual_edit_entry_father_ppnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_father_org"
-            android:layout_toRightOf="@id/individual_entry_father_org"
+            android:layout_alignBaseline="@id/individual_edit_entry_father_org"
+            android:layout_toRightOf="@id/individual_edit_entry_father_org"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="6"
             android:minEms="4" />
 
         <EditText
-            android:id="@+id/individual_entry_father_individnr"
+            android:id="@+id/individual_edit_entry_father_individnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_father_ppnr"
-            android:layout_toRightOf="@id/individual_entry_father_ppnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_father_ppnr"
+            android:layout_toRightOf="@id/individual_edit_entry_father_ppnr"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="4"
             android:minEms="3" />
 
         <EditText
-            android:id="@+id/individual_entry_father_checknr"
+            android:id="@+id/individual_edit_entry_father_checknr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_entry_father_individnr"
-            android:layout_toRightOf="@id/individual_entry_father_individnr"
+            android:layout_alignBaseline="@id/individual_edit_entry_father_individnr"
+            android:layout_toRightOf="@id/individual_edit_entry_father_individnr"
             android:inputType="number"
             android:maxLength="1"
             android:minEms="1" />
@@ -299,10 +299,10 @@
         <!-- DIVIDER -->
 
         <View
-            android:id="@+id/individual_hr2"
+            android:id="@+id/individual_edit_hr2"
             android:layout_width="fill_parent"
             android:layout_height="2dp"
-            android:layout_below="@id/individual_entry_father_org"
+            android:layout_below="@id/individual_edit_entry_father_org"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:background="@color/light_gray" />
@@ -310,48 +310,48 @@
         <!-- Sex start -->
 
         <TextView
-            android:id="@+id/individual_label_sex"
+            android:id="@+id/individual_edit_label_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/individual_hr2"
+            android:layout_below="@id/individual_edit_hr2"
             android:text="@string/individual_label_sex" />
 
         <Spinner
-            android:id="@+id/individual_spinner_sex"
+            android:id="@+id/individual_edit_spinner_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_label_sex"
-            android:layout_below="@id/individual_label_sex" />
+            android:layout_alignLeft="@id/individual_edit_label_sex"
+            android:layout_below="@id/individual_edit_label_sex" />
         <!-- Sex end -->
 
 
         <!-- Heat cyclus start -->
 
         <TextView
-            android:id="@+id/individual_label_heatcyclus"
+            android:id="@+id/individual_edit_label_heatcyclus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_label_sex"
+            android:layout_alignBaseline="@id/individual_edit_label_sex"
             android:layout_centerHorizontal="true"
             android:text="@string/individual_label_heatcyclus" />
 
         <EditText
-            android:id="@+id/individual_entry_heatcyclus"
+            android:id="@+id/individual_edit_entry_heatcyclus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_label_heatcyclus"
-            android:layout_alignTop="@id/individual_spinner_sex"
+            android:layout_alignLeft="@id/individual_edit_label_heatcyclus"
+            android:layout_alignTop="@id/individual_edit_spinner_sex"
             android:inputType="number"
             android:maxLength="2"
             android:minEms="2" />
         
         <ImageButton
-            android:id="@+id/individual_imgbutton_heatcyclus_edit"
+            android:id="@+id/individual_edit_imgbutton_heatcyclus_edit"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignBottom="@id/individual_entry_heatcyclus"
-            android:layout_toRightOf="@id/individual_entry_heatcyclus"
+            android:layout_alignBottom="@id/individual_edit_entry_heatcyclus"
+            android:layout_toRightOf="@id/individual_edit_entry_heatcyclus"
             android:layout_marginLeft="4dp"
             android:background="@drawable/button_bg_green"
             android:scaleType="centerCrop"
@@ -362,29 +362,29 @@
         <!-- Lactation nr start -->
 
         <TextView
-            android:id="@+id/individual_label_lactationnr"
+            android:id="@+id/individual_edit_label_lactationnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/individual_label_sex"
+            android:layout_alignBaseline="@id/individual_edit_label_sex"
             android:layout_alignParentRight="true"
             android:text="@string/individual_label_lactationnr" />
 
         <EditText
-            android:id="@+id/individual_entry_lactationnr"
+            android:id="@+id/individual_edit_entry_lactationnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_label_lactationnr"
-            android:layout_alignTop="@id/individual_spinner_sex"
+            android:layout_alignLeft="@id/individual_edit_label_lactationnr"
+            android:layout_alignTop="@id/individual_edit_spinner_sex"
             android:inputType="number"
             android:maxLength="2"
             android:minEms="2" />
         
          <ImageButton
-            android:id="@+id/individual_imgbutton_lactationnr_edit"
+            android:id="@+id/individual_edit_imgbutton_lactationnr_edit"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignBottom="@id/individual_entry_lactationnr"
-            android:layout_toRightOf="@id/individual_entry_lactationnr"
+            android:layout_alignBottom="@id/individual_edit_entry_lactationnr"
+            android:layout_toRightOf="@id/individual_edit_entry_lactationnr"
             android:layout_marginLeft="4dp"
             android:background="@drawable/button_bg_green"
             android:scaleType="centerCrop"
@@ -395,29 +395,29 @@
         <!-- Last birth start -->
         
         <TextView
-            android:id="@+id/individual_label_lastbirth"
+            android:id="@+id/individual_edit_label_lastbirth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_spinner_sex"
-            android:layout_below="@id/individual_spinner_sex"
+            android:layout_alignLeft="@id/individual_edit_spinner_sex"
+            android:layout_below="@id/individual_edit_spinner_sex"
             android:layout_marginTop="8dp"
             android:text="@string/individual_label_lastbirth" />
 
         <EditText
-            android:id="@+id/individual_entry_lastbirth"
+            android:id="@+id/individual_edit_entry_lastbirth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/individual_label_lastbirth"
-            android:layout_below="@id/individual_label_lastbirth"
+            android:layout_alignLeft="@id/individual_edit_label_lastbirth"
+            android:layout_below="@id/individual_edit_label_lastbirth"
             android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/individual_imgbutton_lastbirth_calendar"
+            android:layout_toLeftOf="@+id/individual_edit_imgbutton_lastbirth_calendar"
             android:inputType="number" />
 
         <ImageButton
-            android:id="@id/individual_imgbutton_lastbirth_calendar"
+            android:id="@id/individual_edit_imgbutton_lastbirth_calendar"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignBottom="@id/individual_entry_lastbirth"
+            android:layout_alignBottom="@id/individual_edit_entry_lastbirth"
             android:layout_alignParentRight="true"
             android:background="@drawable/button_bg_green"
             android:scaleType="centerCrop"

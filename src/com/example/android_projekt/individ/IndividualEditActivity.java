@@ -106,12 +106,12 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Get handles to the different widgets
 	 */
 	private void findViews() {
-		etIdnrOrg = (EditText) findViewById(R.id.individual_entry_id_org);
-		etIdnrPpnr = (EditText) findViewById(R.id.individual_entry_id_ppnr);
-		etIdnrIndividnr = (EditText) findViewById(R.id.individual_entry_id_individnr);
-		etIdnrChecknr = (EditText) findViewById(R.id.individual_entry_id_checknr);
-		etShortnr = (EditText) findViewById(R.id.individual_entry_shortnr);
-		spinSex = (Spinner) findViewById(R.id.individual_spinner_sex);
+		etIdnrOrg = (EditText) findViewById(R.id.individual_edit_entry_id_org);
+		etIdnrPpnr = (EditText) findViewById(R.id.individual_edit_entry_id_ppnr);
+		etIdnrIndividnr = (EditText) findViewById(R.id.individual_edit_entry_id_individnr);
+		etIdnrChecknr = (EditText) findViewById(R.id.individual_edit_entry_id_checknr);
+		etShortnr = (EditText) findViewById(R.id.individual_edit_entry_shortnr);
+		spinSex = (Spinner) findViewById(R.id.individual_edit_spinner_sex);
 	}
 	
 	/**
