@@ -21,9 +21,13 @@
     <string name="individual_label_shortnr">Kortnr</string>
     <string name="individual_label_name">Namn</string>
     <string name="individual_label_active">Aktiv</string>
+    <string name="individual_label_birthdate">Födelsedatum</string>
+    <string name="individual_label_mother_idnr">Mor ID</string>
+    <string name="individual_label_father_idnr">Far ID</string>
     <string name="individual_label_sex">Kön</string>
     <string name="individual_label_heatcyclus">Brunstcykel</string>
     <string name="individual_label_lactationnr">Laktationsnr</string>
+    <string name="individual_label_lastbirth">Senaste kalvning</string>
     <string name="individual_sex_male">Tjur</string>
     <string name="individual_sex_female">Ko</string>
     
