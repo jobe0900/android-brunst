@@ -3,6 +3,7 @@ package com.example.android_projekt.individ;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.example.android_projekt.productionsite.ProductionSiteNr;
@@ -17,7 +18,7 @@ public class Individual implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	public static final int UNSAVED_ID = -1;
-	private static final int DEFAULT_HEATCYCLUS = 21;	// 21 days
+	public static final int DEFAULT_HEATCYCLUS = 21;	// 21 days
 	
 	
 	public static enum Sex {
@@ -28,11 +29,11 @@ public class Individual implements Serializable
 	private long _id;
 	private IdNr idnr;
 	private int shortnr;
-	private Date birthdate;
+	private Calendar birthdate;
 	private String name;
 	private Sex sex;
 	private boolean active;
-	private Date lastbirth;
+	private Calendar lastbirth;
 	private int lactationnr;
 	private int heatcyclus;
 	private ProductionSiteNr homesitenr;
@@ -107,11 +108,11 @@ public class Individual implements Serializable
 		return birthdate != null;
 	}
 	
-	public Date getBirthdate() {
+	public Calendar getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(Calendar birthdate) {
 		this.birthdate = birthdate;
 	}
 	
@@ -161,11 +162,11 @@ public class Individual implements Serializable
 		return lastbirth != null && !lastbirth.equals("");
 	}
 
-	public Date getLastBirth() {
+	public Calendar getLastBirth() {
 		return lastbirth;
 	}
 
-	public void setLastBirth(Date lastbirth) {
+	public void setLastBirth(Calendar lastbirth) {
 		this.lastbirth = lastbirth;
 	}
 

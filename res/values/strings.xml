@@ -12,8 +12,10 @@
     
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nej</string>
+    <string name="dialog_cancel">Avbryt</string>
     <string name="dialog_ask_delete_site">Ta bort</string>
     <string name="dialog_pick_image">Välj en bild</string>
+    <string name="dialog_pick_number">Välj</string>
     
     <string name="individual">Individ</string>
     <string name="individual_activity_title">Individ</string>

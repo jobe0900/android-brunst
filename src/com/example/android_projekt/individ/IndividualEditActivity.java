@@ -1,5 +1,6 @@
 package com.example.android_projekt.individ;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.example.android_projekt.R;
@@ -14,19 +15,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -36,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -46,6 +53,8 @@ import android.provider.MediaStore;
 public class IndividualEditActivity extends ActionBarActivity 
 {
 	private final static String TAG = "Brunst: IndividualEditActivity";
+	private final static String DIALOG_BIRTHDATE = "pickBirthdate";
+	private final static String DIALOG_LASTBIRTH = "pickLastBirth";
 	
 	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualEditActivity.ProductionSiteNr";
 	public final static String EXTRA_INDIVIDUAL_UPDATE = "brunst.extra.IndividualEditActivity.IndividualUpdate";
@@ -80,6 +89,10 @@ public class IndividualEditActivity extends ActionBarActivity
 	private Individual individual;
 	private ArrayAdapter<CharSequence> sexAdapter;
 	private Uri imageUri;
+	private static Calendar basePickerDate;		// date to use as base for date picker
+//	private static int basePickerNumber;	// number to use as base in picker
+	private EditText pickNumberForThis;		// the edit text to set with number picker dialog
+	
 	private boolean updating = false;
 	private boolean female = true;
 	
@@ -182,6 +195,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		disableEntry(etBirthdate);
 		disableEntry(etHeatCyclus);
 		disableEntry(etLactationNr);
+		disableEntry(etLastBirth);
 		
 		// if NEW
 		if(currentSiteNr != null && !updating) {
@@ -193,6 +207,8 @@ public class IndividualEditActivity extends ActionBarActivity
 			etMotherPpnr.setText(ppnr);
 			etFatherOrg.setText(org);
 			etFatherPpnr.setText(ppnr);
+			etHeatCyclus.setText(Individual.DEFAULT_HEATCYCLUS + "");
+			etLactationNr.setText("0");
 		}
 		// if UPDATING
 		if(updating) {
@@ -221,7 +237,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			}
 			
 			if(individual.hasBirthdate()) {
-				etName.setText(Utils.dateToString(individual.getBirthdate()));
+				etName.setText(Utils.calendarToString(individual.getBirthdate()));
 			}
 			
 			if(individual.hasMotherIdNr()) {
@@ -257,7 +273,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			etLactationNr.setText(individual.getLactationNr() + "");
 			
 			if(individual.hasLastBirth()) {
-				etName.setText(Utils.dateToString(individual.getLastBirth()));
+				etName.setText(Utils.calendarToString(individual.getLastBirth()));
 			}
 			
 			if(individual.hasImageUri()) {
@@ -319,6 +335,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	private void setupListeners() {
 		setupOnFocusChangeListeners();
 		setupOnItemSelectedListeners();
+		setupOnClickListeners();
 	}
 
 	/**
@@ -335,6 +352,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Perform an action when widget loses focus
 	 */
 	private void setupOnFocusChangeListeners() {
+		// Set Short nr when IndividNr has text
 		etIdnrIndividnr.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -370,15 +388,146 @@ public class IndividualEditActivity extends ActionBarActivity
 				// NOTHING
 			}
 		});
+	}
+
+	/**
+	 * Set up OnClickListeners for buttons.
+	 */
+	private void setupOnClickListeners() {
+		OnClickListener clickListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				switch(v.getId()) {
+				case R.id.individual_edit_imgbutton_birthdate_calendar:
+					pickBirthdate();
+					break;
+				case R.id.individual_edit_imgbutton_lastbirth_calendar:
+					pickLastBirth();
+					break;
+				case R.id.individual_edit_imgbutton_heatcyclus_edit:
+					pickHeatCyclus();
+					break;
+				case R.id.individual_edit_imgbutton_lactationnr_edit:
+					pickLactationNr();
+					break;
+				}
+				
+			}
+		};
+		ibBirthdateCalendar.setOnClickListener(clickListener);
+		ibLastBirthCalendar.setOnClickListener(clickListener);
+		ibHeatCyclus.setOnClickListener(clickListener);
+		ibLactationNr.setOnClickListener(clickListener);
+	}
+
+	/**
+	 * Fire up a NumberPicker dialog to set the HeatCyclus.
+	 */
+	protected void pickHeatCyclus() {
+		pickNumberForThis = etHeatCyclus;
+		pickNumberDialog();
+	}
+	
+	/**
+	 * Fire up NumberPicker dialog to set the LactationNr.
+	 */
+	protected void pickLactationNr() {
+		pickNumberForThis = etLactationNr;
+		pickNumberDialog();
+	}
+
+	/**
+	 * Get the NumberPicker dialog on screen
+	 */
+	private void pickNumberDialog() {
+		Log.d(TAG, "building NumberPicker");
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.number_picker, null);
 		
+		final NumberPicker picker = (NumberPicker) view.findViewById(R.id.dialog_number_picker);
+		String title;
+		int value;
+		int low;
+		int high;
+		
+		if(pickNumberForThis == etHeatCyclus) {
+			title = getString(R.string.dialog_pick_number) + " " + getString(R.string.individual_label_heatcyclus);
+			value = Integer.parseInt(pickNumberForThis.getText().toString());
+			low = value - 10;
+			high = value + 10;
+			Log.d(TAG, title + ": " + low + " < " + value + " < " + high);
+		}
+		else {	// lactation nr
+			title = getString(R.string.dialog_pick_number) + " " + getString(R.string.individual_label_lactationnr);
+			value = Integer.parseInt(pickNumberForThis.getText().toString());
+			low = 0;
+			high = 25;
+			Log.d(TAG, title + ": " + low + " < " + value + " < " + high);
+		}
+		
+		picker.setMinValue(low);
+		picker.setMaxValue(high);
+		picker.setValue(value);
+		picker.setWrapSelectorWheel(false);
+		
+		// Build the dialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(view);
+		builder.setTitle(title);
+		builder.setCancelable(true);
+		// SET
+		builder.setPositiveButton(R.string.dialog_pick_number, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int val = picker.getValue();
+				pickNumberForThis.setText(val + "");
+			}
+		});
+		// CANCEL
+		builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// Nothing
+			}
+		});
+		builder.show();
+	}
+
+	/**
+	 * Put up a dialog to pick a date of last birth
+	 */
+	protected void pickLastBirth() {
+		if(individual != null && individual.hasLastBirth()) {
+			basePickerDate = individual.getLastBirth();
+		}
+		else {
+			basePickerDate = null;
+		}
+		DialogFragment dialog = new DatePickerFragment();
+		dialog.show(getSupportFragmentManager(), DIALOG_LASTBIRTH);
+	}
+
+	/**
+	 * Put up a dialog to pick a date of birth
+	 */
+	protected void pickBirthdate() {
+		if(individual != null && individual.hasBirthdate()) {
+			basePickerDate = individual.getBirthdate();
+		}
+		else {
+			basePickerDate = null;
+		}
+		DialogFragment dialog = new DatePickerFragment();
+		dialog.show(getSupportFragmentManager(), DIALOG_BIRTHDATE);
 	}
 
 	/**
 	 * Disable all widgets not relevant for a Male Individual.
 	 */
 	protected void setWidgetVisibility() {
-		// TODO Auto-generated method stub
-		
+		ibHeatCyclus.setEnabled(female);
+		ibLactationNr.setEnabled(female);
+		ibLastBirthCalendar.setEnabled(female);
 	}
 
 	/**
@@ -408,6 +557,53 @@ public class IndividualEditActivity extends ActionBarActivity
 		entry.setKeyListener(null);
 		entry.setFocusable(false);
 		entry.setInputType(InputType.TYPE_NULL);
+	}
+	
+	/**
+	 * Put up a dialog to pick the date
+	 */
+	public static class DatePickerFragment extends DialogFragment
+    	implements DatePickerDialog.OnDateSetListener 
+    {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        	Calendar c;
+        	// if we have set a date as the base
+        	if(basePickerDate != null) {
+        		c = basePickerDate;
+        	}
+        	else {
+        		c = Calendar.getInstance();
+        	}
+        	int year = c.get(Calendar.YEAR);
+        	int month = c.get(Calendar.MONTH);
+        	int day = c.get(Calendar.DAY_OF_MONTH);
+
+        	// Create a new instance of DatePickerDialog and return it
+        	return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+        	Calendar c = Calendar.getInstance();
+        	c.set(year, month, day);
+
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	String dateString = sdf.format(c.getTime());
+        	EditText et;
+        	
+        	switch(getTag()) {
+        	case DIALOG_BIRTHDATE:
+        		et = (EditText) getActivity().findViewById(R.id.individual_edit_entry_birthdate);
+        		et.setText(dateString);
+        		break;
+        	case DIALOG_LASTBIRTH:
+        		et = (EditText) getActivity().findViewById(R.id.individual_edit_entry_lastbirth);
+        		et.setText(dateString);
+        		break;
+        	}
+        }
 	}
 
 }

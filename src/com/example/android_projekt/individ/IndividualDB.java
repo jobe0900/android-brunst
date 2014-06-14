@@ -123,13 +123,13 @@ public class IndividualDB implements BaseColumns
 		values.put(COLUMN_IDNR, individ.getIdNr().toString());
 		values.put(COLUMN_SHORTNR, individ.getShortNr());
 		if(individ.hasBirthdate())
-			values.put(COLUMN_BIRTHDATE, Utils.dateToString(individ.getBirthdate()));
+			values.put(COLUMN_BIRTHDATE, Utils.calendarToString(individ.getBirthdate()));
 		if(individ.hasName())
 			values.put(COLUMN_NAME, individ.getName());
 		values.put(COLUMN_SEX, individ.getSexAsString());
 		values.put(COLUMN_ACTIVE, individ.isActive());
 		if(individ.hasLastBirth())
-			values.put(COLUMN_LASTBIRTH, Utils.dateToString(individ.getLastBirth()));
+			values.put(COLUMN_LASTBIRTH, Utils.calendarToString(individ.getLastBirth()));
 		values.put(COLUMN_LACTATIONNR, individ.getLactationNr());
 		values.put(COLUMN_HEATCYCLUS, individ.getHeatcyclus());
 		values.put(COLUMN_HOMESITE, individ.getHomesiteNr().toString());
