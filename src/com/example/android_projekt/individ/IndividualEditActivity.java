@@ -59,6 +59,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	
 	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualEditActivity.ProductionSiteNr";
 	public final static String EXTRA_INDIVIDUAL_UPDATE = "brunst.extra.IndividualEditActivity.IndividualUpdate";
+	private final static int INTENT_PICK_IMAGE = 10;	// id for the gallery intent
 	
 	// WIDGETS
 	private EditText etIdnrOrg;
@@ -93,7 +94,6 @@ public class IndividualEditActivity extends ActionBarActivity
 	private Individual individual;
 	private ArrayAdapter<CharSequence> sexAdapter;
 	private Uri imageUri;
-//	private static int basePickerNumber;	// number to use as base in picker
 	private EditText pickNumberForThis;		// the edit text to set with number picker dialog
 	
 	private boolean updating = false;
@@ -147,6 +147,23 @@ public class IndividualEditActivity extends ActionBarActivity
 		return super.onOptionsItemSelected(item);
 	}
 	
+	// Handle results from picking image in gallery
+	@Override
+	protected void onActivityResult(int request, int result, Intent data) {
+		super.onActivityResult(request, result, data);
+
+		Log.d(TAG, "Return from gallery");
+		switch(request) {
+		case INTENT_PICK_IMAGE:
+			if(data != null) {
+				imageUri = data.getData();
+				Log.d(TAG, "Has URI: " + imageUri.toString());
+				setThumbnail();
+			}
+			break;
+		}
+	}
+	
 	@Override
 	protected void onResume() {
 //		individualDB.open();
@@ -181,6 +198,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		etHeatCyclus = (EditText) findViewById(R.id.individual_edit_entry_heatcyclus);
 		etLactationNr = (EditText) findViewById(R.id.individual_edit_entry_lactationnr);
 		etLastBirth = (EditText) findViewById(R.id.individual_edit_entry_lastbirth);
+		ibThumb = (ImageButton) findViewById(R.id.individual_edit_imgbutton_thumb);
 		ibBirthdateCalendar = (ImageButton) findViewById(R.id.individual_edit_imgbutton_birthdate_calendar);
 		ibHeatCyclus = (ImageButton) findViewById(R.id.individual_edit_imgbutton_heatcyclus_edit);
 		ibLactationNr = (ImageButton) findViewById(R.id.individual_edit_imgbutton_lactationnr_edit);
@@ -404,6 +422,9 @@ public class IndividualEditActivity extends ActionBarActivity
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
+				case R.id.individual_edit_imgbutton_thumb:
+					openGallery();
+					break;
 				case R.id.individual_edit_imgbutton_birthdate_calendar:
 					pickBirthdate();
 					break;
@@ -420,10 +441,22 @@ public class IndividualEditActivity extends ActionBarActivity
 				
 			}
 		};
+		ibThumb.setOnClickListener(clickListener);
 		ibBirthdateCalendar.setOnClickListener(clickListener);
 		ibLastBirthCalendar.setOnClickListener(clickListener);
 		ibHeatCyclus.setOnClickListener(clickListener);
 		ibLactationNr.setOnClickListener(clickListener);
+	}
+
+	/**
+	 * Open the gallery to pick an image for the ProductionSite
+	 */
+	protected void openGallery() {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, getString(R.string.dialog_pick_image)), INTENT_PICK_IMAGE);
 	}
 
 	/**
@@ -668,12 +701,8 @@ public class IndividualEditActivity extends ActionBarActivity
         					// TODO Nothing?
         				}
         			});
-
         	
         	return dialog;
-
-        	// Create a new instance of DatePickerDialog and return it
-//        	return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         @Override
@@ -702,7 +731,6 @@ public class IndividualEditActivity extends ActionBarActivity
         	// TODO Auto-generated method stub
         	super.onCancel(dialog);
         }
-        
-	}
+	} // end DatePickerFragment	
 
 }
