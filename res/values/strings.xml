@@ -13,6 +13,7 @@
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nej</string>
     <string name="dialog_cancel">Avbryt</string>
+    <string name="dialog_choose">Välj</string>
     <string name="dialog_ask_delete_site">Ta bort</string>
     <string name="dialog_pick_image">Välj en bild</string>
     <string name="dialog_pick_number">Välj</string>

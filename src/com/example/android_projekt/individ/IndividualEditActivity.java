@@ -1,5 +1,6 @@
 package com.example.android_projekt.individ;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -89,7 +90,6 @@ public class IndividualEditActivity extends ActionBarActivity
 	private Individual individual;
 	private ArrayAdapter<CharSequence> sexAdapter;
 	private Uri imageUri;
-	private static Calendar basePickerDate;		// date to use as base for date picker
 //	private static int basePickerNumber;	// number to use as base in picker
 	private EditText pickNumberForThis;		// the edit text to set with number picker dialog
 	
@@ -497,13 +497,30 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Put up a dialog to pick a date of last birth
 	 */
 	protected void pickLastBirth() {
+		Calendar baseDate;
 		if(individual != null && individual.hasLastBirth()) {
-			basePickerDate = individual.getLastBirth();
+			baseDate = individual.getLastBirth();
+		}
+		else if(etLastBirth.getText().length() > 0) {
+			try {
+				baseDate = Utils.stringToCalendar(etLastBirth.getText().toString());
+			} catch (ParseException ex) {
+				Log.d(TAG, "Error parsing date");
+				baseDate = null;
+			}
 		}
 		else {
-			basePickerDate = null;
+			baseDate = null;
 		}
 		DialogFragment dialog = new DatePickerFragment();
+		if(baseDate != null) {
+			Bundle b = new Bundle();
+			b.putInt(DatePickerFragment.YEAR, baseDate.get(Calendar.YEAR));
+			b.putInt(DatePickerFragment.MONTH, baseDate.get(Calendar.MONTH));
+			b.putInt(DatePickerFragment.DAY, baseDate.get(Calendar.DAY_OF_MONTH));
+			dialog.setArguments(b);
+			Log.d(TAG, "built a bundle for DatePicker: " + b);
+		}
 		dialog.show(getSupportFragmentManager(), DIALOG_LASTBIRTH);
 	}
 
@@ -511,13 +528,31 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Put up a dialog to pick a date of birth
 	 */
 	protected void pickBirthdate() {
+		Log.d(TAG, "Birthdate Text length: " + etBirthdate.getText().length());
+		Calendar baseDate;
 		if(individual != null && individual.hasBirthdate()) {
-			basePickerDate = individual.getBirthdate();
+			baseDate = individual.getBirthdate();
+		}
+		else if(etBirthdate.getText().length() > 0) {
+			try {
+				baseDate = Utils.stringToCalendar(etBirthdate.getText().toString());
+			} catch (ParseException ex) {
+				Log.d(TAG, "Error parsing date");
+				baseDate = null;
+			}
 		}
 		else {
-			basePickerDate = null;
+			baseDate = null;
 		}
 		DialogFragment dialog = new DatePickerFragment();
+		if(baseDate != null) {
+			Bundle b = new Bundle();
+			b.putInt(DatePickerFragment.YEAR, baseDate.get(Calendar.YEAR));
+			b.putInt(DatePickerFragment.MONTH, baseDate.get(Calendar.MONTH));
+			b.putInt(DatePickerFragment.DAY, baseDate.get(Calendar.DAY_OF_MONTH));
+			dialog.setArguments(b);
+			Log.d(TAG, "built a bundle for DatePicker: " + b);
+		}
 		dialog.show(getSupportFragmentManager(), DIALOG_BIRTHDATE);
 	}
 
@@ -560,28 +595,69 @@ public class IndividualEditActivity extends ActionBarActivity
 	}
 	
 	/**
-	 * Put up a dialog to pick the date
+	 * Put up a dialog to pick the date.
+	 * Should give arguments in a bundle.
 	 */
 	public static class DatePickerFragment extends DialogFragment
     	implements DatePickerDialog.OnDateSetListener 
     {
+		public static final String YEAR = "DatePickerFragment.YEAR";
+		public static final String MONTH = "DatePickerFragment.MONTH";
+		public static final String DAY = "DatePickerFragment.DAY";
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-        	Calendar c;
+        	Bundle arguments = getArguments();
+        	Log.d(TAG, "arguments to DatePicker: " + arguments);
+        	
+        	int year;
+        	int month;
+        	int day;
         	// if we have set a date as the base
-        	if(basePickerDate != null) {
-        		c = basePickerDate;
+        	if(arguments != null) {
+        		Log.d(TAG, "has arguments");
+        		year = arguments.getInt(YEAR);
+        		month = arguments.getInt(MONTH);
+        		day = arguments.getInt(DAY);
         	}
         	else {
-        		c = Calendar.getInstance();
+        		Calendar c = Calendar.getInstance();
+        		year = c.get(Calendar.YEAR);
+            	month = c.get(Calendar.MONTH);
+            	day = c.get(Calendar.DAY_OF_MONTH);
         	}
-        	int year = c.get(Calendar.YEAR);
-        	int month = c.get(Calendar.MONTH);
-        	int day = c.get(Calendar.DAY_OF_MONTH);
+        	
+        	
+        	final DatePickerDialog dialog = new DatePickerDialog(getActivity(), null, 
+        			year, month, day);
+        	
+        	dialog.setCancelable(true);
+        	dialog.setCanceledOnTouchOutside(true);
+        	
+        	// TODO set listeners
+        	dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.dialog_choose),
+        			new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface di, int which) {
+							// TODO Auto-generated method stub
+							DatePicker picker = dialog.getDatePicker();
+							picker.clearFocus();
+							onDateSet(picker, picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
+						}
+					});
+        	dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_cancel), 
+        			new DialogInterface.OnClickListener() {
+        				@Override
+        				public void onClick(DialogInterface di, int which) {
+        					// TODO Nothing?
+        				}
+        			});
+
+        	
+        	return dialog;
 
         	// Create a new instance of DatePickerDialog and return it
-        	return new DatePickerDialog(getActivity(), this, year, month, day);
+//        	return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         @Override
@@ -604,6 +680,13 @@ public class IndividualEditActivity extends ActionBarActivity
         		break;
         	}
         }
+        
+        @Override
+        public void onCancel(DialogInterface dialog) {
+        	// TODO Auto-generated method stub
+        	super.onCancel(dialog);
+        }
+        
 	}
 
 }
