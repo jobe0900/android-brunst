@@ -85,6 +85,9 @@ public class IndividualEditActivity extends ActionBarActivity
 	private ImageButton ibLactationNr;
 	private ImageButton ibLastBirthCalendar;
 	private Spinner  spinSex;
+	private TextView tvHeatCyclus;
+	private TextView tvLactationNr;
+	private TextView tvLastBirth;
 	
 	private ProductionSiteNr currentSiteNr;
 	private Individual individual;
@@ -183,6 +186,9 @@ public class IndividualEditActivity extends ActionBarActivity
 		ibLactationNr = (ImageButton) findViewById(R.id.individual_edit_imgbutton_lactationnr_edit);
 		ibLastBirthCalendar = (ImageButton) findViewById(R.id.individual_edit_imgbutton_lastbirth_calendar);
 		spinSex = (Spinner) findViewById(R.id.individual_edit_spinner_sex);
+		tvHeatCyclus = (TextView) findViewById(R.id.individual_edit_label_heatcyclus);
+		tvLactationNr = (TextView) findViewById(R.id.individual_edit_label_lactationnr);
+		tvLastBirth = (TextView) findViewById(R.id.individual_edit_label_lastbirth);
 	}
 	
 	/**
@@ -560,9 +566,19 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Disable all widgets not relevant for a Male Individual.
 	 */
 	protected void setWidgetVisibility() {
-		ibHeatCyclus.setEnabled(female);
-		ibLactationNr.setEnabled(female);
-		ibLastBirthCalendar.setEnabled(female);
+//		ibHeatCyclus.setEnabled(female);
+//		ibLactationNr.setEnabled(female);
+//		ibLastBirthCalendar.setEnabled(female);
+		int visibility = female ? View.VISIBLE : View.GONE;
+		etHeatCyclus.setVisibility(visibility);
+		etLactationNr.setVisibility(visibility);
+		etLastBirth.setVisibility(visibility);
+		ibHeatCyclus.setVisibility(visibility);
+		ibLactationNr.setVisibility(visibility);
+		ibLastBirthCalendar.setVisibility(visibility);
+		tvHeatCyclus.setVisibility(visibility);
+		tvLactationNr.setVisibility(visibility);
+		tvLastBirth.setVisibility(visibility);
 	}
 
 	/**
