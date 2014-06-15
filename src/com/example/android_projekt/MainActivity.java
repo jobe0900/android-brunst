@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualEditActivity;
 import com.example.android_projekt.productionsite.ProductionSite;
 import com.example.android_projekt.productionsite.ProductionSiteActivity;
@@ -39,6 +40,7 @@ import android.os.Build;
 public class MainActivity extends ActionBarActivity 
 {	
 	public static final String EXTRA_SITE_UPDATED = "brunst.extra.MainActivity.siteUpdate";
+	public static final String EXTRA_INDIVIDUAL_UPDATED = "brunst.extra.MainActivity.individualUpdate";
 //	public static final String EXTRA_SITE_DELETED = "brunst.extra.MainActivity.siteDelete";
 	private static final String TAG = "Brunst: MAIN";
 	private static final int DB_LOADER = 0;
@@ -59,6 +61,7 @@ public class MainActivity extends ActionBarActivity
 	private ProductionSite currentSite;
 //	private String currentSiteNr = null;
 	private ProductionSite updatedSite = null;
+	private Individual updatedIndividual = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,10 @@ public class MainActivity extends ActionBarActivity
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
+		}
+		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
+			updatedIndividual = (Individual) getIntent().getSerializableExtra(EXTRA_INDIVIDUAL_UPDATED);
+			updatedSite = new ProductionSite(updatedIndividual.getHomesiteNr());
 		}
 		
 		fillSpinners();

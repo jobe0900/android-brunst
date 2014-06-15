@@ -392,21 +392,19 @@ public class ProductionSiteActivity extends ActionBarActivity
 	private void createProductionSiteFromForm() {
 		// org = 2 chars, 0-padded
 		String orgStr = etOrg.getText().toString();
-		int len = orgStr.length();
-		while(len < 2) {
+		while(orgStr.length() < 2) {
 			orgStr = "0" + orgStr;
 		}
-		if(len > 2) {
+		if(orgStr.length() > 2) {
 			orgStr = orgStr.substring(0, 2);
 		}
 		
 		// ppnr = 6 chars, 0-padded
 		String ppnrStr = etPpnr.getText().toString();
-		len = ppnrStr.length();
-		while(len < 6) {
+		while(ppnrStr.length() < 6) {
 			ppnrStr = "0" + ppnrStr;
 		}
-		if(len > 6) {
+		if(ppnrStr.length() > 6) {
 			ppnrStr = ppnrStr.substring(0, 6);
 		}
 		

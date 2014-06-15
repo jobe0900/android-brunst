@@ -4,11 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.example.android_projekt.MainActivity;
 import com.example.android_projekt.R;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.Utils;
+import com.example.android_projekt.individ.Individual.Sex;
 import com.example.android_projekt.productionsite.ProductionSiteNr;
 
 import android.support.v7.app.ActionBarActivity;
@@ -17,6 +19,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -51,6 +54,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import android.os.Build;
 import android.provider.MediaStore;
 
@@ -64,6 +68,10 @@ public class IndividualEditActivity extends ActionBarActivity
 	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualEditActivity.ProductionSiteNr";
 	public final static String EXTRA_INDIVIDUAL_UPDATE = "brunst.extra.IndividualEditActivity.IndividualUpdate";
 	private final static int INTENT_PICK_IMAGE = 10;	// id for the gallery intent
+	// identify which id fields to read
+	private final static String ID_OWN = "ownID";
+	private final static String ID_MOTHER = "motherID";
+	private final static String ID_FATHER = "fatherID";
 	
 	// WIDGETS
 	private EditText etIdnrOrg;
@@ -124,34 +132,39 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		
 //		individualDB = new IndividualDB(this);
-		
-		findViews();
-		prepareViews();
-		
-		setupListeners();
-
+		if(currentSiteNr != null) {
+			findViews();
+			prepareViews();
+			
+			setupListeners();
+		}
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
+	public boolean onPrepareOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.individual, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.individual_edit_activity_actions, menu);
+		// enabled / disable delete depending on update or not
+		menu.getItem(0).setVisible(updating);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch(item.getItemId()) {
+		case R.id.individual_edit_action_delete:
+			deleteIndividual();
 			return true;
+		case R.id.individual_edit_action_save:
+			saveIndividual();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 	
+	
+
 	// Handle results from picking image in gallery
 	@Override
 	protected void onActivityResult(int request, int result, Intent data) {
@@ -264,7 +277,15 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		// if UPDATING
 		if(updating) {
-			spinSex.setEnabled(false); 	// should not be able to change sex...
+			// hide delete icon
+			// TODO
+//			MenuItem deleteItem = getResources().
+			// disable editing IDnr and sex
+			disableEntry(etIdnrOrg);
+			disableEntry(etIdnrPpnr);
+			disableEntry(etIdnrIndividnr);
+			disableEntry(etIdnrChecknr);
+			spinSex.setEnabled(false);
 			populateViews();
 		}
 	}
@@ -701,6 +722,222 @@ public class IndividualEditActivity extends ActionBarActivity
 	}
 	
 	/**
+	 * Attempt to save an individual from contents in form
+	 */
+	private void saveIndividual() {
+		Log.d(TAG, "save action");
+		boolean saveOK = createIndividualFromForm();
+		if(saveOK) {
+			Log.d(TAG, "attempt to save INdividual in DB");
+//			saveOK = individualDB.saveIndividual(individual);
+		}
+		
+		if(saveOK) {
+			Log.d(TAG, "saved OK");
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra(MainActivity.EXTRA_INDIVIDUAL_UPDATED, individual);
+			startActivity(intent);
+		}
+		else {
+			Log.d(TAG, "failed to save");
+			String text = getString(R.string.toast_could_not_save) + " Individ";
+			Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	/**
+	 * Read the form and try to create an individual
+	 */
+	private boolean createIndividualFromForm() {
+		// first check that the ID nr fields are ok
+		IdNr idnr = createIdnrFromForm(ID_OWN);
+		if(idnr == null) {
+			// put up a toast
+			String toastText = getString(R.string.toast_could_not_save) + " Individ";
+			Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		Individual.Sex sex = female ? Sex.F : Sex.M;
+		// now we can create an individual:
+		individual = new Individual(idnr, currentSiteNr, sex);
+		
+		// and read the rest of the fields
+		// SHORTNR
+		try {
+			int shortnr = Integer.parseInt(etShortnr.getText().toString());
+			individual.setShortNr(shortnr);
+		} catch (NumberFormatException ex) {
+			Log.d(TAG, "could not parse shortnr");
+		}
+		// NAME
+		individual.setName(etName.getText().toString());
+		// BIRTHDATE
+		String birthdateString = etBirthdate.getText().toString();
+		if(birthdateString.length() > 0) {
+			try {
+				individual.setBirthdate(Utils.stringToCalendar(birthdateString));
+			} catch (ParseException e) {
+				Log.d(TAG, "could not parse birthdate: " + birthdateString);
+			}
+		}
+		// MOTHER ID
+		IdNr motherIdNr = createIdnrFromForm(ID_MOTHER);
+		if(motherIdNr != null) {
+			individual.setMotherIdNr(motherIdNr);
+		}
+		// FATHER ID
+		IdNr fatherIdNr = createIdnrFromForm(ID_FATHER);
+		if(fatherIdNr != null) {
+			individual.setFatherIdNr(fatherIdNr);
+		}
+		// HEAT CYCLUS
+		try {
+			int heat = Integer.parseInt(etHeatCyclus.getText().toString());
+			individual.setHeatcyclus(heat);
+		} catch (NumberFormatException ex) {
+			Log.d(TAG, "could not parse heat");
+		}
+		// HEAT CYCLUS
+		try {
+			int lactation = Integer.parseInt(etHeatCyclus.getText().toString());
+			individual.setLactationNr(lactation);
+		} catch (NumberFormatException ex) {
+			Log.d(TAG, "could not parse lactation nr");
+		}
+		// LAST BIRTH
+		String lastBirthString = etLastBirth.getText().toString();
+		if(lastBirthString.length() > 0) {
+			try {
+				individual.setLastBirth(Utils.stringToCalendar(lastBirthString));
+			} catch (ParseException e) {
+				Log.d(TAG, "could not parse last birth: " + lastBirthString);
+			}
+		}
+		// IMAGE URI
+		if(imageUri != null) {
+			Log.d(TAG, "Saving URI: " + imageUri.toString());
+			individual.setImageUri(imageUri.toString());
+		}
+		Log.d(TAG, "created the individual " + individual.toString());
+		return true;
+	}
+
+	/**
+	 * Read the related ID fields an try to create an IdNr from that
+	 * @param	id	Which Id to construct: own, mother, father
+	 * @return	a valid IdNr or null
+	 */
+	private IdNr createIdnrFromForm(String id) {
+		IdNr idnr = null;
+		
+		String org = "";
+		String ppnr = "";
+		String individnr = "";
+		String checknr = "";
+		
+		switch(id) {
+		case ID_OWN:
+			org = etIdnrOrg.getText().toString();
+			ppnr = etIdnrPpnr.getText().toString();
+			individnr = etIdnrIndividnr.getText().toString();
+			checknr = etIdnrChecknr.getText().toString();
+			break;
+		case ID_MOTHER:
+			org = etMotherOrg.getText().toString();
+			ppnr = etMotherPpnr.getText().toString();
+			individnr = etMotherIndividnr.getText().toString();
+			checknr = etMotherChecknr.getText().toString();
+			break;
+		case ID_FATHER:
+			org = etFatherOrg.getText().toString();
+			ppnr = etFatherPpnr.getText().toString();
+			individnr = etFatherIndividnr.getText().toString();
+			checknr = etFatherChecknr.getText().toString();
+			break;
+		}
+		
+		if(org.length() > 0 && ppnr.length() > 0 && individnr.length() > 0 && checknr.length() > 0) {
+			// pad the fields
+			org = zeroPad(org, 2);
+			ppnr = zeroPad(ppnr, 6);
+			individnr = zeroPad(individnr, 4);
+			checknr = zeroPad(checknr, 1);
+			String idnrStr = org + "-" + ppnr + "-" + individnr + "-" + checknr;
+			try {
+				idnr = new IdNr(idnrStr);
+			} catch (ParseException e) {
+				Log.d(TAG, "malformed idnr string: " + idnrStr);
+			}
+		}
+		
+		return idnr;
+	}
+
+	/**
+	 * Create a zero padded string of a certain length
+	 * @param str
+	 * @param len
+	 * @return
+	 */
+	private String zeroPad(String str, int len) {
+		while(str.length() < len) {
+			str = "0" + str;
+		}
+		if(str.length() > len) {
+			str = str.substring(0, len);
+		}
+		return str;
+	}
+
+	/**
+	 * Just show confirmattion dialog.
+	 */
+	private void deleteIndividual() {
+		Log.d(TAG, "delete action");
+		showDialogDelete();
+	}
+	
+	/**
+	 * Perform deletion and return to MainActivity.
+	 */
+	private void doDelete() {
+		int rowsAffected = individualDB.deleteIndividual(individual.getIdNr());
+		Log.d(TAG, "nr of deleted rows: " + rowsAffected);
+		
+		// back to main
+		Intent intent = new Intent(this, MainActivity.class);;
+		startActivity(intent);
+	}
+	
+	/**
+	 * Show a dialog, confirming the user's wish to delete an Individual.
+	 */
+	private void showDialogDelete() {
+		if(individual != null) {
+			// ask for confirmation first
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(getString(R.string.dialog_ask_delete_individual) + " " + individual.toString() + "?");
+			builder.setCancelable(true);
+			// YES button
+			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					doDelete();	
+				}
+			});
+			// NO button
+			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// nothing?
+				}
+			});
+
+			builder.show();
+		}
+	}
+	
+	/**
 	 * Put up a dialog to pick the date.
 	 * Should give arguments in a bundle.
 	 */
@@ -740,12 +977,10 @@ public class IndividualEditActivity extends ActionBarActivity
         	dialog.setCancelable(true);
         	dialog.setCanceledOnTouchOutside(true);
         	
-        	// TODO set listeners
         	dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.dialog_choose),
         			new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface di, int which) {
-							// TODO Auto-generated method stub
 							DatePicker picker = dialog.getDatePicker();
 							picker.clearFocus();
 							onDateSet(picker, picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
@@ -755,7 +990,7 @@ public class IndividualEditActivity extends ActionBarActivity
         			new DialogInterface.OnClickListener() {
         				@Override
         				public void onClick(DialogInterface di, int which) {
-        					// TODO Nothing?
+        					// Nothing?
         				}
         			});
         	
