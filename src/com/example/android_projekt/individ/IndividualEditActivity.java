@@ -28,16 +28,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -95,6 +99,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	private ArrayAdapter<CharSequence> sexAdapter;
 	private Uri imageUri;
 	private EditText pickNumberForThis;		// the edit text to set with number picker dialog
+	private View contextMenuForThis;		// the view the context menu belongs to
 	
 	private boolean updating = false;
 	private boolean female = true;
@@ -164,6 +169,29 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 	}
 	
+	// Get the context menu
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.individual_edit_context_menu, menu);
+		contextMenuForThis = v;
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.individual_edit_context_delete:
+	        	Log.d(TAG, "Pick context Delete");
+	            clearView(contextMenuForThis);
+	            contextMenuForThis = null;
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}
+
 	@Override
 	protected void onResume() {
 //		individualDB.open();
@@ -360,6 +388,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		setupOnFocusChangeListeners();
 		setupOnItemSelectedListeners();
 		setupOnClickListeners();
+		setupContextMenuViews();
 	}
 
 	/**
@@ -438,7 +467,6 @@ public class IndividualEditActivity extends ActionBarActivity
 					pickLactationNr();
 					break;
 				}
-				
 			}
 		};
 		ibThumb.setOnClickListener(clickListener);
@@ -446,6 +474,15 @@ public class IndividualEditActivity extends ActionBarActivity
 		ibLastBirthCalendar.setOnClickListener(clickListener);
 		ibHeatCyclus.setOnClickListener(clickListener);
 		ibLactationNr.setOnClickListener(clickListener);
+	}
+	
+	/**
+	 * Register which views to handle long click to pop up Context Menus.
+	 */
+	private void setupContextMenuViews() {
+		registerForContextMenu(ibThumb);
+		registerForContextMenu(etBirthdate);
+		registerForContextMenu(etLastBirth);
 	}
 
 	/**
@@ -641,6 +678,26 @@ public class IndividualEditActivity extends ActionBarActivity
 		entry.setKeyListener(null);
 		entry.setFocusable(false);
 		entry.setInputType(InputType.TYPE_NULL);
+	}
+	
+	/**
+	 * Delete the contents of a view, like remove bitmap of thumb
+	 * @param id
+	 */
+	private void clearView(View view) {
+		Log.d(TAG, "clear view " + view);
+		if(view == ibThumb) {
+			Log.d(TAG, "clear image");
+			ibThumb.setImageDrawable(getResources().getDrawable(R.drawable.ic_visualpharm_cow_add_96));
+		}
+		else if(view == etBirthdate) {
+			Log.d(TAG, "clear birthdate");
+			etBirthdate.setText("");
+		}
+		else if(view == etLastBirth) {
+			Log.d(TAG, "clear last birth");
+			etLastBirth.setText("");
+		}
 	}
 	
 	/**
