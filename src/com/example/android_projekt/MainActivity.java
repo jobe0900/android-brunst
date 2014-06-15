@@ -34,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.os.Build;
 
@@ -48,9 +49,12 @@ public class MainActivity extends ActionBarActivity
 	private Spinner productionSiteSpinner;
 	private ArrayAdapter<String> productionSiteSpinnerAdapter;
 	
-	private Button productionSiteButtonNew;
-	private Button productionSiteButtonEdit;
+//	private Button productionSiteButtonNew;
+	private ImageButton productionSiteButtonNew;
+//	private Button productionSiteButtonEdit;
+	private ImageButton productionSiteButtonEdit;
 	private Button individualButtonNew;
+	
 	
 	private OnClickListener clickListener;
 	private OnItemSelectedListener productionSiteSpinnerListener;
@@ -70,24 +74,30 @@ public class MainActivity extends ActionBarActivity
 		
 		productionSiteSpinner = (Spinner) findViewById(R.id.main_spinner_production_site);
 		
-		productionSiteButtonNew = (Button) findViewById(R.id.main_btn_production_site_new);
-		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
+//		productionSiteButtonNew = (Button) findViewById(R.id.main_btn_production_site_new);
+		productionSiteButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_site_new);
+//		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
+		productionSiteButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_site_edit);
 		individualButtonNew = (Button) findViewById(R.id.main_btn_individual_new);
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
 		}
-		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
+		if(getIntent().hasExtra(EXTRA_INDIVIDUAL_UPDATED)) {
 			updatedIndividual = (Individual) getIntent().getSerializableExtra(EXTRA_INDIVIDUAL_UPDATED);
 			updatedSite = new ProductionSite(updatedIndividual.getHomesiteNr());
 		}
+		
+		setImageButtonEnabled(productionSiteButtonEdit, false);
 		
 		fillSpinners();
 		
 		setupClickListeners();
 		setUpSpinnerListeners();
 		
-		productionSiteButtonEdit.setEnabled(false);
+		
+//		productionSiteButtonEdit.setEnabled(false);
+//		productionSiteButtonEdit.setAlpha(128);
 		
 	}
 
@@ -96,6 +106,17 @@ public class MainActivity extends ActionBarActivity
 		// TODO Auto-generated method stub
 		super.onResume();
 //		fillSpinners();	// need this?
+	}
+	
+	/**
+	 * Change appearance of button depending on state
+	 * @param button
+	 * @param enabled
+	 */
+	private void setImageButtonEnabled(ImageButton button, boolean enabled) {
+		button.setEnabled(enabled);
+		int alpha = enabled ? 255 : 128;
+		button.setAlpha(alpha);
 	}
 
 	/**
@@ -179,7 +200,8 @@ public class MainActivity extends ActionBarActivity
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
-				case R.id.main_btn_production_site_edit:
+//				case R.id.main_btn_production_site_edit:
+				case R.id.main_imgbutton_site_edit:
 					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
 					Log.d(TAG, "sending serializable: " + currentSite);
 					if(currentSite != null) {
@@ -187,7 +209,8 @@ public class MainActivity extends ActionBarActivity
 					}
 					startActivity(intent);
 					break;
-				case R.id.main_btn_production_site_new:
+//				case R.id.main_btn_production_site_new:
+				case R.id.main_imgbutton_site_new:
 					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
 					startActivity(intent);
 					break;
@@ -218,8 +241,8 @@ public class MainActivity extends ActionBarActivity
 				String selected = (String) parent.getItemAtPosition(position);
 				Log.d(TAG, "PS Spinner Listener selected: " + selected);
 				if(!selected.equals(getString(R.string.production_site))) {
-					Log.d(TAG, "PS Spinner Title: " + ProductionSiteDB.TABLE_NAME);
-					Log.d(TAG, "Equals: " + selected.equals(getString(R.string.production_site)));
+					Log.d(TAG, "PS Spinner Title: " + selected);
+//					Log.d(TAG, "Equals: " + selected.equals(getString(R.string.production_site)));
 					// we have a selected item
 					enablWidgetsOnSelectedSite(true);
 					currentSite = getSelectedProductionSite();
@@ -234,7 +257,8 @@ public class MainActivity extends ActionBarActivity
 			public void onNothingSelected(AdapterView<?> parent) {
 				currentSite = null;
 				enablWidgetsOnSelectedSite(false);
-				productionSiteButtonEdit.setEnabled(false);
+				setImageButtonEnabled(productionSiteButtonEdit, false);
+//				productionSiteButtonEdit.setEnabled(false);
 //				productionSiteButtonEdit.setClickable(false);
 				// TODO disable individ spinner
 			}
@@ -247,7 +271,8 @@ public class MainActivity extends ActionBarActivity
 	 * @param enable
 	 */
 	private void enablWidgetsOnSelectedSite(boolean enable) {
-		productionSiteButtonEdit.setEnabled(enable);
+		setImageButtonEnabled(productionSiteButtonEdit, enable);
+//		productionSiteButtonEdit.setEnabled(enable);
 		individualButtonNew.setEnabled(enable);
 	}
 
