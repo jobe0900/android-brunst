@@ -177,6 +177,27 @@ public class ProductionSiteDB implements BaseColumns
 	}
 	
 	/**
+	 * Get a single ProductionSite from the Database.
+	 * @param 	siteNr	The ProductionSiteNr for the site
+	 * @return	A ProductionSite or null
+	 */
+	public ProductionSite getProductionSite(ProductionSiteNr siteNr) {
+		ProductionSite site = null;
+		String selection = COLUMN_SITENR + " LIKE ?";
+		String[] selectionArgs = {siteNr.toString()};
+		
+		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
+		cursor.moveToFirst();
+		
+		if(cursor.getCount() == 1) {
+			site = createFromCursor(cursor);
+		}
+		
+		cursor.close();
+		return site;
+	}
+	
+	/**
 	 * Get a list of all production sites as strings to present in a spinner
 	 * @return	List of titles like "SE-012345 (Nygarden)"
 	 */

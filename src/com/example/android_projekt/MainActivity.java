@@ -58,14 +58,19 @@ public class MainActivity extends ActionBarActivity
 	
 //	private List<ProductionSite> productionSites;
 	private List<String> productionSitesList;
+	private String selectedSiteStr;
+	
 	private List<String> indivdualsList;
-	private ProductionSite currentSite;
+	private String selectedIndividualStr;
+	
+	
+//	private ProductionSite currentSite;
 //	private ProductionSite updatedSite = null;
 //	private Individual updatedIndividual = null;
 	
-	private String selectedSiteStr;
+	
 //	private String updatedSiteStr;
-	private String selectedIndividualStr;
+	
 //	private String updatedIndividua
 
 	@Override
@@ -157,10 +162,10 @@ public class MainActivity extends ActionBarActivity
 	 */
 	private void fillIndividSpinner() {
 		// TODO
-		if(currentSite != null) {
-			//TODO kick of the background task to load the spinner data
-//			new LoadSpinnerDataTask().execute(IndividualDB.TABLE_NAME, siteNr);
-		}
+//		if(currentSite != null) {
+//			//TODO kick of the background task to load the spinner data
+////			new LoadSpinnerDataTask().execute(IndividualDB.TABLE_NAME, siteNr);
+//		}
 	}
 	
 	
@@ -235,10 +240,13 @@ public class MainActivity extends ActionBarActivity
 //				case R.id.main_btn_production_site_edit:
 				case R.id.main_imgbutton_site_edit:
 					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
-					Log.d(TAG, "sending serializable: " + currentSite);
-					if(currentSite != null) {
-						intent.putExtra(ProductionSiteActivity.EXTRA_PRODUCTION_SITE, currentSite);
+					Log.d(TAG, "sending site: " + selectedSiteStr);
+					if(selectedSiteStr != null) {
+						intent.putExtra(ProductionSiteActivity.EXTRA_PRODUCTION_SITE, getSelectedProductionSiteNrAsString());
 					}
+//					if(currentSite != null) {
+//						intent.putExtra(ProductionSiteActivity.EXTRA_PRODUCTION_SITE, currentSite);
+//					}
 					startActivity(intent);
 					break;
 //				case R.id.main_btn_production_site_new:
@@ -248,10 +256,10 @@ public class MainActivity extends ActionBarActivity
 					break;
 				case R.id.main_imgbutton_individual_new:
 					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
-					if(currentSite != null) {
-						intent.putExtra(IndividualEditActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
-					}
-					startActivity(intent);
+//					if(currentSite != null) {
+//						intent.putExtra(IndividualEditActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
+//					}
+//					startActivity(intent);
 					break;
 				case R.id.main_imgbutton_individual_edit:
 					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
@@ -293,7 +301,8 @@ public class MainActivity extends ActionBarActivity
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				currentSite = null;
+//				currentSite = null;
+				selectedSiteStr = null;
 				enableWidgetsOnSelectedSite(false);
 				setImageButtonEnabled(productionSiteButtonEdit, false);
 //				productionSiteButtonEdit.setEnabled(false);

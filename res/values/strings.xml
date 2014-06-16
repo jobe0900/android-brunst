@@ -54,5 +54,6 @@
     <string name="production_site_org_default">SE</string>
     
     <string name="toast_could_not_save">Kunde inte spara</string>
+    <string name="toast_could_not_fetch">Kunde inte hämta</string>
     
 </resources>

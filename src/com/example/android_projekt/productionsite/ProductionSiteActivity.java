@@ -350,8 +350,21 @@ public class ProductionSiteActivity extends ActionBarActivity
 		updating = true;
 		Intent intent = getIntent();
 		
-		site = (ProductionSite) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE);
-		Log.d(TAG, "received serializable site id: " + site.get_id());
+		String siteNrStr = intent.getStringExtra(EXTRA_PRODUCTION_SITE);
+		ProductionSiteNr siteNr = new ProductionSiteNr(siteNrStr);
+		
+		if(siteNr != null) {
+			site = productionSiteDB.getProductionSite(siteNr);
+		}
+		
+		if(site == null) {
+			String text = getString(R.string.toast_could_not_fetch) + " " + siteNrStr;
+			Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+//		site = (ProductionSite) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE);
+		Log.d(TAG, "site id: " + site.get_id());
 		etOrg.setText(site.getSiteNr().getOrg());
 		etPpnr.setText(site.getSiteNr().getPpnr());
 		// disable input
