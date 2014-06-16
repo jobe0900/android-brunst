@@ -97,18 +97,22 @@ public class MainActivity extends ActionBarActivity
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			selectedSiteStr = getIntent().getStringExtra(EXTRA_SITE_UPDATED);	
+			Log.d(TAG, "Main update Site: " + selectedSiteStr);
 		}
 		if(getIntent().hasExtra(EXTRA_INDIVIDUAL_UPDATED)) {
 			selectedIndividualStr = getIntent().getStringExtra(EXTRA_INDIVIDUAL_UPDATED);
+			Log.d(TAG, "Main update Individual: " + selectedIndividualStr);
 		}
 		
+		enableWidgetsOnSelectedSite(false);
+		enableWidgetsOnSelectedIndividual(false);
 		
 		fillSpinners();
 		
 		setupClickListeners();
 		setUpSpinnerListeners();
 		
-		updateEnabledWidgets();
+//		updateEnabledWidgets();
 	}
 
 	
@@ -150,14 +154,14 @@ public class MainActivity extends ActionBarActivity
 		button.setAlpha(alpha);
 	}
 	
-	/**
-	 * Change the enabled state / visibility depending on selected spinners.
-	 */
-	private void updateEnabledWidgets() {
-		// TODO Auto-generated method stub
-		// discover which state....
-		
-	}
+//	/**
+//	 * Change the enabled state / visibility depending on selected spinners.
+//	 */
+//	private void updateEnabledWidgets() {
+//		// TODO Auto-generated method stub
+//		// discover which state....
+//		
+//	}
 
 	/**
 	 * Fill the spinners with data from the database.
@@ -234,6 +238,8 @@ public class MainActivity extends ActionBarActivity
 					startActivity(intent);
 					break;
 				case R.id.main_imgbutton_individual_edit:
+					Log.d(TAG, "edit individual: " + selectedIndividualStr);
+					Log.d(TAG, "edit individual: " + getSelectedIndividualIdNrAsString());
 					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
 					if(selectedIndividualStr != null) {
 						intent.putExtra(IndividualEditActivity.EXTRA_INDIVIDUAL_UPDATE, getSelectedIndividualIdNrAsString());
@@ -289,8 +295,8 @@ public class MainActivity extends ActionBarActivity
 					int position, long id) {
 				String selected = (String) parent.getItemAtPosition(position);
 				Log.d(TAG, "Individual Spinner Listener selected: " + selected);
+				selectedIndividualStr = getSelectedIndividualIdNrAsString();
 				enableWidgetsOnSelectedIndividual(true);
-				selectedIndividualStr = getSelectedProductionSiteNrAsString();
 			}
 
 			@Override
@@ -349,10 +355,12 @@ public class MainActivity extends ActionBarActivity
 			switch(currentTable) {
 			case ProductionSiteDB.TABLE_NAME:
 				buildProductionSiteAdapter(result);
+				setSelectedProductionSiteInSpinner();
 				fillIndividSpinner();
 				break;
 			case IndividualDB.TABLE_NAME:
 				buildIndividualAdapter(result);
+				setSelectedIndividualInSpinner();
 				break;
 			}
 		}
@@ -416,7 +424,7 @@ public class MainActivity extends ActionBarActivity
 			// set the selected item
 			setSelectedIndividualInSpinner();
 		}
-	}
+	} // end LoadDataTask
 	
 	/**
 	 * Make the site in selectedSiteNr be the selected site in the productionSiteSpinner
@@ -435,6 +443,7 @@ public class MainActivity extends ActionBarActivity
 		if(selectedSiteStr != null) {
 			int pos = individualSpinnerAdapter.getPosition(selectedIndividualStr);
 			individualSpinner.setSelection(pos);
+			Log.d(TAG, "attempt to set selected individaul at position: " + pos);
 		}
 	}
 }

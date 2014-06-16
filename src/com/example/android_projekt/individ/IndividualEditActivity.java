@@ -11,6 +11,8 @@ import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.Utils;
 import com.example.android_projekt.individ.Individual.Sex;
+import com.example.android_projekt.productionsite.ProductionSite;
+import com.example.android_projekt.productionsite.ProductionSiteDB;
 import com.example.android_projekt.productionsite.ProductionSiteNr;
 
 import android.support.v7.app.ActionBarActivity;
@@ -103,6 +105,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	private TextView tvLastBirth;
 	
 	private ProductionSiteNr currentSiteNr;
+	private ProductionSite currentSite;
 	private Individual individual;
 	private ArrayAdapter<CharSequence> sexAdapter;
 	private Uri imageUri;
@@ -129,27 +132,33 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		if(intent.hasExtra(EXTRA_INDIVIDUAL_UPDATE)) {
 			String idnrStr = intent.getStringExtra(EXTRA_INDIVIDUAL_UPDATE);
+			Log.d(TAG, "edit individual: " + idnrStr);
 			IdNr idnr = null;
 			try {
 				idnr = new IdNr(idnrStr);
-			} catch (ParseException ex) {
+			} catch (Exception ex) {
 				Log.d(TAG, "Cannot parse the idnr: " + idnrStr);
 			}
 			if(idnr != null) {
 				individual = individualDB.getIndividual(idnr);
-				currentSiteNr = individual.getHomesiteNr();
-				updating = true;
-				Log.d(TAG, "received Individual: " + individual.toString());
+				if(individual != null) {
+					currentSiteNr = individual.getHomesiteNr();
+					updating = true;
+					Log.d(TAG, "received Individual: " + individual.toString());
+				}
+				else {
+					String text = getString(R.string.toast_could_not_fetch) + " " + idnrStr;
+					Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+				}
 			}
-			
-			
-//			individual = (Individual) intent.getSerializableExtra(EXTRA_INDIVIDUAL_UPDATE);
-//			currentSiteNr = individual.getHomesiteNr();
-//			updating = true;
-//			Log.d(TAG, "received Individual: " + individual.toString());
 		}
 		
 		if(currentSiteNr != null) {
+			ProductionSiteDB pdb = new ProductionSiteDB(this);
+			pdb.open();
+			currentSite = pdb.getProductionSite(currentSiteNr);
+			pdb.close();
+			
 			findViews();
 			prepareViews();
 			
@@ -327,7 +336,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			}
 			
 			if(individual.hasBirthdate()) {
-				etName.setText(Utils.calendarToString(individual.getBirthdate()));
+				etBirthdate.setText(Utils.calendarToString(individual.getBirthdate()));
 			}
 			
 			if(individual.hasMotherIdNr()) {
@@ -363,7 +372,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			etLactationNr.setText(individual.getLactationNr() + "");
 			
 			if(individual.hasLastBirth()) {
-				etName.setText(Utils.calendarToString(individual.getLastBirth()));
+				etLastBirth.setText(Utils.calendarToString(individual.getLastBirth()));
 			}
 			
 			if(individual.hasImageUri()) {
@@ -743,16 +752,27 @@ public class IndividualEditActivity extends ActionBarActivity
 	 */
 	private void saveIndividual() {
 		Log.d(TAG, "save action");
-		boolean saveOK = createIndividualFromForm();
-		if(saveOK) {
-			Log.d(TAG, "attempt to save INdividual in DB");
+		
+		boolean saveOK = false; //= createIndividualFromForm();
+		if(updating) {
+			getOptionalFields();
 			saveOK = individualDB.saveIndividual(individual);
+		}
+		else {
+			saveOK = createIndividualFromForm();
+			Log.d(TAG, "attempt to save INdividual in DB");
+			if(saveOK) {
+				saveOK = individualDB.saveIndividual(individual);
+			}
 		}
 		
 		if(saveOK) {
 			Log.d(TAG, "saved OK");
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(MainActivity.EXTRA_INDIVIDUAL_UPDATED, individual);
+			if(currentSite != null) {
+				intent.putExtra(MainActivity.EXTRA_SITE_UPDATED, currentSite.getTitle());
+			}
+			intent.putExtra(MainActivity.EXTRA_INDIVIDUAL_UPDATED, individual.toString());
 			startActivity(intent);
 		}
 		else {
@@ -778,65 +798,77 @@ public class IndividualEditActivity extends ActionBarActivity
 		// now we can create an individual:
 		individual = new Individual(idnr, currentSiteNr, sex);
 		
+		
 		// and read the rest of the fields
-		// SHORTNR
-		try {
-			int shortnr = Integer.parseInt(etShortnr.getText().toString());
-			individual.setShortNr(shortnr);
-		} catch (NumberFormatException ex) {
-			Log.d(TAG, "could not parse shortnr");
-		}
-		// NAME
-		individual.setName(etName.getText().toString());
-		// BIRTHDATE
-		String birthdateString = etBirthdate.getText().toString();
-		if(birthdateString.length() > 0) {
-			try {
-				individual.setBirthdate(Utils.stringToCalendar(birthdateString));
-			} catch (ParseException e) {
-				Log.d(TAG, "could not parse birthdate: " + birthdateString);
-			}
-		}
-		// MOTHER ID
-		IdNr motherIdNr = createIdnrFromForm(ID_MOTHER);
-		if(motherIdNr != null) {
-			individual.setMotherIdNr(motherIdNr);
-		}
-		// FATHER ID
-		IdNr fatherIdNr = createIdnrFromForm(ID_FATHER);
-		if(fatherIdNr != null) {
-			individual.setFatherIdNr(fatherIdNr);
-		}
-		// HEAT CYCLUS
-		try {
-			int heat = Integer.parseInt(etHeatCyclus.getText().toString());
-			individual.setHeatcyclus(heat);
-		} catch (NumberFormatException ex) {
-			Log.d(TAG, "could not parse heat");
-		}
-		// HEAT CYCLUS
-		try {
-			int lactation = Integer.parseInt(etHeatCyclus.getText().toString());
-			individual.setLactationNr(lactation);
-		} catch (NumberFormatException ex) {
-			Log.d(TAG, "could not parse lactation nr");
-		}
-		// LAST BIRTH
-		String lastBirthString = etLastBirth.getText().toString();
-		if(lastBirthString.length() > 0) {
-			try {
-				individual.setLastBirth(Utils.stringToCalendar(lastBirthString));
-			} catch (ParseException e) {
-				Log.d(TAG, "could not parse last birth: " + lastBirthString);
-			}
-		}
-		// IMAGE URI
-		if(imageUri != null) {
-			Log.d(TAG, "Saving URI: " + imageUri.toString());
-			individual.setImageUri(imageUri.toString());
-		}
+		getOptionalFields();
+		
 		Log.d(TAG, "created the individual " + individual.toString());
 		return true;
+	}
+	
+	/**
+	 * Read the optional fields for an individual and set them in the Indivudal object
+	 */
+	private void getOptionalFields() {
+		if(individual != null) {
+			// SHORTNR
+			try {
+				int shortnr = Integer.parseInt(etShortnr.getText().toString());
+				individual.setShortNr(shortnr);
+			} catch (NumberFormatException ex) {
+				Log.d(TAG, "could not parse shortnr");
+			}
+			// NAME
+			individual.setName(etName.getText().toString());
+			// BIRTHDATE
+			String birthdateString = etBirthdate.getText().toString();
+			if(birthdateString.length() > 0) {
+				try {
+					individual.setBirthdate(Utils.stringToCalendar(birthdateString));
+				} catch (ParseException e) {
+					Log.d(TAG, "could not parse birthdate: " + birthdateString);
+				}
+			}
+			// MOTHER ID
+			IdNr motherIdNr = createIdnrFromForm(ID_MOTHER);
+			if(motherIdNr != null) {
+				individual.setMotherIdNr(motherIdNr);
+			}
+			// FATHER ID
+			IdNr fatherIdNr = createIdnrFromForm(ID_FATHER);
+			if(fatherIdNr != null) {
+				individual.setFatherIdNr(fatherIdNr);
+			}
+			// HEAT CYCLUS
+			try {
+				int heat = Integer.parseInt(etHeatCyclus.getText().toString());
+				individual.setHeatcyclus(heat);
+			} catch (NumberFormatException ex) {
+				Log.d(TAG, "could not parse heat");
+			}
+			// HEAT CYCLUS
+			try {
+				int lactation = Integer.parseInt(etLactationNr.getText().toString());
+				individual.setLactationNr(lactation);
+			} catch (NumberFormatException ex) {
+				Log.d(TAG, "could not parse lactation nr");
+			}
+			// LAST BIRTH
+			String lastBirthString = etLastBirth.getText().toString();
+			if(lastBirthString.length() > 0) {
+				try {
+					individual.setLastBirth(Utils.stringToCalendar(lastBirthString));
+				} catch (ParseException e) {
+					Log.d(TAG, "could not parse last birth: " + lastBirthString);
+				}
+			}
+			// IMAGE URI
+			if(imageUri != null) {
+				Log.d(TAG, "Saving URI: " + imageUri.toString());
+				individual.setImageUri(imageUri.toString());
+			}
+		}
+		
 	}
 
 	/**

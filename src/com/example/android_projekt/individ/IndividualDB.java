@@ -144,6 +144,7 @@ public class IndividualDB implements BaseColumns
 		// unsaved Individual
 		if(individ.get_id() == Individual.UNSAVED_ID) {
 			long insertId = database.insert(TABLE_NAME, null, values);
+			Log.d(TAG, "save new individual, insertID: " + insertId);
 			if(insertId != -1) {
 				retval = true;
 			}
@@ -153,6 +154,7 @@ public class IndividualDB implements BaseColumns
 			String selection = BaseColumns._ID + " LIKE ?";
 			String[] selectionArgs = {String.valueOf(individ.get_id())};
 			int count = database.update(TABLE_NAME, values, selection, selectionArgs);
+			Log.d(TAG, "update individual, count: " + count);
 			if(count != 0) {
 				retval = true;
 			}
@@ -205,7 +207,7 @@ public class IndividualDB implements BaseColumns
 	 */
 	public Individual getIndividual(IdNr idNr) {
 		String selection = COLUMN_IDNR + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
-		String[] selectionArgs = {idNr.toString(), "TRUE"};
+		String[] selectionArgs = {idNr.toString(), "1"};
 		
 		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
 		Individual individ = null;
@@ -226,7 +228,7 @@ public class IndividualDB implements BaseColumns
 		List<Individual> individs = new ArrayList<Individual>();
 		
 		String selection = COLUMN_HOMESITE + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
-		String[] selectionArgs = {site.getSiteNr().toString(), "TRUE"};
+		String[] selectionArgs = {site.getSiteNr().toString(), "1"};
 		String sortorder = COLUMN_SHORTNR + " ASC";
 		
 		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, sortorder);
@@ -252,11 +254,13 @@ public class IndividualDB implements BaseColumns
 
 		String[] titleCols = {COLUMN_SHORTNR, COLUMN_NAME, COLUMN_IDNR};
 		String selection = COLUMN_HOMESITE + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
-		String[] selectionArgs = {siteNrStr, "TRUE"};
+		String[] selectionArgs = {siteNrStr, "1"};
 		String sortorder = COLUMN_SHORTNR + " ASC";
 
 		Cursor cursor = database.query(TABLE_NAME, titleCols, selection, selectionArgs, null, null, sortorder);
 		cursor.moveToFirst();
+		
+		Log.d(TAG, "nr individs hit count: " + cursor.getCount());
 
 		while(!cursor.isAfterLast()) {
 			String individ = cursor.getInt(0) + " "; // short nr
@@ -264,6 +268,8 @@ public class IndividualDB implements BaseColumns
 				individ += cursor.getString(1) + " ";
 			}
 			individ += "(" + cursor.getString(2) + ")";
+			
+			Log.d(TAG, "consutrcted individual title: " + individ);
 			
 			individs.add(individ);
 			cursor.moveToNext();
@@ -282,7 +288,24 @@ public class IndividualDB implements BaseColumns
 		String homeSiteStr = cursor.getString(10);
 		Individual individ = null;
 		try {
+			Log.d(TAG, "cursor count: " + cursor.getCount() + ", columns: " + cursor.getColumnCount());
+			for(int i = 0; i < cursor.getColumnCount(); ++i) {
+				Log.d(TAG, "    " + i + ": " + cursor.getColumnName(i) + ": " + cursor.getString(i));
+			}
+			
 			individ = new Individual(new IdNr(idNrStr), new ProductionSiteNr(homeSiteStr));
+			individ.set_id(cursor.getLong(0));
+			if(!cursor.isNull(2))	individ.setShortNr(cursor.getInt(2));
+			if(!cursor.isNull(3))	individ.setBirthdate(Utils.stringToCalendar(cursor.getString(3)));
+			if(!cursor.isNull(4))	individ.setName(cursor.getString(4));
+			if(!cursor.isNull(5))	individ.setSex(cursor.getString(5));
+			if(!cursor.isNull(6))	individ.setActive(cursor.getInt(6) == 1);
+			if(!cursor.isNull(7))	individ.setLastBirth(Utils.stringToCalendar(cursor.getString(7)));
+			if(!cursor.isNull(8))	individ.setLactationNr(cursor.getInt(8));
+			if(!cursor.isNull(9))	individ.setHeatcyclus(cursor.getInt(9));
+			if(!cursor.isNull(11))	individ.setMotherIdNr(new IdNr(cursor.getString(11)));
+			if(!cursor.isNull(12))	individ.setFatherIdNr(new IdNr(cursor.getString(12)));
+			if(!cursor.isNull(13))	individ.setImageUri(cursor.getString(13));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			Log.d(TAG, "Unabled to create Individual from String");
