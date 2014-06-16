@@ -177,6 +177,32 @@ public class ProductionSiteDB implements BaseColumns
 	}
 	
 	/**
+	 * Get a list of all production sites as strings to present in a spinner
+	 * @return	List of titles like "SE-012345 (Nygarden)"
+	 */
+	public List<String> getAllProductionSiteSpinnerTitles() {
+		List<String> titles = new ArrayList<String>();
+		String sortorder = COLUMN_SITENR + " ASC";
+		String[] titleCols = { COLUMN_SITENR, COLUMN_NAME };
+		
+		Cursor cursor = database.query(TABLE_NAME, titleCols, null, null, null, null, sortorder);
+		cursor.moveToFirst();
+		
+		while(!cursor.isAfterLast()) {
+			String title = cursor.getString(0);
+			// has name?
+			if(!cursor.isNull(1)) {
+				title += " (" + cursor.getString(1) + ")";
+			}
+			titles.add(title);
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		return titles;
+	}
+	
+	/**
 	 * Construct a ProductionSite from the row pointed to by the Cursor.
 	 * @param 	cursor	Pointer to a row in the table
 	 * @return	A ProductionSite created from the data
@@ -195,6 +221,8 @@ public class ProductionSiteDB implements BaseColumns
 		
 		return site;
 	}
+
+	
 	
 	
 }

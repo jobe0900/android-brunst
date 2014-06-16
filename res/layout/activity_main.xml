@@ -8,15 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android_projekt.MainActivity" >
     
+    <TextView 
+        android:id="@+id/main_label_production_site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/production_site"
+        />
+    
     <Spinner
         android:id="@+id/main_spinner_production_site"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/main_label_production_site"
         android:layout_alignParentLeft="true" 
         android:layout_toLeftOf="@+id/main_imgbutton_site_edit"
         />
-    
     
     <ImageButton 
         android:id="@+id/main_imgbutton_site_edit"
@@ -41,6 +49,49 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_plus_40"
         />
+     
+     <TextView 
+        android:id="@+id/main_label_individual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/main_spinner_production_site"
+        android:layout_marginTop="12dp"
+        android:text="@string/individual"
+        />
+     
+     <Spinner
+        android:id="@+id/main_spinner_individual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_label_individual"
+        android:layout_alignParentLeft="true" 
+        android:layout_toLeftOf="@+id/main_imgbutton_individual_edit"
+        />
+    
+    <ImageButton 
+        android:id="@+id/main_imgbutton_individual_edit"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@id/main_spinner_individual"
+        android:layout_toLeftOf="@+id/main_imgbutton_individual_new"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_edit"
+        />
+    
+     <ImageButton 
+        android:id="@id/main_imgbutton_individual_new"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/main_spinner_individual"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_plus_40"
+        />
 
     <!-- 
     <Button
@@ -60,7 +111,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/button_new_short" 
         />
-     -->
+     
    
     <Button 
         android:id="@+id/main_btn_individual_new"
@@ -69,5 +120,6 @@
         android:layout_below="@id/main_spinner_production_site"
         android:text="@string/button_new_short"
         />
+    -->
     
 </RelativeLayout>

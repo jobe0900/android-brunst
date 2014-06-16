@@ -42,30 +42,31 @@ public class MainActivity extends ActionBarActivity
 {	
 	public static final String EXTRA_SITE_UPDATED = "brunst.extra.MainActivity.siteUpdate";
 	public static final String EXTRA_INDIVIDUAL_UPDATED = "brunst.extra.MainActivity.individualUpdate";
-//	public static final String EXTRA_SITE_DELETED = "brunst.extra.MainActivity.siteDelete";
 	private static final String TAG = "Brunst: MAIN";
 	private static final int DB_LOADER = 0;
 	
 	private Spinner productionSiteSpinner;
 	private ArrayAdapter<String> productionSiteSpinnerAdapter;
 	
-//	private Button productionSiteButtonNew;
 	private ImageButton productionSiteButtonNew;
-//	private Button productionSiteButtonEdit;
 	private ImageButton productionSiteButtonEdit;
-	private Button individualButtonNew;
-	
+	private ImageButton individualButtonNew;
+	private ImageButton individualButtonEdit;
 	
 	private OnClickListener clickListener;
 	private OnItemSelectedListener productionSiteSpinnerListener;
-//	private SimpleCursorAdapter productionSiteAdapter;
-//	private SimpleCursorAdapter individualAdapter;
 	
-	private List<ProductionSite> productionSites;
+//	private List<ProductionSite> productionSites;
+	private List<String> productionSitesList;
+	private List<String> indivdualsList;
 	private ProductionSite currentSite;
-//	private String currentSiteNr = null;
-	private ProductionSite updatedSite = null;
-	private Individual updatedIndividual = null;
+//	private ProductionSite updatedSite = null;
+//	private Individual updatedIndividual = null;
+	
+	private String selectedSiteStr;
+//	private String updatedSiteStr;
+	private String selectedIndividualStr;
+//	private String updatedIndividua
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,28 +79,36 @@ public class MainActivity extends ActionBarActivity
 		productionSiteButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_site_new);
 //		productionSiteButtonEdit = (Button) findViewById(R.id.main_btn_production_site_edit);
 		productionSiteButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_site_edit);
-		individualButtonNew = (Button) findViewById(R.id.main_btn_individual_new);
+//		individualButtonNew = (Button) findViewById(R.id.main_btn_individual_new);
+		individualButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_individual_new);
+		individualButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_individual_edit);
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
-			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
+//			updatedSite = (ProductionSite) getIntent().getSerializableExtra(EXTRA_SITE_UPDATED);
+			selectedSiteStr = getIntent().getStringExtra(EXTRA_SITE_UPDATED);	
 		}
 		if(getIntent().hasExtra(EXTRA_INDIVIDUAL_UPDATED)) {
-			updatedIndividual = (Individual) getIntent().getSerializableExtra(EXTRA_INDIVIDUAL_UPDATED);
-			updatedSite = new ProductionSite(updatedIndividual.getHomesiteNr());
+//			updatedIndividual = (Individual) getIntent().getSerializableExtra(EXTRA_INDIVIDUAL_UPDATED);
+//			updatedSite = new ProductionSite(updatedIndividual.getHomesiteNr());
+			selectedIndividualStr = getIntent().getStringExtra(EXTRA_INDIVIDUAL_UPDATED);
 		}
 		
-		setImageButtonEnabled(productionSiteButtonEdit, false);
+//		setImageButtonEnabled(productionSiteButtonEdit, false);
 		
 		fillSpinners();
 		
 		setupClickListeners();
 		setUpSpinnerListeners();
 		
+		updateEnabledWidgets();
+		
 		
 //		productionSiteButtonEdit.setEnabled(false);
 //		productionSiteButtonEdit.setAlpha(128);
 		
 	}
+
+	
 
 	@Override
 	protected void onResume() {
@@ -117,6 +126,15 @@ public class MainActivity extends ActionBarActivity
 		button.setEnabled(enabled);
 		int alpha = enabled ? 255 : 128;
 		button.setAlpha(alpha);
+	}
+	
+	/**
+	 * Change the enabled state / visibility depending on selected spinners.
+	 */
+	private void updateEnabledWidgets() {
+		// TODO Auto-generated method stub
+		// discover which state....
+		
 	}
 
 	/**
@@ -146,30 +164,44 @@ public class MainActivity extends ActionBarActivity
 	}
 	
 	
+//	/**
+//	 * Get the site that is selected in the ProductionSite spinner.
+//	 * @return	A ProductionSite or null if none selected
+//	 */
+//	private ProductionSite getSelectedProductionSite() {
+//		// first check if there is a site selected in ProductionSiteSpinner
+//		String siteString = (String) productionSiteSpinner.getSelectedItem();
+//		ProductionSite site = null;
+//		String siteNr = null;
+//		// if there is a site selected (and not just the title for the spinner)
+//		if(siteString != null && !siteString.equalsIgnoreCase(getString(R.string.production_site))) {
+//			Log.d(TAG, "The line in spinner: " + siteString);
+//			// get the sitenr
+//			siteNr = siteString.split("\\s+")[0]; // get the nr part of the line
+//			Log.d(TAG, "The number part: " + siteNr);
+//			for(ProductionSite ps : productionSites) {
+//				Log.d(TAG, "comparing: " + siteNr + " to " + ps.getSiteNr().toString());
+//				if(ps.getSiteNr().toString().equals(siteNr)) {
+//					site = ps;
+//					break;
+//				}
+//			}
+//		}
+//		return site;
+//	}
+	
 	/**
-	 * Get the site that is selected in the ProductionSite spinner.
-	 * @return	A ProductionSite or null if none selected
+	 * Get the selected ProductionSite as a string with the ProductionSiteNr
+	 * @return	ProductionSiteNr as string
 	 */
-	private ProductionSite getSelectedProductionSite() {
-		// first check if there is a site selected in ProductionSiteSpinner
-		String siteString = (String) productionSiteSpinner.getSelectedItem();
-		ProductionSite site = null;
-		String siteNr = null;
-		// if there is a site selected (and not just the title for the spinner)
-		if(siteString != null && !siteString.equalsIgnoreCase(getString(R.string.production_site))) {
-			Log.d(TAG, "The line in spinner: " + siteString);
-			// get the sitenr
-			siteNr = siteString.split("\\s+")[0]; // get the nr part of the line
-			Log.d(TAG, "The number part: " + siteNr);
-			for(ProductionSite ps : productionSites) {
-				Log.d(TAG, "comparing: " + siteNr + " to " + ps.getSiteNr().toString());
-				if(ps.getSiteNr().toString().equals(siteNr)) {
-					site = ps;
-					break;
-				}
-			}
+	private String getSelectedProductionSiteNrAsString() {
+		String siteNrString = null;
+		String siteTitle = (String) productionSiteSpinner.getSelectedItem();
+		// if something is selected
+		if(siteTitle != null) {
+			siteNrString = siteTitle.split("\\s+")[0];	// the nr part of the title
 		}
-		return site;
+		return siteNrString;
 	}
 
 	@Override
@@ -214,12 +246,17 @@ public class MainActivity extends ActionBarActivity
 					intent = new Intent(getApplicationContext(), ProductionSiteActivity.class);
 					startActivity(intent);
 					break;
-				case R.id.main_btn_individual_new:
+				case R.id.main_imgbutton_individual_new:
 					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
 					if(currentSite != null) {
 						intent.putExtra(IndividualEditActivity.EXTRA_PRODUCTION_SITE_NR, currentSite.getSiteNr());
 					}
 					startActivity(intent);
+					break;
+				case R.id.main_imgbutton_individual_edit:
+					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
+//					if()
+					// TODO
 					break;
 				}
 			}
@@ -240,23 +277,24 @@ public class MainActivity extends ActionBarActivity
 					int position, long id) {
 				String selected = (String) parent.getItemAtPosition(position);
 				Log.d(TAG, "PS Spinner Listener selected: " + selected);
-				if(!selected.equals(getString(R.string.production_site))) {
-					Log.d(TAG, "PS Spinner Title: " + selected);
+//				if(!selected.equals(getString(R.string.production_site))) {
+//					Log.d(TAG, "PS Spinner Title: " + selected);
 //					Log.d(TAG, "Equals: " + selected.equals(getString(R.string.production_site)));
 					// we have a selected item
-					enablWidgetsOnSelectedSite(true);
-					currentSite = getSelectedProductionSite();
+					enableWidgetsOnSelectedSite(true);
+//					currentSite = getSelectedProductionSite();
+					selectedSiteStr = getSelectedProductionSiteNrAsString();
 					fillIndividSpinner();
-				}
-				else {
-					enablWidgetsOnSelectedSite(false);
-				}
+//				}
+//				else {
+//					enableWidgetsOnSelectedSite(false);
+//				}
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 				currentSite = null;
-				enablWidgetsOnSelectedSite(false);
+				enableWidgetsOnSelectedSite(false);
 				setImageButtonEnabled(productionSiteButtonEdit, false);
 //				productionSiteButtonEdit.setEnabled(false);
 //				productionSiteButtonEdit.setClickable(false);
@@ -270,7 +308,7 @@ public class MainActivity extends ActionBarActivity
 	 * Enable widgets depending on if there is a selected production site or not
 	 * @param enable
 	 */
-	private void enablWidgetsOnSelectedSite(boolean enable) {
+	private void enableWidgetsOnSelectedSite(boolean enable) {
 		setImageButtonEnabled(productionSiteButtonEdit, enable);
 //		productionSiteButtonEdit.setEnabled(enable);
 		individualButtonNew.setEnabled(enable);
@@ -279,15 +317,15 @@ public class MainActivity extends ActionBarActivity
 	/**
 	 * Load the data for the spinners in a background task.
 	 */
-	private class LoadProductionSiteSpinnerDataTask extends AsyncTask<String, Long, List<ProductionSite>> {
+	private class LoadProductionSiteSpinnerDataTask extends AsyncTask<String, Long, List<String>> {
 		
 		private Spinner currentSpinner;
 		private ArrayAdapter<String> currentAdapter;
 //		private List<String> currentList;
 
 		@Override
-		protected List<ProductionSite> doInBackground(String... params) {
-			List<ProductionSite> currentList = new ArrayList<ProductionSite>();
+		protected List<String> doInBackground(String... params) {
+			List<String> currentList = new ArrayList<String>();
 			
 			// Which spinner to load, the ProductionSite or the Individual?
 			switch(params[0]) {
@@ -304,21 +342,21 @@ public class MainActivity extends ActionBarActivity
 		}
 		
 		@Override
-		protected void onPostExecute(List<ProductionSite> result) {
-			productionSites = result;
-			buildProductionSiteAdapter(productionSites);
+		protected void onPostExecute(List<String> result) {
+			productionSitesList = result;
+			buildProductionSiteAdapter(productionSitesList);
 		}
 
 		/**
 		 * Load the ProductionSites from db
-		 * @return 	All production sites
+		 * @return 	All production sites as Spinner Title strings
 		 */
-		private List<ProductionSite> loadProductionSites() {
+		private List<String> loadProductionSites() {
 			ProductionSiteDB db = new ProductionSiteDB(getApplicationContext());
 			db.open();
-			List<ProductionSite> sites = db.getAllProductionSites();
+			List<String> titles = db.getAllProductionSiteSpinnerTitles();
 			db.close();
-			return sites;
+			return titles;
 		}
 	}
 
@@ -327,28 +365,28 @@ public class MainActivity extends ActionBarActivity
 	 * like "SE-012345 (Nygarden)", and set the list as source for the spinner.
 	 * @param result
 	 */
-	protected void buildProductionSiteAdapter(List<ProductionSite> sites) {
+	protected void buildProductionSiteAdapter(List<String> siteTitles) {
 		// build the title lines
-		ArrayList<String> siteTitles = new ArrayList<String>();
-		for(ProductionSite site : sites) {
-			siteTitles.add(site.getTitle());
-			Log.d(TAG, "adding Site: " + site.getTitle());
-		}
+//		ArrayList<String> siteTitles = new ArrayList<String>();
+//		for(ProductionSite site : sites) {
+//			siteTitles.add(site.getTitle());
+//			Log.d(TAG, "adding Site: " + site.getTitle());
+//		}
 		// sort the titles
 		Collections.sort(siteTitles);
 		// Set the first item to a Title for the spinner, i.e. Produktionsplats
-		String spinnerTitle = getString(R.string.production_site);
-		siteTitles.add(0, spinnerTitle);
+//		String spinnerTitle = getString(R.string.production_site);
+//		siteTitles.add(0, spinnerTitle);
 		
 		// create the adapter
 		productionSiteSpinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), 
 				R.layout.simple_spinner_item, siteTitles);
 		productionSiteSpinner.setAdapter(productionSiteSpinnerAdapter);
 		// set the selected item
-		if(updatedSite != null) {
-			int pos = productionSiteSpinnerAdapter.getPosition(updatedSite.getTitle());
-			productionSiteSpinner.setSelection(pos);	
-		}
+//		if(selectedSiteNr != null) {
+//			int pos = productionSiteSpinnerAdapter.getPosition(selecteSite.getTitle());
+//			productionSiteSpinner.setSelection(pos);	
+//		}
 		
 	}
 	
