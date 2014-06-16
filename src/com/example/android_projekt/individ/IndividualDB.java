@@ -101,6 +101,7 @@ public class IndividualDB implements BaseColumns
 	
 	/** Create this table in the DB. */
 	public static void onCreate(SQLiteDatabase database) {
+		Log.d(TAG, "creating table Individual");
 		database.execSQL(SQL_CREATE_TABLE);
 	}
 	
@@ -224,7 +225,7 @@ public class IndividualDB implements BaseColumns
 	public List<Individual> getAllIndividualsAtSite(ProductionSite site) {
 		List<Individual> individs = new ArrayList<Individual>();
 		
-		String selection = COLUMN_HOMESITE + " LIKE ? AND" + COLUMN_ACTIVE + " LIKE ?";
+		String selection = COLUMN_HOMESITE + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
 		String[] selectionArgs = {site.getSiteNr().toString(), "TRUE"};
 		String sortorder = COLUMN_SHORTNR + " ASC";
 		
@@ -238,6 +239,37 @@ public class IndividualDB implements BaseColumns
 		}
 		cursor.close();
 		return individs;
+	}
+	
+	/**
+	 * Get a list of all individuals at a ProductionSite, as string
+	 * to be used as Spinner titles, like "123 Rosa (SE-012345-0123-5)"
+	 * @param siteNrStr
+	 * @return
+	 */
+	public List<String> getAllIndividualsAtSiteAsSpinnerTitles(String siteNrStr) {
+		List<String> individs = new ArrayList<String>();
+
+		String[] titleCols = {COLUMN_SHORTNR, COLUMN_NAME, COLUMN_IDNR};
+		String selection = COLUMN_HOMESITE + " LIKE ? AND " + COLUMN_ACTIVE + " LIKE ?";
+		String[] selectionArgs = {siteNrStr, "TRUE"};
+		String sortorder = COLUMN_SHORTNR + " ASC";
+
+		Cursor cursor = database.query(TABLE_NAME, titleCols, selection, selectionArgs, null, null, sortorder);
+		cursor.moveToFirst();
+
+		while(!cursor.isAfterLast()) {
+			String individ = cursor.getInt(0) + " "; // short nr
+			if(!cursor.isNull(1)) {	// name
+				individ += cursor.getString(1) + " ";
+			}
+			individ += "(" + cursor.getString(2) + ")";
+			
+			individs.add(individ);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return individs;	
 	}
 	
 	/**
@@ -258,6 +290,8 @@ public class IndividualDB implements BaseColumns
 		}
 		return individ;
 	}
+
+	
 	
 	
 } 

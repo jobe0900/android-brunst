@@ -118,20 +118,37 @@ public class IndividualEditActivity extends ActionBarActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_individual_edit);
+
+		individualDB = new IndividualDB(this);
+		individualDB.open();
 		
 		Intent intent = getIntent();
 		if(intent.hasExtra(EXTRA_PRODUCTION_SITE_NR)) {
-			currentSiteNr = (ProductionSiteNr) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE_NR);
+			currentSiteNr = new ProductionSiteNr(intent.getStringExtra(EXTRA_PRODUCTION_SITE_NR));
 			Log.d(TAG, "received current site nr: " + currentSiteNr.toString());
 		}
 		if(intent.hasExtra(EXTRA_INDIVIDUAL_UPDATE)) {
-			individual = (Individual) intent.getSerializableExtra(EXTRA_INDIVIDUAL_UPDATE);
-			currentSiteNr = individual.getHomesiteNr();
-			updating = true;
-			Log.d(TAG, "received Individual: " + individual.toString());
+			String idnrStr = intent.getStringExtra(EXTRA_INDIVIDUAL_UPDATE);
+			IdNr idnr = null;
+			try {
+				idnr = new IdNr(idnrStr);
+			} catch (ParseException ex) {
+				Log.d(TAG, "Cannot parse the idnr: " + idnrStr);
+			}
+			if(idnr != null) {
+				individual = individualDB.getIndividual(idnr);
+				currentSiteNr = individual.getHomesiteNr();
+				updating = true;
+				Log.d(TAG, "received Individual: " + individual.toString());
+			}
+			
+			
+//			individual = (Individual) intent.getSerializableExtra(EXTRA_INDIVIDUAL_UPDATE);
+//			currentSiteNr = individual.getHomesiteNr();
+//			updating = true;
+//			Log.d(TAG, "received Individual: " + individual.toString());
 		}
 		
-//		individualDB = new IndividualDB(this);
 		if(currentSiteNr != null) {
 			findViews();
 			prepareViews();
@@ -207,13 +224,13 @@ public class IndividualEditActivity extends ActionBarActivity
 
 	@Override
 	protected void onResume() {
-//		individualDB.open();
+		individualDB.open();
 		super.onResume();
 	}
 	
 	@Override
 	protected void onPause() {
-//		individualDB.close();
+		individualDB.close();
 		super.onPause();
 	}
 	
@@ -729,7 +746,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		boolean saveOK = createIndividualFromForm();
 		if(saveOK) {
 			Log.d(TAG, "attempt to save INdividual in DB");
-//			saveOK = individualDB.saveIndividual(individual);
+			saveOK = individualDB.saveIndividual(individual);
 		}
 		
 		if(saveOK) {
@@ -890,7 +907,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	}
 
 	/**
-	 * Just show confirmattion dialog.
+	 * Just show confirmation dialog.
 	 */
 	private void deleteIndividual() {
 		Log.d(TAG, "delete action");

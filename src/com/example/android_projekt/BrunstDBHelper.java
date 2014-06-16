@@ -1,5 +1,6 @@
 package com.example.android_projekt;
 
+import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Create the tables.
 		ProductionSiteDB.onCreate(db);
+		IndividualDB.onCreate(db);
 	}
 	
 	@Override
@@ -34,6 +36,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 		ProductionSiteDB.onUpgrade(db);
+		IndividualDB.onUpgrade(db);
 	}
 
 }

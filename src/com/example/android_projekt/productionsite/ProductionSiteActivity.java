@@ -222,7 +222,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		
 		if(savedOK) {
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(MainActivity.EXTRA_SITE_UPDATED, site);
+			intent.putExtra(MainActivity.EXTRA_SITE_UPDATED, site.getTitle());
 			startActivity(intent);
 		}
 		else {
