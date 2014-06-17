@@ -249,7 +249,7 @@ public class EventDB implements BaseColumns
 			
 			event = new Event(type, idnr);
 			
-			event.set_id(cursor.getLong(0));
+			event.setEventId(cursor.getLong(0));
 			event.setEventTime(Utils.stringToDatetime(cursor.getString(3)));
 			event.setRegTime(Utils.stringToDatetime(cursor.getString(4)));
 		}

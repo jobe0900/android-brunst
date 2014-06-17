@@ -21,7 +21,7 @@ public class Event
 	private static final String TAG = "Brunst: Event";
 	public static final long UNSAVED_ID = -1;
 	
-	private long _id;
+	private long eventId;
 	private EventType.Type type;
 	private IdNr idnr;
 	private Calendar eventTime;
@@ -33,11 +33,23 @@ public class Event
 	 * @param	idnr	The Individual's IdNr
 	 */
 	public Event(EventType.Type type, IdNr idnr) {
-		_id = UNSAVED_ID;
+		eventId = UNSAVED_ID;
 		this.type = type;
 		this.idnr = idnr;
 		eventTime = Calendar.getInstance();
 		regTime = Calendar.getInstance();
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param orig
+	 */
+	public Event(Event orig) {
+		eventId = orig.eventId;
+		type = orig.type;
+		idnr = new IdNr(orig.idnr);
+		eventTime = orig.eventTime;		// is this safe?
+		regTime = orig.regTime;
 	}
 	
 	@Override
@@ -47,12 +59,12 @@ public class Event
 	}
 
 	// GETTERS and SETTERS -----------------------------------------------------
-	public long get_id() {
-		return _id;
+	public long getEventId() {
+		return eventId;
 	}
 	
-	public void set_id(long id) {
-		this._id = id;
+	public void setEventId(long id) {
+		eventId = id;
 	}
 	
 	public EventType.Type getType() {

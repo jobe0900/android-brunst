@@ -1,28 +1,31 @@
 package com.example.android_projekt.event;
 
+import com.example.android_projekt.individ.IdNr;
+
 /**
  * A small class holding a Note for an individual
- * @author Jonas
- *
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
-public class Note 
+public class Note extends Event
 {
 	private static final String TAG = "Brunst: Note";
 	public static final long UNSAVED_ID = -1;
 	
-	private long _id;
+	private long noteId = UNSAVED_ID;
 //	private Event event;
-	private long eventId;
-	private String text;
+//	private long eventId;
+	private String text = null;
 	
 	/**
 	 * Constructor
 	 * @param	eventId		The _id for the Event
 	 */
-	public Note(long eventId) {
-		_id = UNSAVED_ID;
-		this.eventId = eventId;
-		text = null;
+	public Note(IdNr idNr) {
+		super(EventType.Type.EVENT_NOTE, idNr);
+	}
+	
+	public Note(Event event) {
+		super(event);
 	}
 	
 //	/** Constructor */
@@ -32,17 +35,17 @@ public class Note
 //		text = null;
 //	}
 
-	public long get_id() {
-		return _id;
+	public long getNoteId() {
+		return noteId;
 	}
 
-	public void set_id(long _id) {
-		this._id = _id;
+	public void setNoteId(long id) {
+		noteId = id;
 	}
 	
-	public long getEventId() {
-		return eventId;
-	}
+//	public long getEventId() {
+//		return eventId;
+//	}
 	
 //	public void setEventId(long eventId) {
 //		this.eventId = eventId;

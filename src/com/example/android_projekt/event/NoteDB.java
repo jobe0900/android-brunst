@@ -50,6 +50,7 @@ public class NoteDB implements BaseColumns
 	
 	private SQLiteDatabase database;
 	private BrunstDBHelper dbHelper;
+	private EventDB eventDb;
 	
 	/**
 	 * Constructor.
@@ -57,16 +58,19 @@ public class NoteDB implements BaseColumns
 	 */
 	public NoteDB(Context context) {
 		dbHelper = new BrunstDBHelper(context);
+		eventDb = new EventDB(context);
 	}
 	
 	/** Try to open the database to do some work. */
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
+		eventDb.open();
 	}
 	
 	/** Close the database again. */
 	public void close() {
 		dbHelper.close();
+		eventDb.close();
 	}
 	
 	/** Create this table in the DB. */
@@ -82,11 +86,18 @@ public class NoteDB implements BaseColumns
 	}
 	
 	/**
-	 * Attempt to save a Note
+	 * Attempt to save a Note. Must first save the Event-part of the Note.
 	 * @param		note
 	 * @return		the note's _id in the DB, or -1 if failed
 	 */
 	public long saveNote(Note note) {
+		long eventId = eventDb.saveEvent(note);
+		if(eventId == -1) {
+			Log.d(TAG, "could not save Event part of Note");
+			return eventId;
+		}
+		note.setEventId(eventId);
+		
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_EVENT_ID, note.getEventId());
 		if(note.hasText()) {
@@ -200,8 +211,15 @@ public class NoteDB implements BaseColumns
 		Note note = null;
 		
 		long eventId = cursor.getLong(1);
-		note = new Note(eventId);
-		note.set_id(cursor.getLong(0));
+		// recreate the Event part of the Note
+		Event eventPart = eventDb.getEvent(eventId);
+		
+		if(eventPart == null) {
+			Log.d(TAG, "could not recreate the Event part of the Note");
+			return null;
+		}
+		note = new Note(eventPart);
+		note.setNoteId(cursor.getLong(0));
 		if(!cursor.isNull(2)) {
 			note.setText(cursor.getString(2));
 		}
