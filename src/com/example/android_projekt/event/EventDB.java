@@ -1,8 +1,8 @@
 package com.example.android_projekt.event;
 
 import com.example.android_projekt.BrunstDBHelper;
+import com.example.android_projekt.individ.IndividualDB;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,42 +10,42 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
- * Helper class, "contract", handling the database work for the EventType
+ * Helper class, "contract", to handle database work for the Event class
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
-public class EventTypeDB implements BaseColumns
+public class EventDB implements BaseColumns
 {
-	private static final String TAG = "Brunst: EventTypeDB";
+	private static final String TAG = "Brunst: EventDB";
 	
-	public static final String TABLE_NAME = "EventType";
-	public static final String COLUMN_NAME = "name";
-
-	private static final String[] NAMES = {
-		EventType.EVENT_NOTE,
-		EventType.EVENT_HEAT,
-		EventType.EVENT_MATING,
-		EventType.EVENT_PREGCHECK,
-		EventType.EVENT_BIRTH
-	};
+	public static final String TABLE_NAME = "Event";
+	public static final String COLUMN_IDNR = "idnr";
+	public static final String COLUMN_EVENTTYPE = "eventtype";
+	public static final String COLUMN_EVENTTIME = "eventtime";
+	public static final String COLUMN_REGTIME = "regtime";
 	
 	private static final String[] ALL_COLUMNS = {
 		BaseColumns._ID,
-		COLUMN_NAME
+		COLUMN_IDNR,
+		COLUMN_EVENTTYPE,
+		COLUMN_EVENTTIME,
+		COLUMN_REGTIME
 	};
 	
 	private static final String SQL_CREATE_TABLE = 
 		"CREATE TABLE " + TABLE_NAME + " (" +
 			BaseColumns._ID		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COLUMN_NAME			+ " VARCHAR(30) NOT NULL" +
+			COLUMN_IDNR			+ " CHAR(16) NOT NULL, " +
+			COLUMN_EVENTTYPE	+ " INTEGER NOT NULL, " +
+			COLUMN_EVENTTIME	+ " DATETIME NOT NULL, " +
+			COLUMN_REGTIME		+ " DATETIME NOT NULL, " +
+			"FOREIGN KEY (" + COLUMN_IDNR + ") REFERENCES " + 
+				IndividualDB.TABLE_NAME + "(" + IndividualDB.COLUMN_IDNR + ") " +
+				"ON DELETE CASCADE, " +
+			"FOREIGN KEY (" + COLUMN_EVENTTYPE + ") REFERENCES " +
+				EventTypeDB.TABLE_NAME + "(" + EventTypeDB._ID + ") " +
+				"ON DELETE CASCADE" +
 		" )";
 	
-	private static final String SQL_POPULATE_TABLE = 
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[0] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[1] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[2] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[3] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[4];
-		
 	private static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -56,7 +56,7 @@ public class EventTypeDB implements BaseColumns
 	 * Constructor.
 	 * @param context
 	 */
-	public EventTypeDB(Context context) {
+	public EventDB(Context context) {
 		dbHelper = new BrunstDBHelper(context);
 	}
 	
@@ -74,7 +74,6 @@ public class EventTypeDB implements BaseColumns
 	public static void onCreate(SQLiteDatabase database) {
 		Log.d(TAG, "creating table Individual");
 		database.execSQL(SQL_CREATE_TABLE);
-		database.execSQL(SQL_POPULATE_TABLE);
 	}
 	
 	/** Upgrade this table to a new version in the DB. */
@@ -82,5 +81,4 @@ public class EventTypeDB implements BaseColumns
 		// TODO
 		// nothing for now.
 	}
-	
 }

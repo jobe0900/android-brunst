@@ -124,13 +124,13 @@ public class IndividualDB implements BaseColumns
 		values.put(COLUMN_IDNR, individ.getIdNr().toString());
 		values.put(COLUMN_SHORTNR, individ.getShortNr());
 		if(individ.hasBirthdate())
-			values.put(COLUMN_BIRTHDATE, Utils.calendarToString(individ.getBirthdate()));
+			values.put(COLUMN_BIRTHDATE, Utils.dateToString(individ.getBirthdate()));
 		if(individ.hasName())
 			values.put(COLUMN_NAME, individ.getName());
 		values.put(COLUMN_SEX, individ.getSexAsString());
 		values.put(COLUMN_ACTIVE, individ.isActive());
 		if(individ.hasLastBirth())
-			values.put(COLUMN_LASTBIRTH, Utils.calendarToString(individ.getLastBirth()));
+			values.put(COLUMN_LASTBIRTH, Utils.dateToString(individ.getLastBirth()));
 		values.put(COLUMN_LACTATIONNR, individ.getLactationNr());
 		values.put(COLUMN_HEATCYCLUS, individ.getHeatcyclus());
 		values.put(COLUMN_HOMESITE, individ.getHomesiteNr().toString());
@@ -296,11 +296,11 @@ public class IndividualDB implements BaseColumns
 			individ = new Individual(new IdNr(idNrStr), new ProductionSiteNr(homeSiteStr));
 			individ.set_id(cursor.getLong(0));
 			if(!cursor.isNull(2))	individ.setShortNr(cursor.getInt(2));
-			if(!cursor.isNull(3))	individ.setBirthdate(Utils.stringToCalendar(cursor.getString(3)));
+			if(!cursor.isNull(3))	individ.setBirthdate(Utils.stringToDate(cursor.getString(3)));
 			if(!cursor.isNull(4))	individ.setName(cursor.getString(4));
 			if(!cursor.isNull(5))	individ.setSex(cursor.getString(5));
 			if(!cursor.isNull(6))	individ.setActive(cursor.getInt(6) == 1);
-			if(!cursor.isNull(7))	individ.setLastBirth(Utils.stringToCalendar(cursor.getString(7)));
+			if(!cursor.isNull(7))	individ.setLastBirth(Utils.stringToDate(cursor.getString(7)));
 			if(!cursor.isNull(8))	individ.setLactationNr(cursor.getInt(8));
 			if(!cursor.isNull(9))	individ.setHeatcyclus(cursor.getInt(9));
 			if(!cursor.isNull(11))	individ.setMotherIdNr(new IdNr(cursor.getString(11)));

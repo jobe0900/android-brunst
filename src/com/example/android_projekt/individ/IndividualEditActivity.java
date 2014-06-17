@@ -336,7 +336,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			}
 			
 			if(individual.hasBirthdate()) {
-				etBirthdate.setText(Utils.calendarToString(individual.getBirthdate()));
+				etBirthdate.setText(Utils.dateToString(individual.getBirthdate()));
 			}
 			
 			if(individual.hasMotherIdNr()) {
@@ -372,7 +372,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			etLactationNr.setText(individual.getLactationNr() + "");
 			
 			if(individual.hasLastBirth()) {
-				etLastBirth.setText(Utils.calendarToString(individual.getLastBirth()));
+				etLastBirth.setText(Utils.dateToString(individual.getLastBirth()));
 			}
 			
 			if(individual.hasImageUri()) {
@@ -626,7 +626,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		else if(etLastBirth.getText().length() > 0) {
 			try {
-				baseDate = Utils.stringToCalendar(etLastBirth.getText().toString());
+				baseDate = Utils.stringToDate(etLastBirth.getText().toString());
 			} catch (ParseException ex) {
 				Log.d(TAG, "Error parsing date");
 				baseDate = null;
@@ -658,7 +658,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		else if(etBirthdate.getText().length() > 0) {
 			try {
-				baseDate = Utils.stringToCalendar(etBirthdate.getText().toString());
+				baseDate = Utils.stringToDate(etBirthdate.getText().toString());
 			} catch (ParseException ex) {
 				Log.d(TAG, "Error parsing date");
 				baseDate = null;
@@ -824,7 +824,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			String birthdateString = etBirthdate.getText().toString();
 			if(birthdateString.length() > 0) {
 				try {
-					individual.setBirthdate(Utils.stringToCalendar(birthdateString));
+					individual.setBirthdate(Utils.stringToDate(birthdateString));
 				} catch (ParseException e) {
 					Log.d(TAG, "could not parse birthdate: " + birthdateString);
 				}
@@ -857,7 +857,7 @@ public class IndividualEditActivity extends ActionBarActivity
 			String lastBirthString = etLastBirth.getText().toString();
 			if(lastBirthString.length() > 0) {
 				try {
-					individual.setLastBirth(Utils.stringToCalendar(lastBirthString));
+					individual.setLastBirth(Utils.stringToDate(lastBirthString));
 				} catch (ParseException e) {
 					Log.d(TAG, "could not parse last birth: " + lastBirthString);
 				}
