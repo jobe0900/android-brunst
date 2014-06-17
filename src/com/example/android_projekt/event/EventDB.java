@@ -53,7 +53,7 @@ public class EventDB implements BaseColumns
 				"ON DELETE CASCADE, " +
 			"FOREIGN KEY (" + COLUMN_EVENTTYPE + ") REFERENCES " +
 				EventTypeDB.TABLE_NAME + "(" + EventTypeDB._ID + ") " +
-				"ON DELETE CASCADE" +
+				"ON DELETE CASCADE " +
 		" )";
 	
 	private static final String SQL_DROP_TABLE = 
@@ -82,7 +82,7 @@ public class EventDB implements BaseColumns
 	
 	/** Create this table in the DB. */
 	public static void onCreate(SQLiteDatabase database) {
-		Log.d(TAG, "creating table Individual");
+		Log.d(TAG, "creating table Event");
 		database.execSQL(SQL_CREATE_TABLE);
 	}
 	
@@ -214,7 +214,7 @@ public class EventDB implements BaseColumns
 	
 	/**
 	 * Fetch a single event from the DB
-	 * @param 	eventId		The events _id in DB
+	 * @param 	eventId		The Event's _id in DB
 	 * @return
 	 */
 	public Event getEvent(long eventId) {

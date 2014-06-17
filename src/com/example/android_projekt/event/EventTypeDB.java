@@ -36,7 +36,7 @@ public class EventTypeDB implements BaseColumns
 	private static final String SQL_CREATE_TABLE = 
 		"CREATE TABLE " + TABLE_NAME + " (" +
 			BaseColumns._ID		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COLUMN_NAME			+ " VARCHAR(30) NOT NULL" +
+			COLUMN_NAME			+ " VARCHAR(30) NOT NULL " +
 		" )";
 	
 	private static final String SQL_POPULATE_TABLE = 
@@ -72,7 +72,7 @@ public class EventTypeDB implements BaseColumns
 	
 	/** Create this table in the DB. */
 	public static void onCreate(SQLiteDatabase database) {
-		Log.d(TAG, "creating table Individual");
+		Log.d(TAG, "creating table EventType");
 		database.execSQL(SQL_CREATE_TABLE);
 		database.execSQL(SQL_POPULATE_TABLE);
 	}
