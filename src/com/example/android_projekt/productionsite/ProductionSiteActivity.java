@@ -64,8 +64,8 @@ public class ProductionSiteActivity extends ActionBarActivity
 	private ImageButton ibThumb;
 	private ImageButton ibMap;
 	private ImageButton ibHere;
-	private Button btnDelete;
-	private Button btnSave;
+//	private Button btnDelete;
+//	private Button btnSave;
 	
 	private boolean updating = false;
 	private boolean hasLocationService = false;
@@ -95,9 +95,9 @@ public class ProductionSiteActivity extends ActionBarActivity
 		// disable direct entry of coordinates
 		disableEntry(etCoord);
 		
-		if(!updating) {
-			btnDelete.setEnabled(false);
-		}
+//		if(!updating) {
+//			btnDelete.setEnabled(false);
+//		}
 		
 		// TODO Enable location buttons if we get the services working
 		if(hasLocationService) {
@@ -106,23 +106,34 @@ public class ProductionSiteActivity extends ActionBarActivity
 		}
 	}
 	
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.production_site, menu);
+//		return true;
+//	}
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onPrepareOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.production_site, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.production_site_activity_actions, menu);
+		// enabled / disable delete depending on update or not
+		menu.getItem(0).setVisible(updating);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch(item.getItemId()) {
+		case R.id.production_site_action_delete:
+			showDialogDelete();
 			return true;
+		case R.id.production_site_action_save:
+			showDialogSave();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	// Handle results from picking image in gallery
@@ -258,8 +269,8 @@ public class ProductionSiteActivity extends ActionBarActivity
 		ibMap.setEnabled(false);
 		ibHere = (ImageButton) findViewById(R.id.production_site_imgbutton_here);
 		ibHere.setEnabled(false);
-		btnDelete = (Button) findViewById(R.id.production_site_button_delete);
-		btnSave = (Button) findViewById(R.id.production_site_button_save);
+//		btnDelete = (Button) findViewById(R.id.production_site_button_delete);
+//		btnSave = (Button) findViewById(R.id.production_site_button_save);
 	}
 	
 	/** Add OnClickListener to buttons. */
@@ -268,12 +279,12 @@ public class ProductionSiteActivity extends ActionBarActivity
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
-				case R.id.production_site_button_delete:
-					showDialogDelete();
-					break;
-				case R.id.production_site_button_save:
-					saveForm();
-					break;
+//				case R.id.production_site_button_delete:
+//					showDialogDelete();
+//					break;
+//				case R.id.production_site_button_save:
+//					saveForm();
+//					break;
 				case R.id.production_site_imgbutton_thumb:
 					openGallery();
 					break;
@@ -290,8 +301,8 @@ public class ProductionSiteActivity extends ActionBarActivity
 		ibThumb.setOnClickListener(clickListener);
 		ibMap.setOnClickListener(clickListener);
 		ibHere.setOnClickListener(clickListener);
-		btnDelete.setOnClickListener(clickListener);
-		btnSave.setOnClickListener(clickListener);
+//		btnDelete.setOnClickListener(clickListener);
+//		btnSave.setOnClickListener(clickListener);
 	}
 	
 	/**
@@ -305,8 +316,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 		startActivityForResult(Intent.createChooser(intent, getString(R.string.dialog_pick_image)), INTENT_PICK_IMAGE);
 	}
 	
-	
-
 	/**
 	 * Show a dialog, confirming the user's wish to delete a ProductionSite.
 	 */
@@ -329,7 +338,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 				// nothing?
 			}
 		});
-
 		builder.show();
 	}
 	
@@ -343,6 +351,40 @@ public class ProductionSiteActivity extends ActionBarActivity
 		// back to main
 		Intent intent = new Intent(this, MainActivity.class);;
 		startActivity(intent);
+	}
+	
+	/**
+	 * Show a dialog, confirming the user's wish to save a ProductionSite.
+	 */
+	private void showDialogSave() {
+		if(verifyForm()) {
+			// ask for confirmation first
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			String siteStr = etOrg.getText().toString() + "-" + etPpnr.getText().toString();
+			if(etName.length() > 0) {
+				siteStr += etName.getText().toString();
+			}
+			builder.setMessage(getString(R.string.dialog_ask_save) + " " + siteStr + "?");
+			builder.setCancelable(true);
+			// YES button
+			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					saveForm();
+				}
+			});
+			// NO button
+			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// nothing?
+				}
+			});
+			builder.show();
+		}
+		else {
+			Toast.makeText(this, R.string.toast_form_not_correct, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/** Fill fields with intent-extras, disable input on ProductionSiteNr. */
@@ -391,7 +433,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		}
 		
 		// save button =  update button
-		btnSave.setText(R.string.button_update);
+//		btnSave.setText(R.string.button_update);
 	}
 	
 	/** Disable an EditText-field. */
