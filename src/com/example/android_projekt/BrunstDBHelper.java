@@ -1,5 +1,6 @@
 package com.example.android_projekt;
 
+import com.example.android_projekt.event.EventDB;
 import com.example.android_projekt.event.EventTypeDB;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -27,6 +28,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 		ProductionSiteDB.onCreate(db);
 		IndividualDB.onCreate(db);
 		EventTypeDB.onCreate(db);
+		EventDB.onCreate(db);
 	}
 	
 	@Override
@@ -40,6 +42,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 		ProductionSiteDB.onUpgrade(db);
 		IndividualDB.onUpgrade(db);
 		EventTypeDB.onUpgrade(db);
+		EventDB.onUpgrade(db);
 	}
 
 }

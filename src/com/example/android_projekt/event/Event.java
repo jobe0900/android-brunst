@@ -16,14 +16,16 @@ import com.example.android_projekt.individ.IdNr;
  *  
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
-public abstract class Event 
+public class Event 
 {
 	private static final String TAG = "Brunst: Event";
+	public static final long UNSAVED_ID = -1;
 	
+	private long _id;
 	private EventType.Type type;
 	private IdNr idnr;
 	private Calendar eventTime;
-	private Calendar regtime;
+	private Calendar regTime;
 	
 	/**
 	 * Constructor
@@ -31,19 +33,28 @@ public abstract class Event
 	 * @param	idnr	The Individual's IdNr
 	 */
 	public Event(EventType.Type type, IdNr idnr) {
+		_id = UNSAVED_ID;
 		this.type = type;
 		this.idnr = idnr;
 		eventTime = Calendar.getInstance();
-		regtime = Calendar.getInstance();
+		regTime = Calendar.getInstance();
 	}
 	
 	@Override
 	public String toString() {
-		String str = regtime.toString() + ": " + idnr.toString() + " " + type + " at " + eventTime.toString();
+		String str = regTime.toString() + ": " + idnr.toString() + " " + type + " at " + eventTime.toString();
 		return str;
 	}
 
 	// GETTERS and SETTERS -----------------------------------------------------
+	public long get_id() {
+		return _id;
+	}
+	
+	public void set_id(long id) {
+		this._id = id;
+	}
+	
 	public EventType.Type getType() {
 		return type;
 	}
@@ -60,8 +71,12 @@ public abstract class Event
 		this.eventTime = eventTime;
 	}
 
-	public Calendar getRegtime() {
-		return regtime;
+	public Calendar getRegTime() {
+		return regTime;
+	}
+	
+	public void setRegTime(Calendar regTime) {
+		this.regTime = regTime;
 	}
 	
 }
