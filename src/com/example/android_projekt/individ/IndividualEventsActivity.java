@@ -244,9 +244,13 @@ public class IndividualEventsActivity extends ActionBarActivity
 		}
 	}
 
+	/**
+	 * Start the IndividualEdit activity
+	 */
 	protected void editIndividual() {
-		// TODO Auto-generated method stub
-		
+		Intent intent = new Intent(this, IndividualEditActivity.class);
+		intent.putExtra(IndividualEditActivity.EXTRA_INDIVIDUAL_UPDATE, individual.getIdNr().toString());
+		startActivity(intent);
 	}
 
 	protected void addEvent() {
