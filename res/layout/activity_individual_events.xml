@@ -134,12 +134,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/individual_events_label_events"
-            android:layout_toLeftOf="@+id/individual_events_imgbutton_events_edit" />
+            android:layout_toLeftOf="@+id/individual_events_imgbutton_events_add" />
 
       
 
         <ImageButton
-            android:id="@id/individual_events_imgbutton_events_edit"
+            android:id="@id/individual_events_imgbutton_events_add"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"

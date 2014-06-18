@@ -8,6 +8,7 @@ import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.R.string;
+import com.example.android_projekt.Utils;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -93,7 +94,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 		// try to set focus, no effect if updating
 		etPpnr.requestFocus();
 		// disable direct entry of coordinates
-		disableEntry(etCoord);
+		Utils.disableEntry(etCoord);
 		
 //		if(!updating) {
 //			btnDelete.setEnabled(false);
@@ -410,8 +411,8 @@ public class ProductionSiteActivity extends ActionBarActivity
 		etOrg.setText(site.getSiteNr().getOrg());
 		etPpnr.setText(site.getSiteNr().getPpnr());
 		// disable input
-		disableEntry(etOrg);
-		disableEntry(etPpnr);
+		Utils.disableEntry(etOrg);
+		Utils.disableEntry(etPpnr);
 		
 		if(site.hasName())
 			etName.setText(site.getName());
@@ -435,13 +436,13 @@ public class ProductionSiteActivity extends ActionBarActivity
 		// save button =  update button
 //		btnSave.setText(R.string.button_update);
 	}
-	
-	/** Disable an EditText-field. */
-	private void disableEntry(EditText entry) {
-		entry.setKeyListener(null);
-		entry.setFocusable(false);
-		entry.setInputType(InputType.TYPE_NULL);
-	}
+//	
+//	/** Disable an EditText-field. */
+//	private void disableEntry(EditText entry) {
+//		entry.setKeyListener(null);
+//		entry.setFocusable(false);
+//		entry.setInputType(InputType.TYPE_NULL);
+//	}
 	
 	/** Read the form and create a ProductionSite with those values. */
 	private void createProductionSiteFromForm() {

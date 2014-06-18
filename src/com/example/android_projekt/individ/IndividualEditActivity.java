@@ -283,10 +283,10 @@ public class IndividualEditActivity extends ActionBarActivity
 		setupSpinners();
 		
 		//disable some EditTexts
-		disableEntry(etBirthdate);
-		disableEntry(etHeatCyclus);
-		disableEntry(etLactationNr);
-		disableEntry(etLastBirth);
+		Utils.disableEntry(etBirthdate);
+		Utils.disableEntry(etHeatCyclus);
+		Utils.disableEntry(etLactationNr);
+		Utils.disableEntry(etLastBirth);
 		
 		// if NEW
 		if(currentSiteNr != null && !updating) {
@@ -307,10 +307,10 @@ public class IndividualEditActivity extends ActionBarActivity
 			// TODO
 //			MenuItem deleteItem = getResources().
 			// disable editing IDnr and sex
-			disableEntry(etIdnrOrg);
-			disableEntry(etIdnrPpnr);
-			disableEntry(etIdnrIndividnr);
-			disableEntry(etIdnrChecknr);
+			Utils.disableEntry(etIdnrOrg);
+			Utils.disableEntry(etIdnrPpnr);
+			Utils.disableEntry(etIdnrIndividnr);
+			Utils.disableEntry(etIdnrChecknr);
 			spinSex.setEnabled(false);
 			populateViews();
 		}
@@ -720,12 +720,12 @@ public class IndividualEditActivity extends ActionBarActivity
 		return female;
 	}
 	
-	/** Disable an EditText-field. */
-	private void disableEntry(EditText entry) {
-		entry.setKeyListener(null);
-		entry.setFocusable(false);
-		entry.setInputType(InputType.TYPE_NULL);
-	}
+//	/** Disable an EditText-field. */
+//	private void disableEntry(EditText entry) {
+//		entry.setKeyListener(null);
+//		entry.setFocusable(false);
+//		entry.setInputType(InputType.TYPE_NULL);
+//	}
 	
 	/**
 	 * Delete the contents of a view, like remove bitmap of thumb

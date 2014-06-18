@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.individ.IndividualEditActivity;
+import com.example.android_projekt.individ.IndividualEventsActivity;
 import com.example.android_projekt.productionsite.ProductionSite;
 import com.example.android_projekt.productionsite.ProductionSiteActivity;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -240,9 +241,11 @@ public class MainActivity extends ActionBarActivity
 				case R.id.main_imgbutton_individual_edit:
 					Log.d(TAG, "edit individual: " + selectedIndividualStr);
 					Log.d(TAG, "edit individual: " + getSelectedIndividualIdNrAsString());
-					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
+					intent = new Intent(getApplicationContext(), IndividualEventsActivity.class);
+//					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
 					if(selectedIndividualStr != null) {
-						intent.putExtra(IndividualEditActivity.EXTRA_INDIVIDUAL_UPDATE, getSelectedIndividualIdNrAsString());
+						intent.putExtra(IndividualEventsActivity.EXTRA_IDNR, getSelectedIndividualIdNrAsString());
+//						intent.putExtra(IndividualEditActivity.EXTRA_INDIVIDUAL_UPDATE, getSelectedIndividualIdNrAsString());
 					}
 					startActivity(intent);
 					break;
