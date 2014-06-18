@@ -31,7 +31,19 @@
             android:src="@drawable/ic_action_edit" />
 
         <!-- Short nr start -->
+        
+        <TextView
+            android:id="@+id/individual_events_text_shortnr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/individual_events_imgbutton_edit_individual"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/individual_events_imgbutton_thumb"
+            android:text="@string/individual_label_shortnr" 
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
+        <!--  
         <TextView
             android:id="@+id/individual_events_label_shortnr"
             android:layout_width="wrap_content"
@@ -53,11 +65,21 @@
             android:minEms="2"
             android:textSize="30sp"
             android:textStyle="bold" />
+        -->
         <!-- Short nr end -->
 
 
         <!-- Name start -->
+        
+        <TextView
+            android:id="@+id/individual_events_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/individual_events_text_shortnr"
+            android:layout_toRightOf="@id/individual_events_text_shortnr"
+            android:text="@string/individual_label_name" />
 
+        <!--  
         <TextView
             android:id="@+id/individual_events_label_name"
             android:layout_width="wrap_content"
@@ -82,10 +104,11 @@
             android:maxLength="40"
             android:scrollHorizontally="true"
             android:singleLine="true" />
+        -->
         <!-- Name end -->
         
         <!-- ID nr start -->
-
+		<!--  
         <TextView
             android:id="@+id/individual_events_label_idnr"
             android:layout_width="wrap_content"
@@ -94,15 +117,13 @@
             android:layout_alignLeft="@id/individual_events_label_shortnr"
             android:layout_marginRight="8dp"
             android:text="@string/individual_label_idnr" />
-        
+        -->
          <TextView
-            android:id="@id/individual_events_text_idnr"
+            android:id="@+id/individual_events_text_idnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/individual_events_imgbutton_thumb"
-            android:layout_toRightOf="@id/individual_events_label_idnr"
-            android:layout_marginTop="12dp"
-            android:layout_alignLeft="@id/individual_events_entry_shortnr"
+            android:layout_alignLeft="@id/individual_events_text_shortnr"
+            android:layout_alignBottom="@id/individual_events_imgbutton_thumb"
             android:text="@string/production_site_org_default" />
          
           <!-- ID nr end -->

@@ -54,13 +54,15 @@ public class IndividualEventsActivity extends ActionBarActivity
 	public static final String EXTRA_IDNR = "brunst.extra.IndividualEventsActivity.IdNr";
 	
 	// WIDGETS
-	private EditText etShortnr;
-	private EditText etName;
+//	private EditText etShortnr;
+//	private EditText etName;
 	private ImageButton ibThumb;
 	private ImageButton ibEditIndividual;
 	private ImageButton ibAddEvent;
 	private ListView lvEvents;
 	private Spinner spinEvents;
+	private TextView tvShortnr;
+	private TextView tvName;
 	private TextView tvIdnr;
 	
 	private ArrayAdapter<CharSequence> eventTypeAdapter;
@@ -151,13 +153,15 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Get references to the widgets
 	 */
 	private void findViews() {
-		etShortnr = (EditText) findViewById(R.id.individual_events_entry_shortnr);
-		etName = (EditText) findViewById(R.id.individual_events_entry_name);
+//		etShortnr = (EditText) findViewById(R.id.individual_events_entry_shortnr);
+//		etName = (EditText) findViewById(R.id.individual_events_entry_name);
 		ibThumb = (ImageButton) findViewById(R.id.individual_events_imgbutton_thumb);
 		ibEditIndividual = (ImageButton) findViewById(R.id.individual_events_imgbutton_edit_individual);
 		ibAddEvent = (ImageButton) findViewById(R.id.individual_events_imgbutton_events_add);
 		lvEvents = (ListView) findViewById(R.id.individual_events_listview_events);
 		spinEvents = (Spinner) findViewById(R.id.individual_events_spinner_events);
+		tvShortnr = (TextView) findViewById(R.id.individual_events_text_shortnr);
+		tvName = (TextView) findViewById(R.id.individual_events_text_name);
 		tvIdnr = (TextView) findViewById(R.id.individual_events_text_idnr);
 	}
 
@@ -166,13 +170,13 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 */
 	private void prepareViews() {
 		// disable entries
-		Utils.disableEntry(etShortnr);
-		Utils.disableEntry(etName);
+//		Utils.disableEntry(etShortnr);
+//		Utils.disableEntry(etName);
 		
 		// populate
-		etShortnr.setText(individual.getShortNr() + "");
+		tvShortnr.setText(individual.getShortNr() + "");
 		if(individual.hasName()) {
-			etName.setText(individual.getName());
+			tvName.setText(individual.getName());
 		}
 		tvIdnr.setText(individual.getIdNr().toString());
 		setThumbnail();
