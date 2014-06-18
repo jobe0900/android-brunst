@@ -234,7 +234,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 	}
 
 	/**
-	 * Open the thumbnail in full size in image viewer
+	 * Open the thumbnail in full size in image viewer.
 	 */
 	protected void showImage() {
 		if(individual.hasImageUri()) {
@@ -245,7 +245,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 	}
 
 	/**
-	 * Start the IndividualEdit activity
+	 * Start the IndividualEdit activity.
 	 */
 	protected void editIndividual() {
 		Intent intent = new Intent(this, IndividualEditActivity.class);
@@ -253,6 +253,9 @@ public class IndividualEventsActivity extends ActionBarActivity
 		startActivity(intent);
 	}
 
+	/**
+	 * Add a new Event.
+	 */
 	protected void addEvent() {
 		// TODO Auto-generated method stub
 		

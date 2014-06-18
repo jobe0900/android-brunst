@@ -179,10 +179,10 @@ public class IndividualEditActivity extends ActionBarActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.individual_edit_action_delete:
-			deleteIndividual();
+			showDialogDelete();
 			return true;
 		case R.id.individual_edit_action_save:
-			saveIndividual();
+			showDialogSave();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -921,6 +921,17 @@ public class IndividualEditActivity extends ActionBarActivity
 		
 		return idnr;
 	}
+	
+	/**
+	 * Are all the fields for the IDnr filled in?
+	 * @return
+	 */
+	private boolean validIdNrForm() {
+		return (etIdnrOrg.length() > 0 && 
+				etIdnrPpnr.length() > 0 && 
+				etIdnrIndividnr.length() > 0 && 
+				etIdnrChecknr.length() > 0);
+	}
 
 	/**
 	 * Create a zero padded string of a certain length
@@ -938,13 +949,13 @@ public class IndividualEditActivity extends ActionBarActivity
 		return str;
 	}
 
-	/**
-	 * Just show confirmation dialog.
-	 */
-	private void deleteIndividual() {
-		Log.d(TAG, "delete action");
-		showDialogDelete();
-	}
+//	/**
+//	 * Just show confirmation dialog.
+//	 */
+//	private void deleteIndividual() {
+//		Log.d(TAG, "delete action");
+//		showDialogDelete();
+//	}
 	
 	/**
 	 * Perform deletion and return to MainActivity.
@@ -983,6 +994,40 @@ public class IndividualEditActivity extends ActionBarActivity
 			});
 
 			builder.show();
+		}
+	}
+	
+	/**
+	 * Show a dialog, confirming the user's wish to save a ProductionSite.
+	 */
+	private void showDialogSave() {
+		if(validIdNrForm()) {
+			// ask for confirmation first
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			IdNr idnr = createIdnrFromForm(ID_OWN);
+//			if(etName.length() > 0) {
+//				siteStr += etName.getText().toString();
+//			}
+			builder.setMessage(getString(R.string.dialog_ask_save) + " " + idnr.toString() + "?");
+			builder.setCancelable(true);
+			// YES button
+			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					saveIndividual();
+				}
+			});
+			// NO button
+			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// nothing?
+				}
+			});
+			builder.show();
+		}
+		else {
+			Toast.makeText(this, R.string.toast_form_not_correct, Toast.LENGTH_SHORT).show();
 		}
 	}
 	
