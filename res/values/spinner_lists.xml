@@ -5,4 +5,8 @@
         <item>@string/individual_sex_male</item>
     </string-array>
     
+    <string-array name="event_types">
+        <item>@string/event_type_note</item>
+    </string-array>
+    
 </resources>

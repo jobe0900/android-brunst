@@ -39,12 +39,12 @@ public class EventTypeDB implements BaseColumns
 			COLUMN_NAME			+ " VARCHAR(30) NOT NULL " +
 		" )";
 	
-	private static final String SQL_POPULATE_TABLE = 
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[0] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[1] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[2] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[3] + " " +
-		"INSERT INTO " + TABLE_NAME + " " + NAMES[4];
+//	private static final String SQL_POPULATE_TABLE = 
+//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[0] + "', " +
+//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[1] + "', " +
+//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[2] + "', " +
+//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[3] + "', " +
+//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[4] + "'";
 		
 	private static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -74,7 +74,13 @@ public class EventTypeDB implements BaseColumns
 	public static void onCreate(SQLiteDatabase database) {
 		Log.d(TAG, "creating table EventType");
 		database.execSQL(SQL_CREATE_TABLE);
-		database.execSQL(SQL_POPULATE_TABLE);
+//		ContentValues values = new ContentValues();
+		for(String name : NAMES) {
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_NAME, name);
+			database.insert(TABLE_NAME, null, values);
+		}
+//		database.execSQL(SQL_POPULATE_TABLE);
 	}
 	
 	/** Upgrade this table to a new version in the DB. */

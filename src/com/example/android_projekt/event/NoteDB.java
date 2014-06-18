@@ -157,17 +157,24 @@ public class NoteDB implements BaseColumns
 		 *		 ORDER BY Event.eventtime)
 		 * 
 		 */
-		String selection = "? IN (SELECT ? FROM ? WHERE ? = ? ORDER BY ?)";
-		String[] selectionArgs = {
-				COLUMN_EVENT_ID, 
-				EventDB._ID,
-				EventDB.TABLE_NAME,
-				EventDB.COLUMN_IDNR,
-				idNr.toString(),
-				EventDB.COLUMN_EVENTTIME
-		};
-		
-		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
+		String rawQuery = 
+				"SELECT Note.* FROM Note, Event"
+				+ " WHERE Note.eventid = Event._id"
+				+ " AND Event.idnr = '"
+				+ idNr.toString()
+				+ "' ORDER BY Event.eventtime";
+//		String selection = "? IN (SELECT ? FROM ? WHERE ? = ? ORDER BY ?)";
+//		String[] selectionArgs = {
+//				COLUMN_EVENT_ID, 
+//				EventDB.TABLE_NAME + "." + EventDB._ID,
+//				EventDB.TABLE_NAME,
+//				EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR,
+//				idNr.toString(),
+//				EventDB.TABLE_NAME + "." + EventDB.COLUMN_EVENTTIME
+//		};
+//		
+//		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
+		Cursor cursor = database.rawQuery(rawQuery, null);
 		cursor.moveToFirst();
 		
 		Log.d(TAG, "Nr of Notes for individual: " + cursor.getCount());

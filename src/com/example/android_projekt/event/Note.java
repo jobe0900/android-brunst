@@ -28,6 +28,12 @@ public class Note extends Event
 		super(event);
 	}
 	
+	public String toString() {
+		boolean isTextLong = text.length() > 10;
+		String shortText = isTextLong ? (text.substring(0, 10) + "...") : text;
+		return getRegTime().toString() + ": " + shortText;
+	}
+	
 //	/** Constructor */
 //	public Note() {
 //		_id = UNSAVED_ID;

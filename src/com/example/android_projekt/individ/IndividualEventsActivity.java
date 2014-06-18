@@ -1,11 +1,16 @@
 package com.example.android_projekt.individ;
 
+import java.util.List;
+
 import com.example.android_projekt.R;
 import com.example.android_projekt.Utils;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.event.EventDB;
+import com.example.android_projekt.event.Note;
+import com.example.android_projekt.event.NoteAdapter;
+import com.example.android_projekt.event.NoteDB;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -23,12 +28,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.os.Build;
 import android.provider.MediaStore;
 
@@ -53,6 +62,10 @@ public class IndividualEventsActivity extends ActionBarActivity
 	private ListView lvEvents;
 	private Spinner spinEvents;
 	private TextView tvIdnr;
+	
+	private ArrayAdapter<CharSequence> eventTypeAdapter;
+	private String selectedEventType;
+//	private ArrayAdapter<CharSequence> listAdapter;
 	
 	private IndividualDB individualDB;
 	private EventDB eventDB;
@@ -120,6 +133,20 @@ public class IndividualEventsActivity extends ActionBarActivity
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	protected void onResume() {
+		individualDB.open();
+		eventDB.open();
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		individualDB.close();
+		eventDB.close();
+		super.onPause();
+	}
+	
 	/**
 	 * Get references to the widgets
 	 */
@@ -150,8 +177,11 @@ public class IndividualEventsActivity extends ActionBarActivity
 		tvIdnr.setText(individual.getIdNr().toString());
 		setThumbnail();
 		
+		setupSpinners();
+		
 	}
 	
+
 	/**
 	 * Set the contents of the Thumbnail image button
 	 */
@@ -203,7 +233,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Have widgets listen for events
 	 */
 	private void setupListeners() {
-		setupOnClickListeners();
+		setupOnClickListeners();		// click on buttons
+		setupOnItemSelectedListeners();	// selection in spinners
 		
 	}
 
@@ -258,7 +289,65 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 */
 	protected void addEvent() {
 		// TODO Auto-generated method stub
+		Log.d(TAG, "should launch Note activity here");
 		
 	}
+	
+	/**
+	 * Populate spinners from array.
+	 */
+	private void setupSpinners() {
+		// Event types
+		eventTypeAdapter = ArrayAdapter.createFromResource(this, R.array.event_types, R.layout.simple_spinner_item);
+		spinEvents.setAdapter(eventTypeAdapter);
+	}
 
+	/**
+	 * Listen for selection in spinners.
+	 */
+	private void setupOnItemSelectedListeners() {
+		spinEvents.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				selectedEventType = (String) parent.getItemAtPosition(position);
+				// Notes
+				if(selectedEventType.equals(getString(R.string.event_type_note))) {
+					showNotesList();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// NOTHING
+			}
+		});
+	}
+
+	/**
+	 * Display the notes in the list view
+	 */
+	protected void showNotesList() {
+		// Get the notes
+		NoteDB ndb = new NoteDB(this);
+		ndb.open();
+		List<Note> notes = ndb.getAllNotesForIndividual(individual.getIdNr());
+		ndb.close();
+		
+		Log.d(TAG, "nr notes for individual: " + notes.size());
+//		listAdapter = new ArrayAdapter<>(this, R.layout.simple_spinner_item, notes);
+		
+		NoteAdapter adapter = new NoteAdapter(this, notes);
+		lvEvents.setAdapter(adapter);
+		lvEvents.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final Note note = (Note) parent.getItemAtPosition(position);
+				// TODO open note for edit
+				Toast.makeText(getApplicationContext(), note.getText(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 }

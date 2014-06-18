@@ -26,6 +26,9 @@
     <string name="dialog_pick_image">Välj en bild</string>
     <string name="dialog_pick_number">Välj</string>
     
+    <string name="event_type_note">Anteckning</string>
+    <string name="event_type_heat">Brunst</string>
+    
     <string name="individual">Individ</string>
     <string name="individual_edit_activity_title">Individ</string>
     <string name="individual_events_activity_title">Händelser</string>
