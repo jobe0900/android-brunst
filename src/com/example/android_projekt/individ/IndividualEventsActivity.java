@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -202,6 +203,53 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Have widgets listen for events
 	 */
 	private void setupListeners() {
+		setupOnClickListeners();
+		
+	}
+
+	/**
+	 * Set up OnClickListeners for buttons
+	 */
+	private void setupOnClickListeners() {
+		OnClickListener clickListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				switch(v.getId()) {
+				case R.id.individual_events_imgbutton_thumb:
+					showImage();
+					break;
+				case R.id.individual_events_imgbutton_edit_individual:
+					editIndividual();
+					break;
+				case R.id.individual_events_imgbutton_events_add:
+					addEvent();
+					break;
+				}
+				
+			}
+		};
+		ibThumb.setOnClickListener(clickListener);
+		ibEditIndividual.setOnClickListener(clickListener);
+		ibAddEvent.setOnClickListener(clickListener);
+	}
+
+	/**
+	 * Open the thumbnail in full size in image viewer
+	 */
+	protected void showImage() {
+		if(individual.hasImageUri()) {
+			Uri uri = Uri.parse(individual.getImageUri());
+			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+			startActivity(intent);
+		}
+	}
+
+	protected void editIndividual() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void addEvent() {
 		// TODO Auto-generated method stub
 		
 	}

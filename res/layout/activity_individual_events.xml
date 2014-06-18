@@ -147,7 +147,7 @@
             android:layout_marginLeft="8dp"
             android:background="@drawable/button_bg_green"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_edit" />
+            android:src="@drawable/ic_plus_40" />
         
         <!-- Spinner row end -->
 
