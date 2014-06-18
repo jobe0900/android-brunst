@@ -27,7 +27,8 @@
     <string name="dialog_pick_number">Välj</string>
     
     <string name="individual">Individ</string>
-    <string name="individual_activity_title">Individ</string>
+    <string name="individual_edit_activity_title">Individ</string>
+    <string name="individual_events_activity_title">Händelser</string>
     <string name="individual_label_idnr">ID-nr</string>
     <string name="individual_label_shortnr">Kortnr</string>
     <string name="individual_label_name">Namn</string>
@@ -39,6 +40,7 @@
     <string name="individual_label_heatcyclus">Brunstcykel</string>
     <string name="individual_label_lactationnr">Laktationsnr</string>
     <string name="individual_label_lastbirth">Senaste kalvning</string>
+    <string name="individual_label_events">Händelse</string>
     <string name="individual_sex_male">Tjur</string>
     <string name="individual_sex_female">Ko</string>
     
@@ -57,5 +59,6 @@
     <string name="toast_could_not_save">Kunde inte spara</string>
     <string name="toast_could_not_fetch">Kunde inte hämta</string>
     <string name="toast_form_not_correct">Fel i formulär</string>
-    
+
+
 </resources>

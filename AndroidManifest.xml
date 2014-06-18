@@ -32,7 +32,15 @@
         </activity>
         <activity
             android:name="com.example.android_projekt.individ.IndividualEditActivity"
-            android:label="@string/individual_activity_title"
+            android:label="@string/individual_edit_activity_title"
+            android:parentActivityName="com.example.android_projekt.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android_projekt.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.android_projekt.individ.IndividualEventsActivity"
+            android:label="@string/individual_events_activity_title"
             android:parentActivityName="com.example.android_projekt.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
