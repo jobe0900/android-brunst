@@ -326,7 +326,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 				if(selectedEventType.equals(getString(R.string.event_type_note))) {
 					showNotesList();
 				}
-				
 			}
 
 			@Override
@@ -357,7 +356,10 @@ public class IndividualEventsActivity extends ActionBarActivity
 					int position, long id) {
 				final Note note = (Note) parent.getItemAtPosition(position);
 				// TODO open note for edit
-				Toast.makeText(getApplicationContext(), note.getText(), Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
+				intent.putExtra(NoteActivity.EXTRA_NOTE, note);
+				startActivity(intent);
+//				Toast.makeText(getApplicationContext(), note.getText(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

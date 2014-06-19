@@ -46,6 +46,8 @@
     <string name="note_activity_title">Anteckning</string>
     <string name="note_label_idnr">Anteckning för individ:</string>
     <string name="note_entry_hint">Max 200 tecken</string>
+    <string name="note_listrow_line1_hint">Datum och tid</string>
+    <string name="note_listrow_line2_hint">Anteckningens text</string>
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>
     <string name="production_site_label_number">Produktionsplatsnummer</string>
