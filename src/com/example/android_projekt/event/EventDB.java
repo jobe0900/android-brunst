@@ -248,7 +248,8 @@ public class EventDB implements BaseColumns
 //			EventType.Type type = EventType.parseString(typeStr);
 			
 			int typeIndex = cursor.getInt(2) - 1; // DB based on 1, enum based on 0
-			EventType.Type type = EventType.Type.values()[typeIndex];
+//			EventType.Type type = EventType.Type.values()[typeIndex];
+			Event.Type type = Event.Type.values()[typeIndex];
 			
 			event = new Event(type, idnr);
 			

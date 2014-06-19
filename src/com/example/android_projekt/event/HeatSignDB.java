@@ -10,22 +10,23 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
- * Helper class, "contract", handling the database work for the EventType
+ * Helper class, "contract", to handle DB work for the HeatSign class
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
-public class EventTypeDB implements BaseColumns
+public class HeatSignDB implements BaseColumns
 {
-	private static final String TAG = "Brunst: EventTypeDB";
+	private static final String TAG = "Brunst: HeatSignDB";
 	
-	public static final String TABLE_NAME = "EventType";
+	public static final String TABLE_NAME = "HeatSign";
 	public static final String COLUMN_NAME = "name";
-
+	
 	private static final String[] NAMES = {
-		Event.Type.EVENT_NOTE.toString(),
-		Event.Type.EVENT_HEAT.toString(),
-		Event.Type.EVENT_MATING.toString(),
-		Event.Type.EVENT_PREGCHECK.toString(),
-		Event.Type.EVENT_BIRTH.toString()
+		HeatEvent.Sign.HEATSIGN_UNREST.toString(),
+		HeatEvent.Sign.HEATSIGN_DISCHARGE.toString(),
+		HeatEvent.Sign.HEATSIGN_RIDING.toString(),
+		HeatEvent.Sign.HEATSIGN_SAG.toString(),
+		HeatEvent.Sign.HEATSIGN_SWELLING.toString(),
+		HeatEvent.Sign.HEATSIGN_LOWMILK.toString()
 	};
 	
 	private static final String[] ALL_COLUMNS = {
@@ -35,17 +36,10 @@ public class EventTypeDB implements BaseColumns
 	
 	private static final String SQL_CREATE_TABLE = 
 		"CREATE TABLE " + TABLE_NAME + " (" +
-			BaseColumns._ID		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COLUMN_NAME			+ " VARCHAR(30) NOT NULL " +
-		" )";
+			BaseColumns._ID		+ " INTEGER PRIMATY KEY AUTOINCREMENT, " +
+			COLUMN_NAME			+ " VARCHAR(20) NOT NULL" +
+		" ) ";
 	
-//	private static final String SQL_POPULATE_TABLE = 
-//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[0] + "', " +
-//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[1] + "', " +
-//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[2] + "', " +
-//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[3] + "', " +
-//		"INSERT INTO " + TABLE_NAME + " '" + NAMES[4] + "'";
-		
 	private static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -56,7 +50,7 @@ public class EventTypeDB implements BaseColumns
 	 * Constructor.
 	 * @param context
 	 */
-	public EventTypeDB(Context context) {
+	public HeatSignDB(Context context) {
 		dbHelper = new BrunstDBHelper(context);
 	}
 	
@@ -72,15 +66,14 @@ public class EventTypeDB implements BaseColumns
 	
 	/** Create this table in the DB. */
 	public static void onCreate(SQLiteDatabase database) {
-		Log.d(TAG, "creating table EventType");
+		Log.d(TAG, "creating table HeatSign");
 		database.execSQL(SQL_CREATE_TABLE);
-//		ContentValues values = new ContentValues();
+		// populate the table
 		for(String name : NAMES) {
 			ContentValues values = new ContentValues();
 			values.put(COLUMN_NAME, name);
 			database.insert(TABLE_NAME, null, values);
 		}
-//		database.execSQL(SQL_POPULATE_TABLE);
 	}
 	
 	/** Upgrade this table to a new version in the DB. */
@@ -88,5 +81,4 @@ public class EventTypeDB implements BaseColumns
 		// TODO
 		// nothing for now.
 	}
-	
 }

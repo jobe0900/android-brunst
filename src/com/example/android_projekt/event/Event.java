@@ -8,7 +8,7 @@ import com.example.android_projekt.individ.IdNr;
 /**
  * Base class for the different kinds of events to register:
  * 0. Note
- * 1. Heat
+ * 1. HeatEvent
  * 2. Mating
  * 3. Pregnancy check
  * 4. Birth
@@ -24,8 +24,17 @@ public class Event
 	private static final String TAG = "Brunst: Event";
 	public static final long UNSAVED_ID = -1;
 	
+	public static enum Type {
+		EVENT_NOTE,
+		EVENT_HEAT,
+		EVENT_MATING,
+		EVENT_PREGCHECK,
+		EVENT_BIRTH
+	};
+	
 	private long eventId;
-	private EventType.Type type;
+//	private EventType.Type type;
+	private Type type;
 	private IdNr idnr;
 	private Calendar eventTime;
 	private Calendar regTime;
@@ -35,7 +44,8 @@ public class Event
 	 * @param	type	The type of event
 	 * @param	idnr	The Individual's IdNr
 	 */
-	public Event(EventType.Type type, IdNr idnr) {
+//	public Event(EventType.Type type, IdNr idnr) {
+	public Event(Type type, IdNr idnr) {
 		eventId = UNSAVED_ID;
 		this.type = type;
 		this.idnr = idnr;
@@ -70,7 +80,8 @@ public class Event
 		eventId = id;
 	}
 	
-	public EventType.Type getType() {
+//	public EventType.Type getType() {
+	public Type getType() {
 		return type;
 	}
 

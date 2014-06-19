@@ -25,7 +25,8 @@ public class Note extends Event
 	 * @param	idNr		IdNr for the Individual the Notes is concerning
 	 */
 	public Note(IdNr idNr) {
-		super(EventType.Type.EVENT_NOTE, idNr);
+//		super(EventType.Type.EVENT_NOTE, idNr);
+		super(Event.Type.EVENT_NOTE, idNr);
 	}
 	
 	/**

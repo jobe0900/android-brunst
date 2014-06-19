@@ -2,6 +2,8 @@ package com.example.android_projekt;
 
 import com.example.android_projekt.event.EventDB;
 import com.example.android_projekt.event.EventTypeDB;
+import com.example.android_projekt.event.HeatSignDB;
+import com.example.android_projekt.event.HeatStrengthDB;
 import com.example.android_projekt.event.NoteDB;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -25,12 +27,13 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Create the tables.
 		ProductionSiteDB.onCreate(db);
 		IndividualDB.onCreate(db);
 		EventTypeDB.onCreate(db);
 		EventDB.onCreate(db);
 		NoteDB.onCreate(db);
+		HeatSignDB.onCreate(db);
+		HeatStrengthDB.onCreate(db);
 	}
 	
 	@Override
@@ -40,12 +43,13 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 		ProductionSiteDB.onUpgrade(db);
 		IndividualDB.onUpgrade(db);
 		EventTypeDB.onUpgrade(db);
 		EventDB.onUpgrade(db);
 		NoteDB.onUpgrade(db);
+		HeatSignDB.onUpgrade(db);
+		HeatStrengthDB.onUpgrade(db);
 	}
 
 }
