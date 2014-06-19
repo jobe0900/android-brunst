@@ -102,7 +102,7 @@ public class EventDB implements BaseColumns
 		// the values to store
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_IDNR, event.getIdnr().toString());
-		values.put(COLUMN_EVENTTYPE, EventType.getTypeAsString(event.getType()));
+		values.put(COLUMN_EVENTTYPE, event.getType().ordinal() + 1);	// 0 base enum, 1 base in DB
 		values.put(COLUMN_EVENTTIME, Utils.datetimeToString(event.getEventTime()));
 		values.put(COLUMN_REGTIME, Utils.datetimeToString(event.getRegTime()));
 		
@@ -244,8 +244,11 @@ public class EventDB implements BaseColumns
 			String idnrStr = cursor.getString(1);
 			IdNr idnr = new IdNr(idnrStr);
 			
-			String typeStr = cursor.getString(2);
-			EventType.Type type = EventType.parseString(typeStr);
+//			String typeStr = cursor.getString(2);
+//			EventType.Type type = EventType.parseString(typeStr);
+			
+			int typeIndex = cursor.getInt(2) - 1; // DB based on 1, enum based on 0
+			EventType.Type type = EventType.Type.values()[typeIndex];
 			
 			event = new Event(type, idnr);
 			

@@ -1,5 +1,7 @@
 package com.example.android_projekt.event;
 
+import java.io.Serializable;
+
 import com.example.android_projekt.individ.IdNr;
 
 /**
@@ -7,7 +9,9 @@ import com.example.android_projekt.individ.IdNr;
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class Note extends Event
+	implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private static final String TAG = "Brunst: Note";
 	public static final long UNSAVED_ID = -1;
 	
@@ -18,16 +22,21 @@ public class Note extends Event
 	
 	/**
 	 * Constructor
-	 * @param	eventId		The _id for the Event
+	 * @param	idNr		IdNr for the Individual the Notes is concerning
 	 */
 	public Note(IdNr idNr) {
 		super(EventType.Type.EVENT_NOTE, idNr);
 	}
 	
+	/**
+	 * Create a Note from an Event
+	 * @param event
+	 */
 	public Note(Event event) {
 		super(event);
 	}
 	
+	@Override
 	public String toString() {
 		boolean isTextLong = text.length() > 10;
 		String shortText = isTextLong ? (text.substring(0, 10) + "...") : text;

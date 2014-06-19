@@ -46,6 +46,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android_projekt.MainActivity" />
         </activity>
+        <activity
+            android:name="com.example.android_projekt.event.NoteActivity"
+            android:label="@string/note_activity_title"
+            android:parentActivityName="com.example.android_projekt.individ.IndividualEventsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android_projekt.individ.IndividualEventsActivity" />
+        </activity>
     </application>
 
 </manifest>

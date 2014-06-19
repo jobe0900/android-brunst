@@ -92,6 +92,7 @@ public class NoteDB implements BaseColumns
 	 */
 	public long saveNote(Note note) {
 		long eventId = eventDb.saveEvent(note);
+		Log.d(TAG, "Save Event part gave eventID: " + eventId);
 		if(eventId == -1) {
 			Log.d(TAG, "could not save Event part of Note");
 			return eventId;
@@ -111,14 +112,23 @@ public class NoteDB implements BaseColumns
 	}
 	
 	/**
-	 * Delete an Note from the DB
+	 * Delete an Note from the DB, and also the Event part of the note
 	 * @param	noteId		The _id of the Note
 	 * @return	The number of Notes deleted (should be 1)
 	 */
 	public int deleteNote(long noteId) {
-		String selection = BaseColumns._ID + " LIKE ?";
-		String[] selectionArgs = {noteId + ""};
-		return database.delete(TABLE_NAME, selection, selectionArgs);
+		Note note = getNote(noteId);
+		
+		long eventId = note.getEventId();
+		
+		// this should cascade the deletion
+		return eventDb.deleteEvent(eventId);
+		
+		
+//		
+//		String selection = BaseColumns._ID + " LIKE ?";
+//		String[] selectionArgs = {noteId + ""};
+//		return database.delete(TABLE_NAME, selection, selectionArgs);
 	}
 	
 	/**

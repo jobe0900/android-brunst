@@ -1,5 +1,6 @@
 package com.example.android_projekt.event;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import com.example.android_projekt.individ.IdNr;
@@ -17,7 +18,9 @@ import com.example.android_projekt.individ.IdNr;
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class Event 
+	implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private static final String TAG = "Brunst: Event";
 	public static final long UNSAVED_ID = -1;
 	

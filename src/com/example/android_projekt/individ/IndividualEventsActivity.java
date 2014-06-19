@@ -9,6 +9,7 @@ import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.event.EventDB;
 import com.example.android_projekt.event.Note;
+import com.example.android_projekt.event.NoteActivity;
 import com.example.android_projekt.event.NoteAdapter;
 import com.example.android_projekt.event.NoteDB;
 
@@ -293,7 +294,13 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 */
 	protected void addEvent() {
 		// TODO Auto-generated method stub
-		Log.d(TAG, "should launch Note activity here");
+		Log.d(TAG, "should launch Event activity here");
+		// NOTE
+		if(selectedEventType.equals(getString(R.string.event_type_note))) {
+			Intent intent = new Intent(this, NoteActivity.class);
+			intent.putExtra(NoteActivity.EXTRA_IDNR, individual.getIdNr().toString());
+			startActivity(intent);
+		}
 		
 	}
 	

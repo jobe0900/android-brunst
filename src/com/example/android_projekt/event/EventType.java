@@ -1,5 +1,6 @@
 package com.example.android_projekt.event;
 
+import java.io.Serializable;
 import java.text.ParseException;
 
 /**
@@ -7,7 +8,10 @@ import java.text.ParseException;
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class EventType 
+	implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private static final String TAG = "Brunst: EventType";
 	
 	public static final String EVENT_NOTE = "Note";
