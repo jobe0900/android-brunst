@@ -3,6 +3,7 @@ package com.example.android_projekt.event;
 import java.util.List;
 
 import com.example.android_projekt.R;
+import com.example.android_projekt.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -30,13 +31,13 @@ public class NoteAdapter extends ArrayAdapter<Note>
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		View rowView = inflater.inflate(R.layout.list_row_note, parent);
+		View rowView = inflater.inflate(R.layout.list_row_note, parent, false);
 		TextView line1 = (TextView) rowView.findViewById(R.id.list_row_note_line1);
 		TextView line2 = (TextView) rowView.findViewById(R.id.list_row_note_line2);
 		
 		// fill in the text
 		Note note = notes.get(position);
-		line1.setText(note.getRegTime().toString());
+		line1.setText(Utils.datetimeToString(note.getRegTime()));
 		line2.setText(note.getText());
 		
 		return rowView;
