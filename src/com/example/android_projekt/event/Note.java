@@ -2,6 +2,7 @@ package com.example.android_projekt.event;
 
 import java.io.Serializable;
 
+import com.example.android_projekt.Utils;
 import com.example.android_projekt.individ.IdNr;
 
 /**
@@ -16,8 +17,6 @@ public class Note extends Event
 	public static final long UNSAVED_ID = -1;
 	
 	private long noteId = UNSAVED_ID;
-//	private Event event;
-//	private long eventId;
 	private String text = null;
 	
 	/**
@@ -25,7 +24,6 @@ public class Note extends Event
 	 * @param	idNr		IdNr for the Individual the Notes is concerning
 	 */
 	public Note(IdNr idNr) {
-//		super(EventType.Type.EVENT_NOTE, idNr);
 		super(Event.Type.EVENT_NOTE, idNr);
 	}
 	
@@ -41,15 +39,9 @@ public class Note extends Event
 	public String toString() {
 		boolean isTextLong = text.length() > 10;
 		String shortText = isTextLong ? (text.substring(0, 10) + "...") : text;
-		return getRegTime().toString() + ": " + shortText;
+		return Utils.datetimeToString(getRegTime()) + ": " + shortText;
 	}
 	
-//	/** Constructor */
-//	public Note() {
-//		_id = UNSAVED_ID;
-//		event = null;
-//		text = null;
-//	}
 
 	public long getNoteId() {
 		return noteId;
@@ -58,26 +50,6 @@ public class Note extends Event
 	public void setNoteId(long id) {
 		noteId = id;
 	}
-	
-//	public long getEventId() {
-//		return eventId;
-//	}
-	
-//	public void setEventId(long eventId) {
-//		this.eventId = eventId;
-//	}
-
-//	public boolean hasEvent() {
-//		return event != null;
-//	}
-//	
-//	public Event getEvent() {
-//		return event;
-//	}
-//
-//	public void setEvent(Event event) {
-//		this.event = event;
-//	}
 	
 	public boolean hasText() {
 		return text != null && text.length() > 0;
