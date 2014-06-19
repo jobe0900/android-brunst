@@ -26,6 +26,8 @@
     <string name="dialog_pick_number">Välj</string>
     <string name="event_type_note">Anteckning</string>
     <string name="event_type_heat">Brunst</string>
+    
+    <string name="heat_activity_title">Brunst</string>
     <string name="heat_sign_unrest">Oro</string>
     <string name="heat_sign_discharge">Flytning</string>
     <string name="heat_sign_riding">Ridning</string>
@@ -37,6 +39,7 @@
     <string name="heat_strength_3">Trolig</string>
     <string name="heat_strength_4">Säker</string>
     <string name="heat_strength_5">Stark</string>
+    
     <string name="individual">Individ</string>
     <string name="individual_edit_activity_title">Individ</string>
     <string name="individual_events_activity_title">Händelser</string>
@@ -74,6 +77,7 @@
     <string name="toast_could_not_fetch">Kunde inte hämta</string>
     <string name="toast_form_not_correct">Fel i formulär</string>
     <string name="toast_nothing_to_save">Ingenting att spara</string>
-
+    <string name="title_activity_heat">HeatActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
