@@ -123,12 +123,6 @@ public class NoteDB implements BaseColumns
 		
 		// this should cascade the deletion
 		return eventDb.deleteEvent(eventId);
-		
-		
-//		
-//		String selection = BaseColumns._ID + " LIKE ?";
-//		String[] selectionArgs = {noteId + ""};
-//		return database.delete(TABLE_NAME, selection, selectionArgs);
 	}
 	
 	/**
@@ -137,7 +131,6 @@ public class NoteDB implements BaseColumns
 	 */
 	public List<Note> getAllNotes() {
 		List<Note> notes = new ArrayList<Note>();
-//		String sortOrder = COLUMN_EVENTTIME + " ASC";
 		
 		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
 		cursor.moveToFirst();
@@ -160,30 +153,18 @@ public class NoteDB implements BaseColumns
 		List<Note> notes = new ArrayList<Note>();
 		
 		/*
-		 * SELECT * FROM Note
-		 * WHERE Note.eventid IN
-		 * 		(SELECT Event._id FROM Event 
-		 *		 WHERE Event.idnr = idNr
-		 *		 ORDER BY Event.eventtime)
-		 * 
+		 * SELECT * FROM Note, Event
+		 * WHERE Note.eventid = Event._id
+		 * AND Event.idnr = idNr
+		 * ORDER BY Event.eventtime ASC
 		 */
 		String rawQuery = 
 				"SELECT Note.* FROM Note, Event"
 				+ " WHERE Note.eventid = Event._id"
 				+ " AND Event.idnr = '"
 				+ idNr.toString()
-				+ "' ORDER BY Event.eventtime";
-//		String selection = "? IN (SELECT ? FROM ? WHERE ? = ? ORDER BY ?)";
-//		String[] selectionArgs = {
-//				COLUMN_EVENT_ID, 
-//				EventDB.TABLE_NAME + "." + EventDB._ID,
-//				EventDB.TABLE_NAME,
-//				EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR,
-//				idNr.toString(),
-//				EventDB.TABLE_NAME + "." + EventDB.COLUMN_EVENTTIME
-//		};
-//		
-//		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, selectionArgs, null, null, null);
+				+ "' ORDER BY Event.eventtime ASC";
+
 		Cursor cursor = database.rawQuery(rawQuery, null);
 		cursor.moveToFirst();
 		

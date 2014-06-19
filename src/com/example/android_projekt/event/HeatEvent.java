@@ -106,6 +106,10 @@ public class HeatEvent extends Event
 	public void setStrength(Strength strength) {
 		this.stren = strength;
 	}
+	
+	public boolean hasNote() {
+		return note != null && note.length() > 0;
+	}
 
 	public String getNote() {
 		return note;
