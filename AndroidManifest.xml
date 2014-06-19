@@ -55,7 +55,7 @@
                 android:value="com.example.android_projekt.individ.IndividualEventsActivity" />
         </activity>
         <activity
-            android:name="com.example.android_projekt.HeatActivity"
+            android:name="com.example.android_projekt.event.HeatActivity"
             android:label="@string/heat_activity_title"
             android:parentActivityName="com.example.android_projekt.individ.IndividualEventsActivity" >
             <meta-data

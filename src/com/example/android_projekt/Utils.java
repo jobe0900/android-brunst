@@ -21,6 +21,7 @@ public class Utils
 	
 	public static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	public static SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 	
 //	public static String dateToString(Date date) {
 //		return DATE_FORMAT.format(date);
@@ -29,6 +30,16 @@ public class Utils
 //	public static Date stringToDate(String dateString) throws ParseException {
 //			return DATE_FORMAT.parse(dateString);
 //	}
+	
+	public static String timeToString(Calendar cal) {
+		return TIME_FORMAT.format(cal.getTime());
+	}
+	
+	public static Calendar stringToTime(String timeString) throws ParseException {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(TIME_FORMAT.parse(timeString));
+		return cal;
+	}
 	
 	public static String dateToString(Calendar cal) {
 		return DATE_FORMAT.format(cal.getTime());

@@ -6,11 +6,204 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android_projekt.HeatActivity" >
+    tools:context="com.example.android_projekt.event.HeatActivity" >
 
     <TextView
+        android:id="@+id/heat_label_individual_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/heat_activity_title" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_individual_title" />
+
+    <TextView
+        android:id="@+id/heat_label_lactationnr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/heat_label_individual_title"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_lactationnr" />
+
+    <EditText
+        android:id="@+id/heat_entry_lactationnr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/heat_label_lactationnr"
+        android:layout_below="@id/heat_label_lactationnr"
+        android:inputType="number"
+        android:maxLength="2"
+        android:minEms="2" />
+
+    <TextView
+        android:id="@+id/heat_label_heatround"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/heat_label_lactationnr"
+        android:layout_alignLeft="@+id/heat_label_time"
+        android:text="@string/heat_label_heatround" />
+
+    <EditText
+        android:id="@+id/heat_entry_heatround"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/heat_entry_lactationnr"
+        android:layout_alignLeft="@id/heat_label_heatround"
+        android:layout_marginRight="8dp"
+        android:inputType="number"
+        android:maxLength="2"
+        android:minEms="3" />
+
+    <ImageButton
+        android:id="@+id/heat_imgbutton_edit_heatround"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@id/heat_entry_heatround"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@id/heat_entry_heatround"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_edit" />
+
+    <TextView
+        android:id="@+id/heat_label_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/heat_entry_heatround"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_date" />
+    
+    <EditText
+        android:id="@+id/heat_entry_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/heat_label_date"
+        android:layout_alignLeft="@id/heat_label_date"
+        android:layout_marginRight="8dp"
+        android:inputType="date"
+        android:minEms="4" />
+
+    <ImageButton
+        android:id="@+id/heat_imgbutton_edit_date"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@id/heat_entry_date"
+        android:layout_marginRight="24dp"
+        android:layout_toRightOf="@id/heat_entry_date"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_calendar_40" />
+    
+    <TextView
+        android:id="@+id/heat_label_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/heat_imgbutton_edit_date"
+        android:layout_alignBaseline="@id/heat_label_date"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_time" />
+    
+    <EditText
+        android:id="@+id/heat_entry_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/heat_entry_date"
+        android:layout_alignLeft="@id/heat_label_time"
+        android:layout_marginRight="8dp"
+        android:inputType="time"
+        android:minEms="3" />
+
+    <ImageButton
+        android:id="@+id/heat_imgbutton_edit_time"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@id/heat_imgbutton_edit_date"
+        android:layout_toRightOf="@id/heat_entry_time"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_clock_40" />
+    
+     <TextView
+        android:id="@+id/heat_label_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/heat_entry_date"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_sign" />
+     
+     <Spinner
+         android:id="@+id/heat_spinner_sign"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/heat_label_sign"
+         android:layout_alignLeft="@id/heat_label_sign"
+         />
+     
+     <TextView
+        android:id="@+id/heat_label_strength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/heat_label_time"
+        android:layout_below="@id/heat_entry_date"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/heat_label_strength" />
+     
+     <Spinner
+         android:id="@+id/heat_spinner_strength"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/heat_label_strength"
+         android:layout_alignLeft="@id/heat_label_strength"
+         />
+
+     <CheckBox
+         android:id="@+id/heat_checkbox_remind"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/heat_spinner_sign"
+         android:layout_below="@+id/heat_spinner_sign"
+         android:layout_marginRight="8dp"
+         android:text="@string/heat_label_remind" />
+     
+     <EditText
+        android:id="@+id/heat_entry_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/heat_checkbox_remind"
+        android:layout_toRightOf="@id/heat_checkbox_remind"
+        android:layout_marginRight="8dp"
+        android:inputType="number"
+        android:minEms="2" />
+
+    <ImageButton
+        android:id="@+id/heat_imgbutton_edit_remind"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@id/heat_checkbox_remind"
+        android:layout_toRightOf="@id/heat_entry_remind"
+        android:background="@drawable/button_bg_green"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_edit" />
+    
+    <EditText
+        android:id="@+id/heat_entry_note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/heat_checkbox_remind"
+        android:layout_marginTop="8dp"
+        android:inputType="text"
+        android:hint="@string/heat_label_note"
+        android:scrollbars="vertical" 
+        android:gravity="top"
+        />
+     
 
 </RelativeLayout>

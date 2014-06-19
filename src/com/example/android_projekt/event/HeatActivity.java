@@ -1,4 +1,9 @@
-package com.example.android_projekt;
+package com.example.android_projekt.event;
+
+import com.example.android_projekt.R;
+import com.example.android_projekt.R.id;
+import com.example.android_projekt.R.layout;
+import com.example.android_projekt.R.menu;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
