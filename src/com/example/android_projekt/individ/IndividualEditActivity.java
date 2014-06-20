@@ -168,6 +168,7 @@ public class IndividualEditActivity extends ActionBarActivity
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.individual_edit_activity_actions, menu);
 		// enabled / disable delete depending on update or not

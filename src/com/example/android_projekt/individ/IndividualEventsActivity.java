@@ -22,6 +22,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -55,8 +56,11 @@ import android.provider.MediaStore;
 public class IndividualEventsActivity extends ActionBarActivity 
 {
 	private static final String TAG = "Brunst: IndividualEventsActivity";
+	private static final String PREFS_IDNR = "brunst.prefs.IndividualEventsActivity.IdNr";
+	private static final String PREFS_EVENT = "brunst.prefs.IndividualEventsActivity.Event";
 	
 	public static final String EXTRA_IDNR = "brunst.extra.IndividualEventsActivity.IdNr";
+	
 	
 	// WIDGETS
 //	private EditText etShortnr;
@@ -78,6 +82,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 	private EventDB eventDB;
 	
 	private Individual individual;
+	private String idNrString;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,25 +94,62 @@ public class IndividualEventsActivity extends ActionBarActivity
 		eventDB = new EventDB(this);
 		eventDB.open();
 		
+		IdNr idnr = null;
+		idNrString = null;
+		
+		if(savedInstanceState != null) {
+			Log.d(TAG, "must restore values");
+//			restoreValues(savedInstanceState);
+		}
+		else {
+			// try to read from preferences
+			SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+			if(prefs.contains(PREFS_IDNR)) {
+				idNrString = prefs.getString(PREFS_IDNR, null);
+			}
+			if(prefs.contains(PREFS_EVENT)) {
+				selectedEventType = prefs.getString(PREFS_EVENT, null);
+			}
+		}
+		
 		Intent intent = getIntent();
 		if(intent.hasExtra(EXTRA_IDNR)) {
-			String idnrStr = intent.getStringExtra(EXTRA_IDNR);
-			Log.d(TAG, "edit individual: " + idnrStr);
-			IdNr idnr = null;
+			idNrString = intent.getStringExtra(EXTRA_IDNR);
+//			Log.d(TAG, "edit individual: " + idnrStr);
+//			idnr = null;
+//			try {
+//				idnr = new IdNr(idnrStr);
+//			} catch (Exception ex) {
+//				Log.d(TAG, "Cannot parse the idnr: " + idnrStr);
+//			}
+//			if(idnr != null) {
+//				individual = individualDB.getIndividual(idnr);
+//				if(individual != null) {
+//					Log.d(TAG, "received Individual: " + individual.toString());
+//				}
+//				else {
+//					String text = getString(R.string.toast_could_not_fetch) + " " + idnrStr;
+//					Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+//				}
+//			}
+		}
+		
+		if(idNrString != null) {
 			try {
-				idnr = new IdNr(idnrStr);
+				idnr = new IdNr(idNrString);
 			} catch (Exception ex) {
-				Log.d(TAG, "Cannot parse the idnr: " + idnrStr);
+				Log.d(TAG, "Cannot parse the idnr: " + idNrString);
 			}
-			if(idnr != null) {
-				individual = individualDB.getIndividual(idnr);
-				if(individual != null) {
-					Log.d(TAG, "received Individual: " + individual.toString());
-				}
-				else {
-					String text = getString(R.string.toast_could_not_fetch) + " " + idnrStr;
-					Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-				}
+		}
+		
+		if(idnr != null) {
+			individual = individualDB.getIndividual(idnr);
+			if(individual != null) {
+				Log.d(TAG, "received Individual: " + individual.toString());
+			}
+			else {
+				String text = getString(R.string.toast_could_not_fetch) + " " + idNrString;
+				Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 			}
 		}
 		
@@ -119,10 +161,12 @@ public class IndividualEventsActivity extends ActionBarActivity
 		}
 
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
+		menu.clear();
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.individual_events, menu);
 		return true;
@@ -152,8 +196,36 @@ public class IndividualEventsActivity extends ActionBarActivity
 		individualDB.close();
 		eventDB.close();
 		super.onPause();
+		
+		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		SharedPreferences.Editor prefsEditor = prefs.edit();
+		prefsEditor.putString(PREFS_IDNR, individual.getIdNr().toString());
+		prefsEditor.putString(PREFS_EVENT, (String) spinEvents.getSelectedItem());
+		prefsEditor.commit();
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		outState.putString(PREFS_IDNR, individual.getIdNr().toString());
+		outState.putString(PREFS_EVENT, (String) spinEvents.getSelectedItem());
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		restoreValues(savedInstanceState);
+	}
+	
+	private void restoreValues(Bundle savedInstanceState) {
+		idNrString = savedInstanceState.getString(PREFS_IDNR);
+		selectedEventType = savedInstanceState.getString(PREFS_EVENT);
+	}
+
+
+
 	/**
 	 * Get references to the widgets
 	 */
@@ -323,6 +395,11 @@ public class IndividualEventsActivity extends ActionBarActivity
 		// Event types
 		eventTypeAdapter = ArrayAdapter.createFromResource(this, R.array.event_types, R.layout.simple_spinner_item);
 		spinEvents.setAdapter(eventTypeAdapter);
+		// set selected item
+		if(selectedEventType != null) {
+			int pos = eventTypeAdapter.getPosition(selectedEventType);
+			spinEvents.setSelection(pos);
+		}
 	}
 
 	/**
@@ -353,6 +430,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 
 	/**
 	 * Display the notes in the list view
+	 * Need to load in background?
 	 */
 	protected void showNotesList() {
 		// Get the notes
@@ -381,7 +459,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 	}
 	
 	/**
-	 * Display the Heat events for this individual
+	 * Display the Heat events for this individual.
+	 * Should perhaps load in background?
 	 */
 	protected void showHeatList() {
 		// Get the Heats

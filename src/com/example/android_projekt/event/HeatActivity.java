@@ -129,7 +129,7 @@ public class HeatActivity extends ActionBarActivity
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-
+		menu.clear();
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.heat_activity_actions, menu);
 		// set visibility of "Save" depending on editing or just viewing
