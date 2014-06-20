@@ -8,6 +8,10 @@ import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.event.EventDB;
+import com.example.android_projekt.event.HeatActivity;
+import com.example.android_projekt.event.HeatAdapter;
+import com.example.android_projekt.event.HeatEvent;
+import com.example.android_projekt.event.HeatEventDB;
 import com.example.android_projekt.event.Note;
 import com.example.android_projekt.event.NoteActivity;
 import com.example.android_projekt.event.NoteAdapter;
@@ -297,8 +301,16 @@ public class IndividualEventsActivity extends ActionBarActivity
 		Log.d(TAG, "should launch Event activity here");
 		// NOTE
 		if(selectedEventType.equals(getString(R.string.event_type_note))) {
+			// pass the idnr as string
 			Intent intent = new Intent(this, NoteActivity.class);
 			intent.putExtra(NoteActivity.EXTRA_IDNR, individual.getIdNr().toString());
+			startActivity(intent);
+		}
+		// HEAT
+		else if(selectedEventType.equals(getString(R.string.event_type_heat))) {
+			// pass the individual
+			Intent intent = new Intent(this, HeatActivity.class);
+			intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
 			startActivity(intent);
 		}
 		
@@ -325,6 +337,10 @@ public class IndividualEventsActivity extends ActionBarActivity
 				// Notes
 				if(selectedEventType.equals(getString(R.string.event_type_note))) {
 					showNotesList();
+				}
+				// Heat
+				else if(selectedEventType.equals(getString(R.string.event_type_heat))) {
+					showHeatList();
 				}
 			}
 
@@ -355,12 +371,41 @@ public class IndividualEventsActivity extends ActionBarActivity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				final Note note = (Note) parent.getItemAtPosition(position);
-				// TODO open note for edit
+				// open note for edit
 				Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
 				intent.putExtra(NoteActivity.EXTRA_NOTE, note);
 				startActivity(intent);
 //				Toast.makeText(getApplicationContext(), note.getText(), Toast.LENGTH_SHORT).show();
 			}
 		});
+	}
+	
+	/**
+	 * Display the Heat events for this individual
+	 */
+	protected void showHeatList() {
+		// Get the Heats
+		HeatEventDB hdb = new HeatEventDB(this);
+		hdb.open();
+		List<HeatEvent> heats = hdb.getAllHeatsForIndividual(individual.getIdNr());
+		hdb.close();
+		
+		Log.d(TAG, "nr heats form individual: " + heats.size());
+		
+		// TODO the HeatAdapter
+		HeatAdapter adapter = new HeatAdapter(this, heats);
+		lvEvents.setAdapter(adapter);
+		lvEvents.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final HeatEvent heat = (HeatEvent) parent.getItemAtPosition(position);
+				Intent intent = new Intent(getApplicationContext(), HeatActivity.class);
+				intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
+				intent.putExtra(HeatActivity.EXTRA_HEATEVENT, heat);
+				startActivity(intent);
+			}
+		});
+		
 	}
 }

@@ -111,6 +111,7 @@ public class HeatActivity extends ActionBarActivity
 			heat = new HeatEvent(individual.getIdNr());
 		}
 		if(intent.hasExtra(EXTRA_HEATEVENT)) {
+			// should have passed in individual in same event
 			editing = false;
 			heat = (HeatEvent) intent.getSerializableExtra(EXTRA_HEATEVENT);
 			Log.d(TAG, "received Heat: " + heat.toString());
@@ -215,7 +216,7 @@ public class HeatActivity extends ActionBarActivity
 		tvIndividual.setText(titleStr);
 		
 		// lactation nr
-		etLactationnr.setText(individual.getLactationNr());
+		etLactationnr.setText(individual.getLactationNr() + "");
 		
 		// spinners
 		heatSignAdapter = ArrayAdapter.createFromResource(this, R.array.heat_sign, R.layout.simple_spinner_item);
@@ -229,7 +230,7 @@ public class HeatActivity extends ActionBarActivity
 		if(editing) {
 			// heat round
 			int lastRound = heatDB.getRoundNr();
-			etHeatRound.setText(lastRound);
+			etHeatRound.setText(lastRound + "");
 			
 			// date
 			etDate.setText(Utils.dateToString(cal));
@@ -252,6 +253,12 @@ public class HeatActivity extends ActionBarActivity
 			cbRemind.setVisibility(View.GONE);
 			etRemind.setVisibility(View.GONE);
 			ibRemind.setVisibility(View.GONE);
+			ibHeatRound.setEnabled(false);
+			ibDate.setEnabled(false);
+			ibTime.setEnabled(false);
+			spinSign.setEnabled(false);
+			spinStrength.setEnabled(false);
+			Utils.disableEntry(etNote);
 		}
 		
 		// disable entries
@@ -506,14 +513,27 @@ public class HeatActivity extends ActionBarActivity
 	protected void saveHeatEvent() {
 		// heat round
 		heat.setHeatRound(Integer.parseInt(etHeatRound.getText().toString())); // should not throw
+		Log.d(TAG, "save heat round: " + heat.getHeatRound());
 		// event time
 		try {
 			Calendar eventDate = Utils.stringToDate(etDate.getText().toString());
+			Log.d(TAG, "save date: " + etDate.getText().toString());
+			Log.d(TAG, "date saved: " + Utils.datetimeToString(eventDate));
 			Calendar eventTime = Utils.stringToTime(etTime.getText().toString());
+			Log.d(TAG, "save time: " + etTime.getText().toString());
 			//get them in the same calendar
-			eventDate.set(Calendar.HOUR_OF_DAY, eventTime.get(Calendar.HOUR_OF_DAY));
-			eventDate.set(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
-			heat.setEventTime(eventTime);
+			Calendar result = Calendar.getInstance();
+			result.set(Calendar.YEAR, eventDate.get(Calendar.YEAR));
+			result.set(Calendar.MONTH, eventDate.get(Calendar.MONTH));
+			result.set(Calendar.DATE, eventDate.get(Calendar.DATE));
+			result.set(Calendar.HOUR, eventTime.get(Calendar.HOUR));
+			result.set(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
+			Log.d(TAG, "result date saved: " + Utils.datetimeToString(result));
+			
+//			eventDate.add(Calendar.HOUR_OF_DAY, eventTime.get(Calendar.HOUR_OF_DAY));
+//			eventDate.add(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
+			heat.setEventTime(result);
+			Log.d(TAG, "save date and time: " + Utils.datetimeToString(heat.getEventTime()));
 		} catch (ParseException e) {
 			Log.d(TAG, "error parsing date and time fileds in form");
 			return;
@@ -522,13 +542,16 @@ public class HeatActivity extends ActionBarActivity
 		String signString = (String) spinSign.getSelectedItem();
 		HeatEvent.Sign sign = getSignFromString(signString);
 		heat.setSign(sign);
+		Log.d(TAG, "save sign :" + heat.getSign());
 		// heat strength
 		String strengthString = (String) spinStrength.getSelectedItem();
 		HeatEvent.Strength stren = getStrengthFromString(strengthString);
 		heat.setStrength(stren);
+		Log.d(TAG, "save stren :" + heat.getStrength());
 		// note
 		if(etNote.length() > 0) {
 			heat.setNote(etNote.getText().toString());
+			Log.d(TAG, "save note:" + heat.getNote());
 		}
 		
 		// perform the save
@@ -681,7 +704,6 @@ public class HeatActivity extends ActionBarActivity
         
         @Override
         public void onCancel(DialogInterface dialog) {
-        	// TODO Auto-generated method stub
         	super.onCancel(dialog);
         }
 	} // end DatePickerFragment	

@@ -36,7 +36,7 @@ public class HeatSignDB implements BaseColumns
 	
 	private static final String SQL_CREATE_TABLE = 
 		"CREATE TABLE " + TABLE_NAME + " (" +
-			BaseColumns._ID		+ " INTEGER PRIMATY KEY AUTOINCREMENT, " +
+			BaseColumns._ID		+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 			COLUMN_NAME			+ " VARCHAR(20) NOT NULL" +
 		" ) ";
 	

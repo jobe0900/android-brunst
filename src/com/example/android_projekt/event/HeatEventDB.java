@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.android_projekt.BrunstDBHelper;
 import com.example.android_projekt.event.HeatEvent.Sign;
+import com.example.android_projekt.event.HeatEvent.Strength;
 import com.example.android_projekt.individ.IdNr;
 
 import android.content.ContentValues;
@@ -181,9 +182,9 @@ public class HeatEventDB
 		 */
 		String rawQuery = 
 				"SELECT " + TABLE_NAME + ".* FROM " + TABLE_NAME + ", " + EventDB.TABLE_NAME +
-				" WHERE " + TABLE_NAME + "." + COLUMN_EVENT_ID + " = " + EventDB._ID +
-				" AND " + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
-				" ORDER BY " + EventDB.COLUMN_EVENTTIME + " DESC";
+				" WHERE " + TABLE_NAME + "." + COLUMN_EVENT_ID + " = " + EventDB.TABLE_NAME + "." + EventDB._ID +
+				" AND " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
+				" ORDER BY " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_EVENTTIME + " DESC";
 		
 		Cursor cursor = database.rawQuery(rawQuery, null);
 		cursor.moveToFirst();
@@ -259,7 +260,7 @@ public class HeatEventDB
 			heat.setSign(Sign.values()[cursor.getInt(3) - 1]);
 		}
 		if(!cursor.isNull(4)) {
-			heat.setSign(Sign.values()[cursor.getInt(4) - 1]);
+			heat.setStrength(Strength.values()[cursor.getInt(4) - 1]);
 		}
 		if(!cursor.isNull(5)) {
 			heat.setNote(cursor.getString(5));

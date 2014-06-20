@@ -37,6 +37,8 @@
     <string name="heat_label_strength">Styrka</string>
     <string name="heat_label_remind">Påminn om (dagar)</string>
     <string name="heat_label_note">Anteckning</string>
+    <string name="heat_listrow_line1_hint">Datum och tid</string>
+    <string name="heat_listrow_line2_hint">Omgång och tecken</string>
     <string name="heat_sign_unrest">Oro</string>
     <string name="heat_sign_discharge">Flytning</string>
     <string name="heat_sign_riding">Ridning</string>
