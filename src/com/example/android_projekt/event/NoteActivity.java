@@ -16,14 +16,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.os.Build;
 
 /**
@@ -104,6 +108,27 @@ public class NoteActivity extends ActionBarActivity
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	// Get the context menu
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu_delete, menu); 
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.context_menu_delete:
+			Log.d(TAG, "Pick context Delete");
+			etText.setText("");
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
 
 	@Override
 	protected void onResume() {
@@ -136,6 +161,8 @@ public class NoteActivity extends ActionBarActivity
 		if(updating && note.hasText()) {
 			etText.setText(note.getText());
 		}
+		
+		registerForContextMenu(etText);
 	}
 	
 	private void showDialogErase() {

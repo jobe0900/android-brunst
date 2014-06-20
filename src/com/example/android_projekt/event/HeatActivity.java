@@ -9,8 +9,12 @@ import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
 import com.example.android_projekt.R.menu;
 import com.example.android_projekt.Utils;
+import com.example.android_projekt.event.HeatEvent.Sign;
+import com.example.android_projekt.event.HeatEvent.Strength;
+import com.example.android_projekt.individ.IdNr;
 import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualDB;
+import com.example.android_projekt.individ.IndividualEventsActivity;
 import com.example.android_projekt.individ.IndividualEditActivity.DatePickerFragment;
 
 import android.support.v7.app.ActionBarActivity;
@@ -27,13 +31,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -44,6 +52,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.os.Build;
 
 /**
@@ -82,6 +91,7 @@ public class HeatActivity extends ActionBarActivity
 	private boolean editing = true;	// editing a new or just viewing an old heat?
 	private boolean createReminder = false;
 	private EditText pickNumberForThis;		// the entry connected to a number picker
+
 	
 	private HeatEventDB heatDB;
 	private IndividualDB individualDB;
@@ -117,11 +127,13 @@ public class HeatActivity extends ActionBarActivity
 	
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onPrepareOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.heat, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.heat_activity_actions, menu);
+		// set visibility of "Save" depending on editing or just viewing
+		menu.getItem(0).setVisible(editing);
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -130,10 +142,32 @@ public class HeatActivity extends ActionBarActivity
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.heat_action_save) {
+			showDialogSave();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	// Get the context menu
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu_delete, menu); 
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.context_menu_delete:
+			Log.d(TAG, "Pick context Delete");
+			etNote.setText("");
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
 	
 	@Override
@@ -234,7 +268,8 @@ public class HeatActivity extends ActionBarActivity
 	private void setUpListeners() {
 		setupOnClickListeners();
 		setupOnItemSelectedListeners();
-		
+		// have the note listen for context menu (long click)
+		registerForContextMenu(etNote);
 	}
 
 	/**
@@ -432,6 +467,142 @@ public class HeatActivity extends ActionBarActivity
 	}
 	
 	/**
+	 * Show a dialog, confirming the user's wish to save a ProductionSite.
+	 */
+	private void showDialogSave() {
+//		if(true) {
+			// ask for confirmation first
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//			IdNr idnr = createIdnrFromForm(ID_OWN);
+//			if(etName.length() > 0) {
+//				siteStr += etName.getText().toString();
+//			}
+			builder.setMessage(getString(R.string.dialog_ask_save) + "?");
+			builder.setCancelable(true);
+			// YES button
+			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					saveHeatEvent();
+				}
+			});
+			// NO button
+			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// nothing?
+				}
+			});
+			builder.show();
+//		}
+//		else {
+//			Toast.makeText(this, R.string.toast_form_not_correct, Toast.LENGTH_SHORT).show();
+//		}
+	}
+	
+	/**
+	 * Save this heat event to database.
+	 */
+	protected void saveHeatEvent() {
+		// heat round
+		heat.setHeatRound(Integer.parseInt(etHeatRound.getText().toString())); // should not throw
+		// event time
+		try {
+			Calendar eventDate = Utils.stringToDate(etDate.getText().toString());
+			Calendar eventTime = Utils.stringToTime(etTime.getText().toString());
+			//get them in the same calendar
+			eventDate.set(Calendar.HOUR_OF_DAY, eventTime.get(Calendar.HOUR_OF_DAY));
+			eventDate.set(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
+			heat.setEventTime(eventTime);
+		} catch (ParseException e) {
+			Log.d(TAG, "error parsing date and time fileds in form");
+			return;
+		}
+		// heat sign
+		String signString = (String) spinSign.getSelectedItem();
+		HeatEvent.Sign sign = getSignFromString(signString);
+		heat.setSign(sign);
+		// heat strength
+		String strengthString = (String) spinStrength.getSelectedItem();
+		HeatEvent.Strength stren = getStrengthFromString(strengthString);
+		heat.setStrength(stren);
+		// note
+		if(etNote.length() > 0) {
+			heat.setNote(etNote.getText().toString());
+		}
+		
+		// perform the save
+		heatDB.saveHeatEvent(heat);
+		
+		// TODO create reminder
+		if(createReminder) {
+			int remindIn = Integer.parseInt(etRemind.getText().toString());
+			Calendar remindDate = Calendar.getInstance();
+			remindDate.add(Calendar.DATE, remindIn);
+			Log.d(TAG, "should create reminder at: " + Utils.datetimeToString(remindDate));
+			// new reminder
+		}
+		
+		// return to Individual Events
+		Intent intent = new Intent(this, IndividualEventsActivity.class);
+		intent.putExtra(IndividualEventsActivity.EXTRA_IDNR, heat.getIdnr().toString());
+		startActivity(intent);
+	}
+	
+	/**
+	 * Find out which Sign was selected in the spinner.
+	 * @param	signStr		The string in the Sign spinner 
+	 * @return the corresponding Sign
+	 */
+	private HeatEvent.Sign getSignFromString(String signStr) {
+		HeatEvent.Sign sign = Sign.HEATSIGN_DISCHARGE;
+		if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_unrest))) {
+			sign = Sign.HEATSIGN_UNREST;
+		}
+		else if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_discharge))) {
+			sign = Sign.HEATSIGN_DISCHARGE;
+		}
+		else if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_riding))) {
+			sign = Sign.HEATSIGN_RIDING;
+		}
+		else if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_sag))) {
+			sign = Sign.HEATSIGN_SAG;
+		}
+		else if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_swelling))) {
+			sign = Sign.HEATSIGN_SWELLING;
+		}
+		else if(signStr.equalsIgnoreCase(getString(R.string.heat_sign_lowmilk))) {
+			sign = Sign.HEATSIGN_LOWMILK;
+		}
+		return sign;
+	}
+	
+	/**
+	 * Find out which Strength was selected in the spinner.
+	 * @param	str		The string in the Strength spinner 
+	 * @return the corresponding Strength
+	 */
+	private HeatEvent.Strength getStrengthFromString(String str) {
+		HeatEvent.Strength stren = Strength.HEATSTREN_3;
+		if(str.equalsIgnoreCase(getString(R.string.heat_strength_1))) {
+			stren = Strength.HEATSTREN_1;
+		}
+		else if(str.equalsIgnoreCase(getString(R.string.heat_strength_2))) {
+			stren = Strength.HEATSTREN_2;
+		}
+		else if(str.equalsIgnoreCase(getString(R.string.heat_strength_3))) {
+			stren = Strength.HEATSTREN_3;
+		}
+		else if(str.equalsIgnoreCase(getString(R.string.heat_strength_4))) {
+			stren = Strength.HEATSTREN_4;
+		}
+		else if(str.equalsIgnoreCase(getString(R.string.heat_strength_5))) {
+			stren = Strength.HEATSTREN_5;
+		}
+		return stren;
+	}
+
+	/***************************************************************************
 	 * Put up a dialog to pick the date.
 	 * Should give arguments in a bundle.
 	 */
@@ -516,7 +687,7 @@ public class HeatActivity extends ActionBarActivity
 	} // end DatePickerFragment	
 
 	
-	/**
+	/***************************************************************************
 	 * Get a time picker on Screen.
 	 * Should have arguments in Bundle
 	 */

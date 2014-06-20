@@ -172,7 +172,7 @@ public class IndividualEditActivity extends ActionBarActivity
 		getMenuInflater().inflate(R.menu.individual_edit_activity_actions, menu);
 		// enabled / disable delete depending on update or not
 		menu.getItem(0).setVisible(updating);
-		return super.onCreateOptionsMenu(menu);
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -998,7 +998,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	}
 	
 	/**
-	 * Show a dialog, confirming the user's wish to save a ProductionSite.
+	 * Show a dialog, confirming the user's wish to save an individual
 	 */
 	private void showDialogSave() {
 		if(validIdNrForm()) {
