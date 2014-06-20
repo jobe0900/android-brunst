@@ -21,6 +21,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ public class MainActivity extends ActionBarActivity
 	public static final String EXTRA_SITE_UPDATED = "brunst.extra.MainActivity.siteUpdate";
 	public static final String EXTRA_INDIVIDUAL_UPDATED = "brunst.extra.MainActivity.individualUpdate";
 	private static final String TAG = "Brunst: MAIN";
+	private static final String PREFS_SITE = "brunst.prefs.MainActivity.Site";
+	private static final String PREFS_INDIVIDUAL = "brunst.prefs.MainActivity.Individual";
 	private static final int DB_LOADER = 0;
 	
 	private ImageButton productionSiteButtonNew;
@@ -88,6 +91,21 @@ public class MainActivity extends ActionBarActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		if(savedInstanceState != null) {
+			Log.d(TAG, "has individual: " + savedInstanceState.containsKey(PREFS_INDIVIDUAL));
+			restoreValues(savedInstanceState);
+		}
+		else {
+			// try to read from prefs
+			SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+			if(prefs.contains(PREFS_SITE)) {
+				selectedSiteStr = prefs.getString(PREFS_SITE, null);
+			}
+			if(prefs.contains(PREFS_INDIVIDUAL)) {
+				selectedIndividualStr = prefs.getString(PREFS_INDIVIDUAL, null);
+			}
+		}
+		
 		productionSiteSpinner = (Spinner) findViewById(R.id.main_spinner_production_site);
 		productionSiteButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_site_new);
 		productionSiteButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_site_edit);
@@ -113,10 +131,47 @@ public class MainActivity extends ActionBarActivity
 		setupClickListeners();
 		setUpSpinnerListeners();
 		
+		
 //		updateEnabledWidgets();
 	}
-
 	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		SharedPreferences.Editor prefsEditor = prefs.edit();
+		prefsEditor.putString(PREFS_SITE, (String) productionSiteSpinner.getSelectedItem());
+		prefsEditor.putString(PREFS_INDIVIDUAL, (String) individualSpinner.getSelectedItem());
+		prefsEditor.commit();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		// save instance state bundle
+//		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+//		SharedPreferences.Editor prefsEditor = prefs.edit();
+		outState.putString(PREFS_SITE, (String) productionSiteSpinner.getSelectedItem());
+		outState.putString(PREFS_INDIVIDUAL, (String) individualSpinner.getSelectedItem());
+//		outState.commit();
+		Log.d(TAG, "saved selected site and individual");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		restoreValues(savedInstanceState);
+	}
+	
+	private void restoreValues(Bundle savedInstanceState) {
+		selectedSiteStr = savedInstanceState.getString(PREFS_SITE);
+		selectedIndividualStr = savedInstanceState.getString(PREFS_INDIVIDUAL);
+		Log.d(TAG, "restore site: " + selectedSiteStr + " and individual: " + selectedIndividualStr);
+	}
 
 	@Override
 	protected void onResume() {
@@ -410,7 +465,7 @@ public class MainActivity extends ActionBarActivity
 					R.layout.simple_spinner_item, siteTitles);
 			productionSiteSpinner.setAdapter(productionSiteSpinnerAdapter);
 			// set the selected item
-			setSelectedProductionSiteInSpinner();
+//			setSelectedProductionSiteInSpinner();
 		}
 		
 		/**
@@ -425,7 +480,7 @@ public class MainActivity extends ActionBarActivity
 					R.layout.simple_spinner_item, titles);
 			individualSpinner.setAdapter(individualSpinnerAdapter);
 			// set the selected item
-			setSelectedIndividualInSpinner();
+//			setSelectedIndividualInSpinner();
 		}
 	} // end LoadDataTask
 	
