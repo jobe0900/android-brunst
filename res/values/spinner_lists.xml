@@ -7,6 +7,24 @@
     
     <string-array name="event_types">
         <item>@string/event_type_note</item>
+        <item>@string/event_type_heat</item>
+    </string-array>
+    
+    <string-array name="heat_sign">
+        <item>@string/heat_sign_unrest</item>
+        <item>@string/heat_sign_discharge</item>
+        <item>@string/heat_sign_riding</item>
+        <item>@string/heat_sign_sag</item>
+        <item>@string/heat_sign_swelling</item>
+        <item>@string/heat_sign_lowmilk</item>
+    </string-array>
+    
+    <string-array name="heat_strength">
+        <item>@string/heat_strength_1</item>
+        <item>@string/heat_strength_2</item>
+        <item>@string/heat_strength_3</item>
+        <item>@string/heat_strength_4</item>
+        <item>@string/heat_strength_5</item>
     </string-array>
     
 </resources>

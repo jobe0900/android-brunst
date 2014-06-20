@@ -170,7 +170,8 @@
          android:layout_alignLeft="@+id/heat_spinner_sign"
          android:layout_below="@+id/heat_spinner_sign"
          android:layout_marginRight="8dp"
-         android:text="@string/heat_label_remind" />
+         android:text="@string/heat_label_remind" 
+         android:onClick="onCheckBoxClicked" />
      
      <EditText
         android:id="@+id/heat_entry_remind"

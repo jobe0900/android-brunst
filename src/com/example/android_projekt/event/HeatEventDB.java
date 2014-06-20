@@ -205,7 +205,7 @@ public class HeatEventDB
 	 * @param heatId
 	 * @return
 	 */
-	private HeatEvent getHeatEvent(long heatId) {
+	public HeatEvent getHeatEvent(long heatId) {
 		HeatEvent heat = null;
 		
 		String selection = BaseColumns._ID + " LIKE ?";
@@ -218,6 +218,23 @@ public class HeatEventDB
 		}
 		cursor.close();
 		return heat;
+	}
+	
+	/**
+	 * Find the HeatRound for the latest heat event
+	 * @return
+	 */
+	public int getRoundNr() {
+		int round = 1;
+		// Just get the last inserted row
+		String rawQeury = 
+				"SELECT rowid, " + COLUMN_HEATROUND + " FROM " + TABLE_NAME +
+				" ORDER BY rowid DESC limit 1";
+		Cursor cursor = database.rawQuery(rawQeury, null);
+		if(cursor != null && cursor.moveToFirst()) {
+			round = cursor.getInt(1);
+		}
+		return round;
 	}
 	
 	/**
