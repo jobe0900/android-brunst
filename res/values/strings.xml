@@ -84,6 +84,11 @@
     <string name="production_site_hint_postaddress">Postadress</string>
     <string name="production_site_hint_coord"></string>
     <string name="production_site_org_default">SE</string>
+    
+    <string name="reminder">Påminnelse</string>
+    <string name="reminder_listrow1_hint">Datum och tid</string>
+    <string name="reminder_listrow2_hint">Beskrivning</string>
+    
     <string name="toast_could_not_save">Kunde inte spara</string>
     <string name="toast_could_not_fetch">Kunde inte hämta</string>
     <string name="toast_form_not_correct">Fel i formulär</string>

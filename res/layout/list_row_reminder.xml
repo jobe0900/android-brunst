@@ -4,37 +4,39 @@
     android:layout_height="match_parent" >
     
     <ImageView 
-        android:id="@+id/list_row_heat_img"
+        android:id="@+id/list_row_reminder_img"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="8dp"
+        android:background="@color/orange_light"
+        android:src="@drawable/ic_action_warning"
         />
     
     <TextView 
-        android:id="@+id/list_row_heat_line1"
+        android:id="@+id/list_row_reminder_line1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/list_row_heat_img"
-        android:layout_alignTop="@id/list_row_heat_img"
+        android:layout_toRightOf="@id/list_row_reminder_img"
+        android:layout_alignTop="@id/list_row_reminder_img"
         android:layout_alignParentRight="true"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textSize="16sp"
-        android:hint="@string/heat_listrow_line1_hint"
+        android:hint="@string/reminder_listrow1_hint"
         />
     
     <TextView 
-        android:id="@+id/list_row_heat_line2"
+        android:id="@+id/list_row_reminder_line2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/list_row_heat_img"
-        android:layout_below="@id/list_row_heat_line1"
+        android:layout_toRightOf="@id/list_row_reminder_img"
+        android:layout_below="@id/list_row_reminder_line1"
         android:layout_alignParentRight="true"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:hint="@string/heat_listrow_line2_hint"
+        android:hint="@string/reminder_listrow2_hint"
         />
     
 
