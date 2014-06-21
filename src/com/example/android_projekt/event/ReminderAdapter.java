@@ -1,9 +1,11 @@
 package com.example.android_projekt.event;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.example.android_projekt.R;
 import com.example.android_projekt.Utils;
+import com.example.android_projekt.event.Reminder.Type;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -45,6 +47,11 @@ public class ReminderAdapter extends ArrayAdapter<Reminder>
 		
 		// set background of img
 		Reminder.Type remType = reminder.getType();
+		// if 'now' has passed eventTime, set to Seriuos
+		Calendar now = Calendar.getInstance();
+		if(reminder.getEventTime().before(now)) {
+			remType = Type.REMINDER_SERIOUS;
+		}
 		int backgroundId = R.color.orange_light;
 		switch(remType) {
 		case REMINDER_NORMAL:

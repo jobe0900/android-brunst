@@ -128,7 +128,7 @@ public class ReminderDB
 		// EventType
 		values.put(COLUMN_EVENTTYPE, reminder.getEventType().ordinal() + 1); // enum 0-based, DB 1-based
 		// Description
-		values.put(COLUMN_ACTIVE, reminder.getDescription());
+		values.put(COLUMN_DESCRIPTION, reminder.getDescription());
 		// Event time
 		values.put(COLUMN_EVENTTIME, Utils.datetimeToString(reminder.getEventTime()));
 		// Reminder time
@@ -184,7 +184,7 @@ public class ReminderDB
 		 * SELECT Reminder.* FROM Reminder, Event
 		 * WHERE Reminder.eventid = Event._id
 		 * AND Reminder.active = "1"
-		 * AND Reminder.remtime < "now"
+		 * AND Reminder.remtime > "now"		-- don't display to early ?
 		 * AND Event.idnr = "idNr"
 		 * ORDER BY Reminder.eventtime ASC
 		 */
@@ -192,7 +192,7 @@ public class ReminderDB
 				"SELECT " + TABLE_NAME + ".* FROM " + TABLE_NAME + ", " + EventDB.TABLE_NAME +
 				" WHERE " + TABLE_NAME + "." + COLUMN_EVENTID + " = " + EventDB.TABLE_NAME + "." + EventDB._ID +
 				" AND " + TABLE_NAME + "." + COLUMN_ACTIVE + " = '1' " +
-				" AND " + TABLE_NAME + "." + COLUMN_REMTIME + " < 'now' " +
+//				" AND " + TABLE_NAME + "." + COLUMN_REMTIME + " > 'now' " +
 				" AND " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
 				" ORDER BY " + TABLE_NAME + "." + COLUMN_EVENTTIME + " ASC";
 		

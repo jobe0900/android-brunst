@@ -441,6 +441,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Need to load in background?
 	 */
 	protected void showNotesList() {
+		// enable add event button
+		ibAddEvent.setEnabled(true);
 		// Get the notes
 		NoteDB ndb = new NoteDB(this);
 		ndb.open();
@@ -471,6 +473,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Should perhaps load in background?
 	 */
 	protected void showHeatList() {
+		// enable add event button
+		ibAddEvent.setEnabled(true);
 		// Get the Heats
 		HeatEventDB hdb = new HeatEventDB(this);
 		hdb.open();
@@ -498,6 +502,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Display the list of Reminders for this Individual
 	 */
 	protected void showReminderList() {
+		// disable add event button
+		ibAddEvent.setEnabled(false);
 		// Get the reminders
 		ReminderDB rdb = new ReminderDB(this);
 		rdb.open();
@@ -517,8 +523,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 //				intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
 //				intent.putExtra(HeatActivity.EXTRA_HEATEVENT, heat);
 //				startActivity(intent);
-				String text = reminder.toString();
-				Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

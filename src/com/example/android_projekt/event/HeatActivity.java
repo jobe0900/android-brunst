@@ -564,7 +564,7 @@ public class HeatActivity extends ActionBarActivity
 			// reminder type
 			reminder.setType(Reminder.Type.REMINDER_NORMAL);
 			// description
-			String descStr = getString(R.string.reminder_expected_heat) + " " +
+			String descStr = getString(R.string.reminder_expected_heat) + ": " +
 					individual.toString() + " @ " + individual.getHomesiteNr().toString();
 			reminder.setDescription(descStr);
 			// time of expected event
