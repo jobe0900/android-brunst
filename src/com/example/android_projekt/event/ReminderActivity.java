@@ -1,9 +1,15 @@
-package com.example.android_projekt;
+package com.example.android_projekt.event;
 
 import java.util.Calendar;
 
-import com.example.android_projekt.event.Reminder;
-import com.example.android_projekt.event.ReminderDB;
+import com.example.android_projekt.MainActivity;
+import com.example.android_projekt.R;
+import com.example.android_projekt.Utils;
+import com.example.android_projekt.R.color;
+import com.example.android_projekt.R.id;
+import com.example.android_projekt.R.layout;
+import com.example.android_projekt.R.menu;
+import com.example.android_projekt.R.string;
 import com.example.android_projekt.event.Reminder.Type;
 
 import android.support.v7.app.ActionBarActivity;

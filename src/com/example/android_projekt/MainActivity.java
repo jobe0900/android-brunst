@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.example.android_projekt.event.Reminder;
+import com.example.android_projekt.event.ReminderActivity;
 import com.example.android_projekt.event.ReminderAdapter;
 import com.example.android_projekt.event.ReminderDB;
 import com.example.android_projekt.individ.Individual;
@@ -47,6 +48,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.os.Build;
 
+/**
+ * The starting point for the App.
+ * Here you can Select, Edit and Add ProductionSite and Individual and see
+ * Reminders for all ProductionSites.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
+ */
 public class MainActivity extends ActionBarActivity 
 {	
 	public static final String EXTRA_SITE_UPDATED = "brunst.extra.MainActivity.siteUpdate";
@@ -60,44 +67,23 @@ public class MainActivity extends ActionBarActivity
 	private ImageButton productionSiteButtonEdit;
 	private Spinner productionSiteSpinner;
 	private ArrayAdapter<String> productionSiteSpinnerAdapter;
-//	private OnItemSelectedListener productionSiteSpinnerListener;
-//	private List<String> productionSitesList;
 	private String selectedSiteStr;
 	
 	private ImageButton individualButtonNew;
 	private ImageButton individualButtonEdit;
 	private Spinner individualSpinner;
 	private ArrayAdapter<String> individualSpinnerAdapter;
-//	private OnItemSelectedListener individualSpinnerListener;
-//	private List<String> indivdualsList;
 	private String selectedIndividualStr;
 	
-	
 	private ListView lvReminders;
-	
-	
-//	private OnClickListener clickListener;
-	
-	
-//	private List<ProductionSite> productionSites;
-	
-	
-	
-	
-//	private ProductionSite currentSite;
-//	private ProductionSite updatedSite = null;
-//	private Individual updatedIndividual = null;
-	
-	
-//	private String updatedSiteStr;
-	
-//	private String updatedIndividua
 
+	/** "Constructor" */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// handle coming back to this activity
 		if(savedInstanceState != null) {
 			Log.d(TAG, "has individual: " + savedInstanceState.containsKey(PREFS_INDIVIDUAL));
 			restoreValues(savedInstanceState);
@@ -113,6 +99,7 @@ public class MainActivity extends ActionBarActivity
 			}
 		}
 		
+		// get references to widgets
 		productionSiteSpinner = (Spinner) findViewById(R.id.main_spinner_production_site);
 		productionSiteButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_site_new);
 		productionSiteButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_site_edit);
@@ -123,6 +110,7 @@ public class MainActivity extends ActionBarActivity
 		
 		lvReminders = (ListView) findViewById(R.id.main_listview_reminder);
 		
+		// if started with intents: handle the extras
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			selectedSiteStr = getIntent().getStringExtra(EXTRA_SITE_UPDATED);	
 			Log.d(TAG, "Main update Site: " + selectedSiteStr);
@@ -132,23 +120,19 @@ public class MainActivity extends ActionBarActivity
 			Log.d(TAG, "Main update Individual: " + selectedIndividualStr);
 		}
 		
+		// additional setup
 		enableWidgetsOnSelectedSite(false);
 		enableWidgetsOnSelectedIndividual(false);
-		
 		fillSpinners();
-		
 		setupClickListeners();
 		setUpSpinnerListeners();
-		
-		
-//		updateEnabledWidgets();
 	}
 	
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		
+		// have the same items selected
 		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 		SharedPreferences.Editor prefsEditor = prefs.edit();
 		prefsEditor.putString(PREFS_SITE, (String) productionSiteSpinner.getSelectedItem());
@@ -158,24 +142,23 @@ public class MainActivity extends ActionBarActivity
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		// save instance state bundle
-//		SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-//		SharedPreferences.Editor prefsEditor = prefs.edit();
 		outState.putString(PREFS_SITE, (String) productionSiteSpinner.getSelectedItem());
 		outState.putString(PREFS_INDIVIDUAL, (String) individualSpinner.getSelectedItem());
-//		outState.commit();
 		Log.d(TAG, "saved selected site and individual");
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState);
 		restoreValues(savedInstanceState);
 	}
 	
+	/**
+	 * Read a bundle and restore the values
+	 * @param savedInstanceState
+	 */
 	private void restoreValues(Bundle savedInstanceState) {
 		selectedSiteStr = savedInstanceState.getString(PREFS_SITE);
 		selectedIndividualStr = savedInstanceState.getString(PREFS_INDIVIDUAL);
@@ -184,9 +167,7 @@ public class MainActivity extends ActionBarActivity
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
-//		fillSpinners();	// need this?
 	}
 	
 	@Override
@@ -219,15 +200,6 @@ public class MainActivity extends ActionBarActivity
 		button.setAlpha(alpha);
 	}
 	
-//	/**
-//	 * Change the enabled state / visibility depending on selected spinners.
-//	 */
-//	private void updateEnabledWidgets() {
-//		// TODO Auto-generated method stub
-//		// discover which state....
-//		
-//	}
-
 	/**
 	 * Fill the spinners with data from the database.
 	 */
@@ -306,10 +278,8 @@ public class MainActivity extends ActionBarActivity
 					Log.d(TAG, "edit individual: " + selectedIndividualStr);
 					Log.d(TAG, "edit individual: " + getSelectedIndividualIdNrAsString());
 					intent = new Intent(getApplicationContext(), IndividualEventsActivity.class);
-//					intent = new Intent(getApplicationContext(), IndividualEditActivity.class);
 					if(selectedIndividualStr != null) {
 						intent.putExtra(IndividualEventsActivity.EXTRA_IDNR, getSelectedIndividualIdNrAsString());
-//						intent.putExtra(IndividualEditActivity.EXTRA_INDIVIDUAL_UPDATE, getSelectedIndividualIdNrAsString());
 					}
 					startActivity(intent);
 					break;
@@ -414,7 +384,6 @@ public class MainActivity extends ActionBarActivity
 			default:
 				return null;
 			}
-			
 		}
 
 		@Override
@@ -474,8 +443,6 @@ public class MainActivity extends ActionBarActivity
 			productionSiteSpinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), 
 					R.layout.simple_spinner_item, siteTitles);
 			productionSiteSpinner.setAdapter(productionSiteSpinnerAdapter);
-			// set the selected item
-//			setSelectedProductionSiteInSpinner();
 		}
 		
 		/**
@@ -489,8 +456,6 @@ public class MainActivity extends ActionBarActivity
 			individualSpinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), 
 					R.layout.simple_spinner_item, titles);
 			individualSpinner.setAdapter(individualSpinnerAdapter);
-			// set the selected item
-//			setSelectedIndividualInSpinner();
 		}
 	} // end LoadDataTask
 	
@@ -523,10 +488,8 @@ public class MainActivity extends ActionBarActivity
 				Intent intent = new Intent(getApplicationContext(), ReminderActivity.class);
 				intent.putExtra(ReminderActivity.EXTRA_REMINDER, reminder);
 				startActivity(intent);
-//				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
 			}
 		});
-		
 	}
 
 	/**

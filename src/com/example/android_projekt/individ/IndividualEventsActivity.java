@@ -3,7 +3,6 @@ package com.example.android_projekt.individ;
 import java.util.List;
 
 import com.example.android_projekt.R;
-import com.example.android_projekt.ReminderActivity;
 import com.example.android_projekt.Utils;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
@@ -18,6 +17,7 @@ import com.example.android_projekt.event.NoteActivity;
 import com.example.android_projekt.event.NoteAdapter;
 import com.example.android_projekt.event.NoteDB;
 import com.example.android_projekt.event.Reminder;
+import com.example.android_projekt.event.ReminderActivity;
 import com.example.android_projekt.event.ReminderAdapter;
 import com.example.android_projekt.event.ReminderDB;
 

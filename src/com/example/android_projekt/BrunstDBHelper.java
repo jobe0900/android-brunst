@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * A Helper class handling the database.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class BrunstDBHelper extends SQLiteOpenHelper 
 {
