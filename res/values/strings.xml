@@ -87,7 +87,7 @@
     <string name="production_site_hint_coord"></string>
     <string name="production_site_org_default">SE</string>
     
-    <string name="reminder">Påminnelse</string>
+    <string name="reminder">Påminnelser</string>
     <string name="reminder_expected_heat">Förväntad brunst</string>
     <string name="reminder_listrow1_hint">Datum och tid</string>
     <string name="reminder_listrow2_hint">Beskrivning</string>

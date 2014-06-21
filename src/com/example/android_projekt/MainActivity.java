@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.android_projekt.event.Reminder;
+import com.example.android_projekt.event.ReminderAdapter;
+import com.example.android_projekt.event.ReminderDB;
 import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.individ.IndividualEditActivity;
@@ -34,11 +37,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity 
@@ -67,6 +73,7 @@ public class MainActivity extends ActionBarActivity
 	private String selectedIndividualStr;
 	
 	
+	private ListView lvReminders;
 	
 	
 //	private OnClickListener clickListener;
@@ -113,6 +120,8 @@ public class MainActivity extends ActionBarActivity
 		individualSpinner = (Spinner) findViewById(R.id.main_spinner_individual);
 		individualButtonNew = (ImageButton) findViewById(R.id.main_imgbutton_individual_new);
 		individualButtonEdit = (ImageButton) findViewById(R.id.main_imgbutton_individual_edit);
+		
+		lvReminders = (ListView) findViewById(R.id.main_listview_reminder);
 		
 		if(getIntent().hasExtra(EXTRA_SITE_UPDATED)) {
 			selectedSiteStr = getIntent().getStringExtra(EXTRA_SITE_UPDATED);	
@@ -415,6 +424,7 @@ public class MainActivity extends ActionBarActivity
 				buildProductionSiteAdapter(result);
 				setSelectedProductionSiteInSpinner();
 				fillIndividSpinner();
+				showReminderList();
 				break;
 			case IndividualDB.TABLE_NAME:
 				buildIndividualAdapter(result);
@@ -494,6 +504,32 @@ public class MainActivity extends ActionBarActivity
 		}
 	}
 	
+	public void showReminderList() {
+		// Get the reminders
+		ReminderDB rdb = new ReminderDB(this);
+		rdb.open();
+		List<Reminder> reminders = rdb.getAllReminders();
+		rdb.close();
+
+		Log.d(TAG, "fetched nr of reminders: " + reminders.size());
+		ReminderAdapter adapter = new ReminderAdapter(this, reminders);
+		lvReminders.setAdapter(adapter);
+		lvReminders.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final Reminder reminder = (Reminder) parent.getItemAtPosition(position);
+				// TODO show reminder in activity or dialog
+				//						Intent intent = new Intent(getApplicationContext(), HeatActivity.class);
+				//						intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
+				//						intent.putExtra(HeatActivity.EXTRA_HEATEVENT, heat);
+				//						startActivity(intent);
+				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
+			}
+		});
+		
+	}
+
 	/**
 	 * Make the site in selectedSiteNr be the selected site in the productionSiteSpinner
 	 */
