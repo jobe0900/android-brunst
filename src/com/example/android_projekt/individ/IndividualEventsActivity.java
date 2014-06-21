@@ -3,10 +3,6 @@ package com.example.android_projekt.individ;
 import java.util.List;
 
 import com.example.android_projekt.R;
-import com.example.android_projekt.Utils;
-import com.example.android_projekt.R.id;
-import com.example.android_projekt.R.layout;
-import com.example.android_projekt.R.menu;
 import com.example.android_projekt.event.EventDB;
 import com.example.android_projekt.event.HeatActivity;
 import com.example.android_projekt.event.HeatAdapter;
@@ -22,9 +18,6 @@ import com.example.android_projekt.event.ReminderAdapter;
 import com.example.android_projekt.event.ReminderDB;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.text.InputType;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -32,23 +25,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.os.Build;
 import android.provider.MediaStore;
 
 /**
@@ -65,10 +54,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 	
 	public static final String EXTRA_IDNR = "brunst.extra.IndividualEventsActivity.IdNr";
 	
-	
 	// WIDGETS
-//	private EditText etShortnr;
-//	private EditText etName;
 	private ImageButton ibThumb;
 	private ImageButton ibEditIndividual;
 	private ImageButton ibAddEvent;
@@ -80,7 +66,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	
 	private ArrayAdapter<CharSequence> eventTypeAdapter;
 	private String selectedEventType;
-//	private ArrayAdapter<CharSequence> listAdapter;
 	
 	private IndividualDB individualDB;
 	private EventDB eventDB;
@@ -103,7 +88,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 		
 		if(savedInstanceState != null) {
 			Log.d(TAG, "must restore values");
-//			restoreValues(savedInstanceState);
 		}
 		else {
 			// try to read from preferences
@@ -119,23 +103,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 		Intent intent = getIntent();
 		if(intent.hasExtra(EXTRA_IDNR)) {
 			idNrString = intent.getStringExtra(EXTRA_IDNR);
-//			Log.d(TAG, "edit individual: " + idnrStr);
-//			idnr = null;
-//			try {
-//				idnr = new IdNr(idnrStr);
-//			} catch (Exception ex) {
-//				Log.d(TAG, "Cannot parse the idnr: " + idnrStr);
-//			}
-//			if(idnr != null) {
-//				individual = individualDB.getIndividual(idnr);
-//				if(individual != null) {
-//					Log.d(TAG, "received Individual: " + individual.toString());
-//				}
-//				else {
-//					String text = getString(R.string.toast_could_not_fetch) + " " + idnrStr;
-//					Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-//				}
-//			}
 		}
 		
 		if(idNrString != null) {
@@ -165,8 +132,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 		}
 
 	}
-	
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -210,7 +175,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		outState.putString(PREFS_IDNR, individual.getIdNr().toString());
 		outState.putString(PREFS_EVENT, (String) spinEvents.getSelectedItem());
@@ -218,7 +182,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState);
 		restoreValues(savedInstanceState);
 	}
@@ -228,14 +191,10 @@ public class IndividualEventsActivity extends ActionBarActivity
 		selectedEventType = savedInstanceState.getString(PREFS_EVENT);
 	}
 
-
-
 	/**
 	 * Get references to the widgets
 	 */
 	private void findViews() {
-//		etShortnr = (EditText) findViewById(R.id.individual_events_entry_shortnr);
-//		etName = (EditText) findViewById(R.id.individual_events_entry_name);
 		ibThumb = (ImageButton) findViewById(R.id.individual_events_imgbutton_thumb);
 		ibEditIndividual = (ImageButton) findViewById(R.id.individual_events_imgbutton_edit_individual);
 		ibAddEvent = (ImageButton) findViewById(R.id.individual_events_imgbutton_events_add);
@@ -250,10 +209,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Set the state of the widgets, and populate them
 	 */
 	private void prepareViews() {
-		// disable entries
-//		Utils.disableEntry(etShortnr);
-//		Utils.disableEntry(etName);
-		
 		// populate
 		tvShortnr.setText(individual.getShortNr() + "");
 		if(individual.hasName()) {
@@ -263,10 +218,8 @@ public class IndividualEventsActivity extends ActionBarActivity
 		setThumbnail();
 		
 		setupSpinners();
-		
 	}
 	
-
 	/**
 	 * Set the contents of the Thumbnail image button
 	 */
@@ -290,7 +243,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 */
 	private Bitmap getThumbnail(Uri uri) {
 	    String[] projection = { MediaStore.Images.Media._ID };
-	    String result = null;
 	    Cursor cursor = managedQuery(uri, projection, null, null, null);
 	    
 	    Log.d(TAG, "cursor: " + cursor);
@@ -320,7 +272,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	private void setupListeners() {
 		setupOnClickListeners();		// click on buttons
 		setupOnItemSelectedListeners();	// selection in spinners
-		
 	}
 
 	/**
@@ -341,7 +292,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 					addEvent();
 					break;
 				}
-				
 			}
 		};
 		ibThumb.setOnClickListener(clickListener);
@@ -373,7 +323,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 	 * Add a new Event.
 	 */
 	protected void addEvent() {
-		// TODO Auto-generated method stub
 		Log.d(TAG, "should launch Event activity here");
 		// NOTE
 		if(selectedEventType.equals(getString(R.string.event_type_note))) {
@@ -389,7 +338,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 			intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
 			startActivity(intent);
 		}
-		
 	}
 	
 	/**
@@ -451,7 +399,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 		ndb.close();
 		
 		Log.d(TAG, "nr notes for individual: " + notes.size());
-//		listAdapter = new ArrayAdapter<>(this, R.layout.simple_spinner_item, notes);
 		
 		NoteAdapter adapter = new NoteAdapter(this, notes);
 		lvEvents.setAdapter(adapter);
@@ -464,7 +411,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 				Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
 				intent.putExtra(NoteActivity.EXTRA_NOTE, note);
 				startActivity(intent);
-//				Toast.makeText(getApplicationContext(), note.getText(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -523,7 +469,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 				Intent intent = new Intent(getApplicationContext(), ReminderActivity.class);
 				intent.putExtra(ReminderActivity.EXTRA_REMINDER, reminder);
 				startActivity(intent);
-//				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

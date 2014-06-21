@@ -107,7 +107,6 @@ public class IndividualDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -162,7 +161,6 @@ public class IndividualDB implements BaseColumns
 		return retval;
 	}
 	
-	// 
 	/**
 	 * Don't actually delete, just mark as not active, meaning the information
 	 * for the Individual is available in the future if necessary.
@@ -178,27 +176,6 @@ public class IndividualDB implements BaseColumns
 		return database.update(TABLE_NAME, values, selection, selectionArgs);
 	}
 	
-//	/**
-//	 * Delete an Individual.
-//	 * @param	individ		The Individual to delete
-//	 * @return	The number of Individuals deleted (should be 1)
-//	 */
-//	public int deleteIndividual(Individual individ) {
-//		String selection = BaseColumns._ID + " LIKE ?";
-//		String[] selectionArgs = {String.valueOf(individ.get_id())};
-//		return database.delete(TABLE_NAME, selection, selectionArgs);
-//	}
-//	
-//	/**
-//	 * Delete an Individual.
-//	 * @param	idNr		The IdNr of the Individual to delete
-//	 * @return	The number of Individuals deleted (should be 1)
-//	 */
-//	public int deleteIndividual(IdNr idNr) {
-//		String selection = COLUMN_IDNR + " LIKE ?";
-//		String[] selectionArgs = {idNr.toString()};
-//		return database.delete(TABLE_NAME, selection, selectionArgs);
-//	}
 	
 	/**
 	 * Get a single individual from the DB.
@@ -313,8 +290,4 @@ public class IndividualDB implements BaseColumns
 		}
 		return individ;
 	}
-
-	
-	
-	
 } 

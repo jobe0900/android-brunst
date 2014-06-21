@@ -60,7 +60,10 @@ import android.widget.Toast;
 import android.os.Build;
 import android.provider.MediaStore;
 
-
+/**
+ * Edit an Individual, setting fields and image for the Individual.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
+ */
 public class IndividualEditActivity extends ActionBarActivity 
 {
 	private final static String TAG = "Brunst: IndividualEditActivity";
@@ -69,6 +72,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	
 	public final static String EXTRA_PRODUCTION_SITE_NR = "brunst.extra.IndividualEditActivity.ProductionSiteNr";
 	public final static String EXTRA_INDIVIDUAL_UPDATE = "brunst.extra.IndividualEditActivity.IndividualUpdate";
+	
 	private final static int INTENT_PICK_IMAGE = 10;	// id for the gallery intent
 	// identify which id fields to read
 	private final static String ID_OWN = "ownID";
@@ -190,8 +194,6 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 	}
 	
-	
-
 	// Handle results from picking image in gallery
 	@Override
 	protected void onActivityResult(int request, int result, Intent data) {
@@ -304,9 +306,6 @@ public class IndividualEditActivity extends ActionBarActivity
 		}
 		// if UPDATING
 		if(updating) {
-			// hide delete icon
-			// TODO
-//			MenuItem deleteItem = getResources().
 			// disable editing IDnr and sex
 			Utils.disableEntry(etIdnrOrg);
 			Utils.disableEntry(etIdnrPpnr);
@@ -684,9 +683,6 @@ public class IndividualEditActivity extends ActionBarActivity
 	 * Disable all widgets not relevant for a Male Individual.
 	 */
 	protected void setWidgetVisibility() {
-//		ibHeatCyclus.setEnabled(female);
-//		ibLactationNr.setEnabled(female);
-//		ibLastBirthCalendar.setEnabled(female);
 		int visibility = female ? View.VISIBLE : View.GONE;
 		etHeatCyclus.setVisibility(visibility);
 		etLactationNr.setVisibility(visibility);
@@ -721,13 +717,6 @@ public class IndividualEditActivity extends ActionBarActivity
 		return female;
 	}
 	
-//	/** Disable an EditText-field. */
-//	private void disableEntry(EditText entry) {
-//		entry.setKeyListener(null);
-//		entry.setFocusable(false);
-//		entry.setInputType(InputType.TYPE_NULL);
-//	}
-	
 	/**
 	 * Delete the contents of a view, like remove bitmap of thumb
 	 * @param id
@@ -754,7 +743,7 @@ public class IndividualEditActivity extends ActionBarActivity
 	private void saveIndividual() {
 		Log.d(TAG, "save action");
 		
-		boolean saveOK = false; //= createIndividualFromForm();
+		boolean saveOK = false;
 		if(updating) {
 			getOptionalFields();
 			saveOK = individualDB.saveIndividual(individual);
@@ -798,7 +787,6 @@ public class IndividualEditActivity extends ActionBarActivity
 		Individual.Sex sex = female ? Sex.F : Sex.M;
 		// now we can create an individual:
 		individual = new Individual(idnr, currentSiteNr, sex);
-		
 		
 		// and read the rest of the fields
 		getOptionalFields();
@@ -869,7 +857,6 @@ public class IndividualEditActivity extends ActionBarActivity
 				individual.setImageUri(imageUri.toString());
 			}
 		}
-		
 	}
 
 	/**
@@ -919,7 +906,6 @@ public class IndividualEditActivity extends ActionBarActivity
 				Log.d(TAG, "malformed idnr string: " + idnrStr);
 			}
 		}
-		
 		return idnr;
 	}
 	
@@ -950,14 +936,6 @@ public class IndividualEditActivity extends ActionBarActivity
 		return str;
 	}
 
-//	/**
-//	 * Just show confirmation dialog.
-//	 */
-//	private void deleteIndividual() {
-//		Log.d(TAG, "delete action");
-//		showDialogDelete();
-//	}
-	
 	/**
 	 * Perform deletion and return to MainActivity.
 	 */
@@ -1006,9 +984,6 @@ public class IndividualEditActivity extends ActionBarActivity
 			// ask for confirmation first
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			IdNr idnr = createIdnrFromForm(ID_OWN);
-//			if(etName.length() > 0) {
-//				siteStr += etName.getText().toString();
-//			}
 			builder.setMessage(getString(R.string.dialog_ask_save) + " " + idnr.toString() + "?");
 			builder.setCancelable(true);
 			// YES button

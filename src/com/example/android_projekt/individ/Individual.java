@@ -17,9 +17,9 @@ import com.example.android_projekt.productionsite.ProductionSiteNr;
 public class Individual implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+
 	public static final int UNSAVED_ID = -1;
 	public static final int DEFAULT_HEATCYCLUS = 21;	// 21 days
-	
 	
 	public static enum Sex {
 		M,		// Male
