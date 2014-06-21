@@ -131,7 +131,7 @@ public class HeatEventDB
 		}
 		
 		long insertId = database.insert(TABLE_NAME, null, values);
-		Log.d(TAG, "save Note, insertId: " + insertId);
+		Log.d(TAG, "save Heat, insertId: " + insertId);
 		
 		return insertId;
 	}

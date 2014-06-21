@@ -6,6 +6,7 @@ import com.example.android_projekt.event.HeatEventDB;
 import com.example.android_projekt.event.HeatSignDB;
 import com.example.android_projekt.event.HeatStrengthDB;
 import com.example.android_projekt.event.NoteDB;
+import com.example.android_projekt.event.ReminderDB;
 import com.example.android_projekt.event.ReminderTypeDB;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -38,6 +39,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 		HeatStrengthDB.onCreate(db);
 		HeatEventDB.onCreate(db);
 		ReminderTypeDB.onCreate(db);
+		ReminderDB.onCreate(db);
 	}
 	
 	@Override
@@ -56,6 +58,7 @@ public class BrunstDBHelper extends SQLiteOpenHelper
 		HeatStrengthDB.onUpgrade(db);
 		HeatEventDB.onUpgrade(db);
 		ReminderTypeDB.onUpgrade(db);
+		ReminderDB.onUpgrade(db);
 	}
 
 }
