@@ -81,7 +81,6 @@ public class NoteDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -140,7 +139,6 @@ public class NoteDB implements BaseColumns
 			notes.add(note);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return notes;
 	}
@@ -175,7 +173,6 @@ public class NoteDB implements BaseColumns
 			notes.add(note);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return notes;
 	}

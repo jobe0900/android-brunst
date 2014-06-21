@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+/**
+ * Helper class, "contract", for the Reminder.Type type.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
+ */
 public class ReminderTypeDB implements BaseColumns
 {
 	private static final String TAG = "Brunst: ReminderTypeDB";
@@ -70,7 +74,6 @@ public class ReminderTypeDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 }

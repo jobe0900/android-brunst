@@ -5,6 +5,11 @@ import java.util.Calendar;
 
 import com.example.android_projekt.Utils;
 
+/**
+ * Class to handle Reminders of coming events that the User 
+ * should be made aware of, or get going.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
+ */
 public class Reminder 
 	implements Serializable
 {
@@ -136,5 +141,4 @@ public class Reminder
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
 }

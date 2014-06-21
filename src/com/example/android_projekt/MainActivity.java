@@ -473,7 +473,7 @@ public class MainActivity extends ActionBarActivity
 		// Get the reminders
 		ReminderDB rdb = new ReminderDB(this);
 		rdb.open();
-		List<Reminder> reminders = rdb.getAllReminders();
+		List<Reminder> reminders = rdb.getAllCurrentReminders();
 		rdb.close();
 
 		Log.d(TAG, "fetched nr of reminders: " + reminders.size());

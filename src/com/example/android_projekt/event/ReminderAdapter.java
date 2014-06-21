@@ -25,6 +25,7 @@ public class ReminderAdapter extends ArrayAdapter<Reminder>
 	private final Context context;
 	private final List<Reminder> reminders;
 	
+	/** Constructor. */
 	public ReminderAdapter(Context context, List<Reminder> reminders) {
 		super(context, R.layout.list_row_reminder, reminders);
 		this.context = context;

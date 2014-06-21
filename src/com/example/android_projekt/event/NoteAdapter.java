@@ -21,6 +21,7 @@ public class NoteAdapter extends ArrayAdapter<Note>
 	private final Context context;
 	private final List<Note> notes;
 	
+	/** Constructor. */
 	public NoteAdapter(Context context, List<Note> notes) {
 		super(context, R.layout.list_row_note, notes);
 		this.context = context;

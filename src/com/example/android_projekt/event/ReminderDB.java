@@ -109,7 +109,6 @@ public class ReminderDB
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -190,12 +189,72 @@ public class ReminderDB
 			reminders.add(reminder);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return reminders;
 	}
 	
+	/**
+	 * Get a list of all current Reminders in the database, (they have reached the reminder time)
+	 * @return
+	 */
+	public List<Reminder> getAllCurrentReminders() {
+		List<Reminder> reminders = new ArrayList<Reminder>();
+		String selection = COLUMN_ACTIVE + " = '1' AND " + COLUMN_REMTIME + " > 'now'";
+		String orderBy = COLUMN_EVENTTIME + " ASC";
+		
+		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, null, null, null, orderBy);
+		cursor.moveToFirst();
+		
+		while(!cursor.isAfterLast()) {
+			Reminder reminder = createFromCursor(cursor);
+			reminders.add(reminder);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return reminders;
+	}
+	
+	/**
+	 * Get all active Reminder for an Individual
+	 * @param idNr
+	 * @return
+	 */
 	public List<Reminder> getAllRemindersForIndividual(IdNr idNr) {
+		List<Reminder> reminders = new ArrayList<Reminder>();
+		
+		/*
+		 * SELECT Reminder.* FROM Reminder, Event
+		 * WHERE Reminder.eventid = Event._id
+		 * AND Reminder.active = "1"
+		 * AND Event.idnr = "idNr"
+		 * ORDER BY Reminder.eventtime ASC
+		 */
+		String rawQuery = 
+				"SELECT " + TABLE_NAME + ".* FROM " + TABLE_NAME + ", " + EventDB.TABLE_NAME +
+				" WHERE " + TABLE_NAME + "." + COLUMN_EVENTID + " = " + EventDB.TABLE_NAME + "." + EventDB._ID +
+				" AND " + TABLE_NAME + "." + COLUMN_ACTIVE + " = '1' " +
+				" AND " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
+				" ORDER BY " + TABLE_NAME + "." + COLUMN_EVENTTIME + " ASC";
+		
+		Cursor cursor = database.rawQuery(rawQuery, null);
+		cursor.moveToFirst();
+		Log.d(TAG, "Nr of Reminders for individual: " + cursor.getCount());
+		
+		while(!cursor.isAfterLast()) {
+			Reminder reminder = createFromCursor(cursor);
+			reminders.add(reminder);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return reminders;
+	}
+	
+	/**
+	 * Get all active Reminders that has reached the reminder dateTime (for an Individual).
+	 * @param idNr
+	 * @return
+	 */
+	public List<Reminder> getAllCurrentRemindersForIndividual(IdNr idNr) {
 		List<Reminder> reminders = new ArrayList<Reminder>();
 		
 		/*
@@ -210,7 +269,7 @@ public class ReminderDB
 				"SELECT " + TABLE_NAME + ".* FROM " + TABLE_NAME + ", " + EventDB.TABLE_NAME +
 				" WHERE " + TABLE_NAME + "." + COLUMN_EVENTID + " = " + EventDB.TABLE_NAME + "." + EventDB._ID +
 				" AND " + TABLE_NAME + "." + COLUMN_ACTIVE + " = '1' " +
-//				" AND " + TABLE_NAME + "." + COLUMN_REMTIME + " > 'now' " +
+				" AND " + TABLE_NAME + "." + COLUMN_REMTIME + " > 'now' " +
 				" AND " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
 				" ORDER BY " + TABLE_NAME + "." + COLUMN_EVENTTIME + " ASC";
 		
@@ -223,7 +282,6 @@ public class ReminderDB
 			reminders.add(reminder);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return reminders;
 	}

@@ -14,6 +14,7 @@ public class Note extends Event
 {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = "Brunst: Note";
+	
 	public static final long UNSAVED_ID = -1;
 	
 	private long noteId = UNSAVED_ID;
@@ -28,7 +29,7 @@ public class Note extends Event
 	}
 	
 	/**
-	 * Create a Note from an Event
+	 * Create a Note from an Event.
 	 * @param event
 	 */
 	public Note(Event event) {
@@ -43,6 +44,7 @@ public class Note extends Event
 	}
 	
 
+	// SETTERS & GETTERS
 	public long getNoteId() {
 		return noteId;
 	}
@@ -62,6 +64,4 @@ public class Note extends Event
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	
 }

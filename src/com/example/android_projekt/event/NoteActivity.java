@@ -49,7 +49,6 @@ public class NoteActivity extends ActionBarActivity
 	
 	private NoteDB noteDB;
 	private boolean updating = false;
-	
 	private Note note;
 	private IdNr idnr;
 
@@ -94,7 +93,6 @@ public class NoteActivity extends ActionBarActivity
 		return true;
 	}
 	
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here.
@@ -149,7 +147,6 @@ public class NoteActivity extends ActionBarActivity
 	private void findViews() {
 		etText = (EditText) findViewById(R.id.note_entry_text);
 		tvIdnr = (TextView) findViewById(R.id.note_label_idnr);
-		
 	}
 
 	/**
@@ -162,11 +159,14 @@ public class NoteActivity extends ActionBarActivity
 		if(updating && note.hasText()) {
 			etText.setText(note.getText());
 		}
-		
 		registerForContextMenu(etText);
 	}
 	
+	/**
+	 * Ask the user to confirm Erase.
+	 */
 	private void showDialogErase() {
+		// only erase if there is text to erase
 		if(etText.length() > 0) {
 			// ask for confirmation first
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -186,12 +186,15 @@ public class NoteActivity extends ActionBarActivity
 					// nothing?
 				}
 			});
-
 			builder.show();
 		}
 	}
 	
+	/**
+	 * Ask the user to confirm Delete.
+	 */
 	private void showDialogDelete() {
+		// only delete if there is no text in the note
 		if(etText.length() == 0) {
 			// ask for confirmation first
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -211,13 +214,13 @@ public class NoteActivity extends ActionBarActivity
 					// nothing?
 				}
 			});
-
 			builder.show();
 		}
 	}
 
-	
-
+	/**
+	 * Ask tehe user for confirmation to Save.
+	 */
 	private void showDialogSave() {
 		if(etText.length() > 0) {
 			// ask for confirmation first
