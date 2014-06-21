@@ -147,6 +147,22 @@ public class ReminderDB
 	}
 	
 	/**
+	 * Mark Reminder as inactive
+	 * @param reminderId
+	 * @return
+	 */
+	public int inactivateReminder(long reminderId) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_ACTIVE, false);
+		
+		String selection = BaseColumns._ID + " LIKE ?";
+		String[] selectionArgs = {reminderId + ""};
+		int rows = database.update(TABLE_NAME, values, selection, selectionArgs);
+		Log.d(TAG, "forgot nr rows: " + rows);
+		return rows;
+	}
+	
+	/**
 	 * Delete a reminder
 	 * @param	reminderId		The _id of the reminder
 	 * @return	The number of reminders deleted (should be 1)
@@ -163,8 +179,10 @@ public class ReminderDB
 	 */
 	public List<Reminder> getAllReminders() {
 		List<Reminder> reminders = new ArrayList<Reminder>();
+		String selection = COLUMN_ACTIVE + " = '1'";
+		String orderBy = COLUMN_EVENTTIME + " ASC";
 		
-		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
+		Cursor cursor = database.query(TABLE_NAME, ALL_COLUMNS, selection, null, null, null, orderBy);
 		cursor.moveToFirst();
 		
 		while(!cursor.isAfterLast()) {
@@ -248,6 +266,7 @@ public class ReminderDB
 		reminder = new Reminder(event, eventType);
 		
 		// fill in rest of values
+		reminder.setReminderId(cursor.getLong(0));
 		reminder.setType(Reminder.Type.values()[cursor.getInt(1) - 1]);
 		reminder.setDescription(cursor.getString(4));
 		try {

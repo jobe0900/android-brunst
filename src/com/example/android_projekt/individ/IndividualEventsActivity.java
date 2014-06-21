@@ -3,6 +3,7 @@ package com.example.android_projekt.individ;
 import java.util.List;
 
 import com.example.android_projekt.R;
+import com.example.android_projekt.ReminderActivity;
 import com.example.android_projekt.Utils;
 import com.example.android_projekt.R.id;
 import com.example.android_projekt.R.layout;
@@ -518,12 +519,11 @@ public class IndividualEventsActivity extends ActionBarActivity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				final Reminder reminder = (Reminder) parent.getItemAtPosition(position);
-				// TODO show reminder in activity or dialog
-//				Intent intent = new Intent(getApplicationContext(), HeatActivity.class);
-//				intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
-//				intent.putExtra(HeatActivity.EXTRA_HEATEVENT, heat);
-//				startActivity(intent);
-				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
+				// show reminder in activity or dialog
+				Intent intent = new Intent(getApplicationContext(), ReminderActivity.class);
+				intent.putExtra(ReminderActivity.EXTRA_REMINDER, reminder);
+				startActivity(intent);
+//				Toast.makeText(getApplicationContext(), reminder.getDescription(), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

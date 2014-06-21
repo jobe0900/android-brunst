@@ -40,6 +40,21 @@ public class Reminder
 		this.eventType = eventType;
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param orig
+	 */
+	public Reminder(Reminder orig) {
+		type = orig.type;
+		event = orig.event;
+		eventType = orig.eventType;
+		description = orig.description;
+		eventTime = orig.eventTime;
+		reminderTime = orig.reminderTime;
+		reminderIntervalDay = orig.reminderIntervalDay;
+		reminderIntervalHour = orig.reminderIntervalHour;
+	}
+	
 	@Override
 	public String toString() {
 		String str = null;
