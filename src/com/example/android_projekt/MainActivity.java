@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.android_projekt.event.Reminder;
-import com.example.android_projekt.event.ReminderActivity;
-import com.example.android_projekt.event.ReminderAdapter;
-import com.example.android_projekt.event.ReminderDB;
 import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.individ.IndividualEditActivity;
@@ -15,6 +11,10 @@ import com.example.android_projekt.individ.IndividualEventsActivity;
 import com.example.android_projekt.productionsite.ProductionSite;
 import com.example.android_projekt.productionsite.ProductionSiteActivity;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
+import com.example.android_projekt.reminder.Reminder;
+import com.example.android_projekt.reminder.ReminderActivity;
+import com.example.android_projekt.reminder.ReminderAdapter;
+import com.example.android_projekt.reminder.ReminderDB;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;

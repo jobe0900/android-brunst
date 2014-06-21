@@ -1,4 +1,4 @@
-package com.example.android_projekt.event;
+package com.example.android_projekt.reminder;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -6,6 +6,10 @@ import java.util.List;
 
 import com.example.android_projekt.BrunstDBHelper;
 import com.example.android_projekt.Utils;
+import com.example.android_projekt.event.Event;
+import com.example.android_projekt.event.EventDB;
+import com.example.android_projekt.event.EventTypeDB;
+import com.example.android_projekt.event.Event.Type;
 import com.example.android_projekt.individ.IdNr;
 
 import android.content.ContentValues;

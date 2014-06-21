@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.android_projekt.event.ReminderActivity" >
+        tools:context="com.example.android_projekt.reminder.ReminderActivity" >
 
         <ImageView
             android:id="@+id/reminder_img"

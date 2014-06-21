@@ -1,9 +1,11 @@
-package com.example.android_projekt.event;
+package com.example.android_projekt.reminder;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
 import com.example.android_projekt.Utils;
+import com.example.android_projekt.event.Event;
+import com.example.android_projekt.event.Event.Type;
 
 /**
  * Class to handle Reminders of coming events that the User 

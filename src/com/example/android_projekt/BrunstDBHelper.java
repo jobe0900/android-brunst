@@ -6,10 +6,10 @@ import com.example.android_projekt.event.HeatEventDB;
 import com.example.android_projekt.event.HeatSignDB;
 import com.example.android_projekt.event.HeatStrengthDB;
 import com.example.android_projekt.event.NoteDB;
-import com.example.android_projekt.event.ReminderDB;
-import com.example.android_projekt.event.ReminderTypeDB;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
+import com.example.android_projekt.reminder.ReminderDB;
+import com.example.android_projekt.reminder.ReminderTypeDB;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

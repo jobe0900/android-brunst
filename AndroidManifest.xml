@@ -63,7 +63,7 @@
                 android:value="com.example.android_projekt.individ.IndividualEventsActivity" />
         </activity>
         <activity
-            android:name="com.example.android_projekt.event.ReminderActivity"
+            android:name="com.example.android_projekt.reminder.ReminderActivity"
             android:label="@string/reminder_activity_title" >
         </activity>
     </application>

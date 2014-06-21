@@ -1,4 +1,4 @@
-package com.example.android_projekt.event;
+package com.example.android_projekt.reminder;
 
 import com.example.android_projekt.BrunstDBHelper;
 

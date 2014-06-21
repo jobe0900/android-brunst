@@ -12,10 +12,10 @@ import com.example.android_projekt.event.Note;
 import com.example.android_projekt.event.NoteActivity;
 import com.example.android_projekt.event.NoteAdapter;
 import com.example.android_projekt.event.NoteDB;
-import com.example.android_projekt.event.Reminder;
-import com.example.android_projekt.event.ReminderActivity;
-import com.example.android_projekt.event.ReminderAdapter;
-import com.example.android_projekt.event.ReminderDB;
+import com.example.android_projekt.reminder.Reminder;
+import com.example.android_projekt.reminder.ReminderActivity;
+import com.example.android_projekt.reminder.ReminderAdapter;
+import com.example.android_projekt.reminder.ReminderDB;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;

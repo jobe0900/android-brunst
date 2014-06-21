@@ -10,6 +10,8 @@ import com.example.android_projekt.event.HeatEvent.Sign;
 import com.example.android_projekt.event.HeatEvent.Strength;
 import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualEventsActivity;
+import com.example.android_projekt.reminder.Reminder;
+import com.example.android_projekt.reminder.ReminderDB;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.DialogFragment;
