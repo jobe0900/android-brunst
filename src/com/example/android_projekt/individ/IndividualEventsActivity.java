@@ -16,6 +16,9 @@ import com.example.android_projekt.event.Note;
 import com.example.android_projekt.event.NoteActivity;
 import com.example.android_projekt.event.NoteAdapter;
 import com.example.android_projekt.event.NoteDB;
+import com.example.android_projekt.event.Reminder;
+import com.example.android_projekt.event.ReminderAdapter;
+import com.example.android_projekt.event.ReminderDB;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -411,6 +414,11 @@ public class IndividualEventsActivity extends ActionBarActivity
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				selectedEventType = (String) parent.getItemAtPosition(position);
+				
+				// Reminders
+				if(selectedEventType.equals(getString(R.string.event_type_reminder))) {
+					showReminderList();
+				}
 				// Notes
 				if(selectedEventType.equals(getString(R.string.event_type_note))) {
 					showNotesList();
@@ -471,7 +479,6 @@ public class IndividualEventsActivity extends ActionBarActivity
 		
 		Log.d(TAG, "nr heats form individual: " + heats.size());
 		
-		// TODO the HeatAdapter
 		HeatAdapter adapter = new HeatAdapter(this, heats);
 		lvEvents.setAdapter(adapter);
 		lvEvents.setOnItemClickListener(new OnItemClickListener() {
@@ -485,6 +492,34 @@ public class IndividualEventsActivity extends ActionBarActivity
 				startActivity(intent);
 			}
 		});
+	}
+	
+	/**
+	 * Display the list of Reminders for this Individual
+	 */
+	protected void showReminderList() {
+		// Get the reminders
+		ReminderDB rdb = new ReminderDB(this);
+		rdb.open();
+		List<Reminder> reminders = rdb.getAllRemindersForIndividual(individual.getIdNr());
+		rdb.close();
 		
+		Log.d(TAG, "fetched nr of reminders: " + reminders.size());
+		ReminderAdapter adapter = new ReminderAdapter(this, reminders);
+		lvEvents.setAdapter(adapter);
+		lvEvents.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final Reminder reminder = (Reminder) parent.getItemAtPosition(position);
+				// TODO show reminder in activity or dialog
+//				Intent intent = new Intent(getApplicationContext(), HeatActivity.class);
+//				intent.putExtra(HeatActivity.EXTRA_INDIVIUDAL, individual);
+//				intent.putExtra(HeatActivity.EXTRA_HEATEVENT, heat);
+//				startActivity(intent);
+				String text = reminder.toString();
+				Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 }

@@ -24,6 +24,8 @@
     <string name="dialog_ask_save">Spara</string>
     <string name="dialog_pick_image">Välj en bild</string>
     <string name="dialog_pick_number">Välj</string>
+    
+    <string name="event_type_reminder">Påminnelse</string>
     <string name="event_type_note">Anteckning</string>
     <string name="event_type_heat">Brunst</string>
     

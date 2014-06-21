@@ -6,6 +6,7 @@
     </string-array>
     
     <string-array name="event_types">
+        <item>@string/event_type_reminder</item>
         <item>@string/event_type_note</item>
         <item>@string/event_type_heat</item>
     </string-array>
