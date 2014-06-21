@@ -557,13 +557,35 @@ public class HeatActivity extends ActionBarActivity
 		// perform the save
 		heatDB.saveHeatEvent(heat);
 		
-		// TODO create reminder
+		// create reminder: e.g check for Heat again in 21 days time
 		if(createReminder) {
-			int remindIn = Integer.parseInt(etRemind.getText().toString());
-			Calendar remindDate = Calendar.getInstance();
-			remindDate.add(Calendar.DATE, remindIn);
-			Log.d(TAG, "should create reminder at: " + Utils.datetimeToString(remindDate));
 			// new reminder
+			Reminder reminder = new Reminder(heat, Event.Type.EVENT_HEAT);
+			// reminder type
+			reminder.setType(Reminder.Type.REMINDER_NORMAL);
+			// description
+			String descStr = getString(R.string.reminder_expected_heat) + " " +
+					individual.toString() + " @ " + individual.getHomesiteNr().toString();
+			reminder.setDescription(descStr);
+			// time of expected event
+			Calendar eventTime = Calendar.getInstance();
+			eventTime.add(Calendar.DATE, individual.getHeatcyclus());
+			Log.d(TAG, "expected next heat: " + Utils.dateToString(eventTime));
+			reminder.setEventTime(eventTime);
+			// reminder time
+			Calendar remindTime = Calendar.getInstance();
+			int remindIn = Integer.parseInt(etRemind.getText().toString());
+			remindTime.add(Calendar.DATE, remindIn);
+			Log.d(TAG, "should create reminder at: " + Utils.datetimeToString(remindTime));
+			reminder.setReminderTime(remindTime);
+			// set as active reminder
+			reminder.setActive(true);
+			
+			// save this reminder to db
+			ReminderDB rdb = new ReminderDB(this);
+			rdb.open();
+			rdb.saveReminder(reminder);
+			rdb.close();
 		}
 		
 		// return to Individual Events

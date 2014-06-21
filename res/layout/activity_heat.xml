@@ -90,7 +90,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignBottom="@id/heat_entry_date"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="16dp"
         android:layout_toRightOf="@id/heat_entry_date"
         android:background="@drawable/button_bg_green"
         android:scaleType="centerCrop"
