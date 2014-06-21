@@ -93,7 +93,6 @@ public class HeatEventDB
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -162,7 +161,6 @@ public class HeatEventDB
 			heats.add(heat);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return heats;
 	}
@@ -196,7 +194,6 @@ public class HeatEventDB
 			heats.add(heat);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return heats;
 	}

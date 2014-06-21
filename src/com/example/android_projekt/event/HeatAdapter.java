@@ -27,6 +27,7 @@ public class HeatAdapter extends ArrayAdapter<HeatEvent>
 	private final Context context;
 	private final List<HeatEvent> heats;
 	
+	/** Constructor. */
 	public HeatAdapter(Context context, List<HeatEvent> heats) {
 		super(context, R.layout.list_row_heat, heats);
 		this.context = context;

@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+/**
+ * Helper class, "contract", to handle database work for HeatStrenght type.
+ * @author	Jonas Bergman, <jobe0900@student.miun.se>
+ */
 public class HeatStrengthDB implements BaseColumns
 {
 	private static final String TAG = "Brunst: HeatStrengthDB";
@@ -73,7 +77,6 @@ public class HeatStrengthDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 }

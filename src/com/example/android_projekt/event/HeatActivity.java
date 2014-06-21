@@ -5,22 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.example.android_projekt.R;
-import com.example.android_projekt.R.id;
-import com.example.android_projekt.R.layout;
-import com.example.android_projekt.R.menu;
 import com.example.android_projekt.Utils;
 import com.example.android_projekt.event.HeatEvent.Sign;
 import com.example.android_projekt.event.HeatEvent.Strength;
-import com.example.android_projekt.individ.IdNr;
 import com.example.android_projekt.individ.Individual;
-import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.individ.IndividualEventsActivity;
-import com.example.android_projekt.individ.IndividualEditActivity.DatePickerFragment;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -39,10 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -52,8 +40,6 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-import android.os.Build;
 
 /**
  * Activity to register Heat events
@@ -62,10 +48,11 @@ import android.os.Build;
 public class HeatActivity extends ActionBarActivity 
 {
 	private static final String TAG = "Brunst: HeatActivity";
-	public static final String EXTRA_INDIVIUDAL = "brunst.extra.HeatActivity.Individual";
-	public static final String EXTRA_HEATEVENT = "brunst.extra.HeatActivity.HeatEvent";
 	private static final String DIALOG_DATE = "pickDateDialog";
 	private static final String DIALOG_TIME = "pickTimeDialog";
+	
+	public static final String EXTRA_INDIVIUDAL = "brunst.extra.HeatActivity.Individual";
+	public static final String EXTRA_HEATEVENT = "brunst.extra.HeatActivity.HeatEvent";
 	
 	// WIDGETS
 	private CheckBox cbRemind;
@@ -92,9 +79,7 @@ public class HeatActivity extends ActionBarActivity
 	private boolean createReminder = false;
 	private EditText pickNumberForThis;		// the entry connected to a number picker
 
-	
 	private HeatEventDB heatDB;
-	private IndividualDB individualDB;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +109,6 @@ public class HeatActivity extends ActionBarActivity
 		}
 		
 	}
-
-	
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -160,7 +143,6 @@ public class HeatActivity extends ActionBarActivity
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.context_menu_delete:
 			Log.d(TAG, "Pick context Delete");
@@ -173,14 +155,12 @@ public class HeatActivity extends ActionBarActivity
 	
 	@Override
 	protected void onResume() {
-//		individualDB.open();
 		heatDB.open();
 		super.onResume();
 	}
 	
 	@Override
 	protected void onPause() {
-//		individualDB.close();
 		heatDB.close();
 		super.onPause();
 	}
@@ -249,7 +229,7 @@ public class HeatActivity extends ActionBarActivity
 			if(heat.hasNote()) {
 				etNote.setText(heat.getNote());
 			}
-			// hide reminder
+			// hide remainder
 			cbRemind.setVisibility(View.GONE);
 			etRemind.setVisibility(View.GONE);
 			ibRemind.setVisibility(View.GONE);
@@ -274,7 +254,6 @@ public class HeatActivity extends ActionBarActivity
 	 */
 	private void setUpListeners() {
 		setupOnClickListeners();
-		setupOnItemSelectedListeners();
 		// have the note listen for context menu (long click)
 		registerForContextMenu(etNote);
 	}
@@ -324,34 +303,6 @@ public class HeatActivity extends ActionBarActivity
 		ibRemind.setOnClickListener(clickListener);
 	}
 
-	/**
-	 * Listen for selections in the spinners. 
-	 */
-	private void setupOnItemSelectedListeners() {
-//		OnItemSelectedListener selectListener = new OnItemSelectedListener() {
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				switch(view.getId()) {
-//				case R.id.heat_spinner_sign:
-//					// something
-//					break;
-//				case R.id.heat_spinner_strength:
-//					//
-//					break;
-//				}
-//				
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> parent) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		};
-		
-	}
-	
 	/**
 	 * Put up a NumberPicker for picking heat round
 	 */
@@ -470,41 +421,30 @@ public class HeatActivity extends ActionBarActivity
 			Log.d(TAG, "built arguments for Time Picker: " + b);
 			dialog.show(getSupportFragmentManager(), DIALOG_TIME);
 		}
-		
 	}
 	
 	/**
 	 * Show a dialog, confirming the user's wish to save a ProductionSite.
 	 */
 	private void showDialogSave() {
-//		if(true) {
-			// ask for confirmation first
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//			IdNr idnr = createIdnrFromForm(ID_OWN);
-//			if(etName.length() > 0) {
-//				siteStr += etName.getText().toString();
-//			}
-			builder.setMessage(getString(R.string.dialog_ask_save) + "?");
-			builder.setCancelable(true);
-			// YES button
-			builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					saveHeatEvent();
-				}
-			});
-			// NO button
-			builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// nothing?
-				}
-			});
-			builder.show();
-//		}
-//		else {
-//			Toast.makeText(this, R.string.toast_form_not_correct, Toast.LENGTH_SHORT).show();
-//		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(getString(R.string.dialog_ask_save) + "?");
+		builder.setCancelable(true);
+		// YES button
+		builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				saveHeatEvent();
+			}
+		});
+		// NO button
+		builder.setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// nothing?
+			}
+		});
+		builder.show();
 	}
 	
 	/**
@@ -529,9 +469,6 @@ public class HeatActivity extends ActionBarActivity
 			result.set(Calendar.HOUR, eventTime.get(Calendar.HOUR));
 			result.set(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
 			Log.d(TAG, "result date saved: " + Utils.datetimeToString(result));
-			
-//			eventDate.add(Calendar.HOUR_OF_DAY, eventTime.get(Calendar.HOUR_OF_DAY));
-//			eventDate.add(Calendar.MINUTE, eventTime.get(Calendar.MINUTE));
 			heat.setEventTime(result);
 			Log.d(TAG, "save date and time: " + Utils.datetimeToString(heat.getEventTime()));
 		} catch (ParseException e) {
@@ -768,30 +705,10 @@ public class HeatActivity extends ActionBarActivity
 			dialog.setCancelable(true);
 			dialog.setCanceledOnTouchOutside(true);
 			
-//			dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.dialog_choose),
-//        			new DialogInterface.OnClickListener() {
-//						@Override
-//						public void onClick(DialogInterface di, int which) {
-//							TimePicker picker = dialog.get
-//							picker.clearFocus();
-//							onDateSet(picker, picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
-//						}
-//					});
-//        	dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_cancel), 
-//        			new DialogInterface.OnClickListener() {
-//        				@Override
-//        				public void onClick(DialogInterface di, int which) {
-//        					// Nothing?
-//        				}
-//        			});
-//        	
-//        	return dialog;
-			
 			// Create a new instance of TimePickerDialog and return it
 			return new TimePickerDialog(getActivity(), this, hour, min,
 					DateFormat.is24HourFormat(getActivity()));
 		}
-
 
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

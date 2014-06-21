@@ -22,6 +22,7 @@ public class Event
 {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = "Brunst: Event";
+	
 	public static final long UNSAVED_ID = -1;
 	
 	public static enum Type {
@@ -33,7 +34,6 @@ public class Event
 	};
 	
 	private long eventId;
-//	private EventType.Type type;
 	private Type type;
 	private IdNr idnr;
 	private Calendar eventTime;
@@ -44,7 +44,6 @@ public class Event
 	 * @param	type	The type of event
 	 * @param	idnr	The Individual's IdNr
 	 */
-//	public Event(EventType.Type type, IdNr idnr) {
 	public Event(Type type, IdNr idnr) {
 		eventId = UNSAVED_ID;
 		this.type = type;
@@ -80,7 +79,6 @@ public class Event
 		eventId = id;
 	}
 	
-//	public EventType.Type getType() {
 	public Type getType() {
 		return type;
 	}

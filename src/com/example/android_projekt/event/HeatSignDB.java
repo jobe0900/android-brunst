@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
- * Helper class, "contract", to handle DB work for the HeatSign class
+ * Helper class, "contract", to handle DB work for the HeatSign type.
  * @author	Jonas Bergman, <jobe0900@student.miun.se>
  */
 public class HeatSignDB implements BaseColumns
@@ -78,7 +78,6 @@ public class HeatSignDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 }

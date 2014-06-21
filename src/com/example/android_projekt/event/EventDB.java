@@ -88,7 +88,6 @@ public class EventDB implements BaseColumns
 	
 	/** Upgrade this table to a new version in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -98,7 +97,6 @@ public class EventDB implements BaseColumns
 	 * @return	the id for the event in DB, or -1 if failed
 	 */
 	public long saveEvent(Event event) {
-		
 		// the values to store
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_IDNR, event.getIdnr().toString());
@@ -177,7 +175,6 @@ public class EventDB implements BaseColumns
 			events.add(event);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return events;
 	}
@@ -207,7 +204,6 @@ public class EventDB implements BaseColumns
 			events.add(event);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return events;
 	}
@@ -244,11 +240,7 @@ public class EventDB implements BaseColumns
 			String idnrStr = cursor.getString(1);
 			IdNr idnr = new IdNr(idnrStr);
 			
-//			String typeStr = cursor.getString(2);
-//			EventType.Type type = EventType.parseString(typeStr);
-			
 			int typeIndex = cursor.getInt(2) - 1; // DB based on 1, enum based on 0
-//			EventType.Type type = EventType.Type.values()[typeIndex];
 			Event.Type type = Event.Type.values()[typeIndex];
 			
 			event = new Event(type, idnr);

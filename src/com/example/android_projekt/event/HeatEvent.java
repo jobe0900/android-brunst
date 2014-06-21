@@ -46,7 +46,6 @@ public class HeatEvent extends Event
 	 */
 	public HeatEvent(IdNr idnr) {
 		super(Event.Type.EVENT_HEAT, idnr);
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**
