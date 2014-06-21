@@ -11,7 +11,9 @@ import java.io.Serializable;
 public class ProductionSite implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+	
 	public static final int UNSAVED_ID = -1;	
+	
 	private long _id;
 	private ProductionSiteNr sitenr;
 	private String name;
@@ -30,7 +32,6 @@ public class ProductionSite implements Serializable
 	/** Constructor. */
 	public ProductionSite(String ppnrString) {
 		this(new ProductionSiteNr(ppnrString));
-//		sitenr = new ProductionSiteNr(ppnrString);
 	}
 	
 	/** Constructor. */
@@ -38,6 +39,7 @@ public class ProductionSite implements Serializable
 		this(new ProductionSiteNr(org, ppnr));
 	}
 	
+	@Override
 	public String toString() {
 		String str = sitenr.toString();
 		if(name != null || !name.equals("")) {
@@ -140,6 +142,4 @@ public class ProductionSite implements Serializable
 	public String getImageUriStr() {
 		return imageUriStr;
 	}
-
-		
 }

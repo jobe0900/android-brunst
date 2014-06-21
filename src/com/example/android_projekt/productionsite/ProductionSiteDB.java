@@ -21,7 +21,6 @@ public class ProductionSiteDB implements BaseColumns
 {
 	public final static String TAG = "Brunst: ProductionSiteDB";
 	public static final String TABLE_NAME = "ProductionSite";
-	// _ID comes from BaseColumns?
 	public static final String COLUMN_SITENR = "sitenr";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_ADDRESS = "address";
@@ -56,8 +55,6 @@ public class ProductionSiteDB implements BaseColumns
 	private static final String SQL_DROP_TABLE = 
 		"DROP TABLE IF EXISTS " + TABLE_NAME;
 	
-	
-	
 	private SQLiteDatabase database;
 	private BrunstDBHelper dbHelper;
 	
@@ -83,7 +80,6 @@ public class ProductionSiteDB implements BaseColumns
 	
 	/** Upgrade this table to a new verison in the DB. */
 	public static void onUpgrade(SQLiteDatabase database) {
-		// TODO
 		// nothing for now.
 	}
 	
@@ -97,7 +93,6 @@ public class ProductionSiteDB implements BaseColumns
 		boolean retval = false;
 		// The values to store in the database
 		ContentValues values = new ContentValues();
-//		values.put(BaseColumns._ID, "NULL");
 		values.put(COLUMN_SITENR, site.getSiteNr().toString());
 		if(site.hasName()) values.put(COLUMN_NAME, site.getName());
 		if(site.hasAddress()) values.put(COLUMN_ADDRESS, site.getAddress());
@@ -117,18 +112,15 @@ public class ProductionSiteDB implements BaseColumns
 				// saved ok
 				retval = true;
 			}
-//			retval = true;
 		}
 		// Updating an existing site
 		else {
 			String selection = BaseColumns._ID + " LIKE ?";
 			String[] selectionArgs = {String.valueOf(site.get_id())};
 			int count = database.update(TABLE_NAME, values, selection, selectionArgs);
-			// TODO something we need to do with count?
 			if(count != 0) {
 				retval =  true;
 			}
-//			retval = true;
 		}
 		return retval;
 	}
@@ -171,7 +163,6 @@ public class ProductionSiteDB implements BaseColumns
 			sites.add(site);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return sites;
 	}
@@ -192,7 +183,6 @@ public class ProductionSiteDB implements BaseColumns
 		if(cursor.getCount() == 1) {
 			site = createFromCursor(cursor);
 		}
-		
 		cursor.close();
 		return site;
 	}
@@ -218,7 +208,6 @@ public class ProductionSiteDB implements BaseColumns
 			titles.add(title);
 			cursor.moveToNext();
 		}
-		
 		cursor.close();
 		return titles;
 	}
@@ -242,8 +231,4 @@ public class ProductionSiteDB implements BaseColumns
 		
 		return site;
 	}
-
-	
-	
-	
 }

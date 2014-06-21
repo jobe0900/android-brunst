@@ -1,45 +1,25 @@
 package com.example.android_projekt.productionsite;
 
-import java.io.File;
-
 import com.example.android_projekt.MainActivity;
 import com.example.android_projekt.R;
-import com.example.android_projekt.R.id;
-import com.example.android_projekt.R.layout;
-import com.example.android_projekt.R.menu;
-import com.example.android_projekt.R.string;
 import com.example.android_projekt.Utils;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.InputType;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.os.Build;
 import android.provider.MediaStore;
 
 /**
@@ -49,9 +29,9 @@ import android.provider.MediaStore;
  */
 public class ProductionSiteActivity extends ActionBarActivity 
 {
-	public final static String TAG = "Brunst: ProductionSiteActivity";
+	private final static String TAG = "Brunst: ProductionSiteActivity";
 	public final static String EXTRA_PRODUCTION_SITE = "brunst.extra.ProductionSiteActivity.ProductionSite";
-//	private final static int DIALOG_DELETE_SITE = 10;	// id for a dialog to confirm delete
+	
 	private final static int INTENT_PICK_IMAGE = 10;	// id for the gallery intent
 	
 	// WIDGETS
@@ -65,8 +45,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 	private ImageButton ibThumb;
 	private ImageButton ibMap;
 	private ImageButton ibHere;
-//	private Button btnDelete;
-//	private Button btnSave;
 	
 	private boolean updating = false;
 	private boolean hasLocationService = false;
@@ -96,23 +74,12 @@ public class ProductionSiteActivity extends ActionBarActivity
 		// disable direct entry of coordinates
 		Utils.disableEntry(etCoord);
 		
-//		if(!updating) {
-//			btnDelete.setEnabled(false);
-//		}
-		
 		// TODO Enable location buttons if we get the services working
 		if(hasLocationService) {
 			ibHere.setEnabled(true);
 			ibMap.setEnabled(true);
 		}
 	}
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.production_site, menu);
-//		return true;
-//	}
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -244,7 +211,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 		}
 	}
 
-
 	/** Have the user place the ProductionSite on a map. */
 	protected void placeOnMap() {
 		// TODO Auto-generated method stub
@@ -271,8 +237,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 		ibMap.setEnabled(false);
 		ibHere = (ImageButton) findViewById(R.id.production_site_imgbutton_here);
 		ibHere.setEnabled(false);
-//		btnDelete = (Button) findViewById(R.id.production_site_button_delete);
-//		btnSave = (Button) findViewById(R.id.production_site_button_save);
 	}
 	
 	/** Add OnClickListener to buttons. */
@@ -281,12 +245,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 			@Override
 			public void onClick(View v) {
 				switch(v.getId()) {
-//				case R.id.production_site_button_delete:
-//					showDialogDelete();
-//					break;
-//				case R.id.production_site_button_save:
-//					saveForm();
-//					break;
 				case R.id.production_site_imgbutton_thumb:
 					openGallery();
 					break;
@@ -297,21 +255,17 @@ public class ProductionSiteActivity extends ActionBarActivity
 					getLocation();
 					break;
 				}
-				
 			}
 		};
 		ibThumb.setOnClickListener(clickListener);
 		ibMap.setOnClickListener(clickListener);
 		ibHere.setOnClickListener(clickListener);
-//		btnDelete.setOnClickListener(clickListener);
-//		btnSave.setOnClickListener(clickListener);
 	}
 	
 	/**
 	 * Open the gallery to pick an image for the ProductionSite
 	 */
 	protected void openGallery() {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -407,7 +361,6 @@ public class ProductionSiteActivity extends ActionBarActivity
 			return;
 		}
 		
-//		site = (ProductionSite) intent.getSerializableExtra(EXTRA_PRODUCTION_SITE);
 		Log.d(TAG, "site id: " + site.get_id());
 		etOrg.setText(site.getSiteNr().getOrg());
 		etPpnr.setText(site.getSiteNr().getPpnr());
@@ -434,16 +387,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 			Log.d(TAG, "no loaded URI");
 		}
 		
-		// save button =  update button
-//		btnSave.setText(R.string.button_update);
 	}
-//	
-//	/** Disable an EditText-field. */
-//	private void disableEntry(EditText entry) {
-//		entry.setKeyListener(null);
-//		entry.setFocusable(false);
-//		entry.setInputType(InputType.TYPE_NULL);
-//	}
 	
 	/** Read the form and create a ProductionSite with those values. */
 	private void createProductionSiteFromForm() {
