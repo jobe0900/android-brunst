@@ -8,6 +8,7 @@ import com.example.android_projekt.Utils;
 import com.example.android_projekt.event.Reminder.Type;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,26 +46,30 @@ public class ReminderAdapter extends ArrayAdapter<Reminder>
 		line1.setText(Utils.dateToString(reminder.getEventTime()));
 		line2.setText(reminder.getDescription());
 		
-		// set background of img
+		// background of image depending on type of reminder
 		Reminder.Type remType = reminder.getType();
 		// if 'now' has passed eventTime, set to Seriuos
 		Calendar now = Calendar.getInstance();
 		if(reminder.getEventTime().before(now)) {
 			remType = Type.REMINDER_SERIOUS;
 		}
-		int backgroundId = R.color.orange_light;
+		int backgroundColorId = R.color.orange_light;
 		switch(remType) {
 		case REMINDER_NORMAL:
-			backgroundId = R.color.orange_light;
+			backgroundColorId = R.color.orange_light;
 			break;
 		case REMINDER_ALERT:
-			backgroundId = R.color.purple_light;
+			backgroundColorId = R.color.purple_light;
 			break;
 		case REMINDER_SERIOUS:
-			backgroundId = R.color.red_light;
+			backgroundColorId = R.color.red_light;
 			break;
 		}
-		img.setBackgroundResource(backgroundId);
+		// if it is not time to remind just yet, make background green
+		if(now.before(reminder.getReminderTime())) {
+			backgroundColorId = R.color.green_semi_transparent;
+		}
+		img.setBackgroundResource(backgroundColorId);
 		return rowView;
 	}
 }

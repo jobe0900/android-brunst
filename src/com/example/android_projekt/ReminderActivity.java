@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.example.android_projekt.event.Reminder;
 import com.example.android_projekt.event.ReminderDB;
+import com.example.android_projekt.event.Reminder.Type;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -41,7 +42,7 @@ public class ReminderActivity extends ActionBarActivity
 	// WIDGETS
 	private Button btnAgain;
 	private Button btnNot;
-	private EditText etDescription;
+//	private EditText etDescription;
 	private EditText etDays;
 	private EditText etHours;
 	private ImageButton ibDays;
@@ -49,6 +50,7 @@ public class ReminderActivity extends ActionBarActivity
 	private ImageView ivImg;
 	private TextView tvEventTime;
 	private TextView tvEventType;
+	private TextView etDescription;
 	
 	private EditText pickNumberForThis;	// the EditText for the NumberPicker to set
 	
@@ -101,7 +103,7 @@ public class ReminderActivity extends ActionBarActivity
 	private void findVews() {
 		btnAgain = (Button) findViewById(R.id.reminder_button_remind_again);
 		btnNot = (Button) findViewById(R.id.reminder_button_remind_not);
-		etDescription = (EditText) findViewById(R.id.reminder_entry_description);
+		etDescription = (TextView) findViewById(R.id.reminder_entry_description);
 		etDays = (EditText) findViewById(R.id.reminder_entry_days);
 		etHours = (EditText) findViewById(R.id.reminder_entry_hours);
 		ibDays = (ImageButton) findViewById(R.id.reminder_imgbutton_edit_days);
@@ -116,12 +118,18 @@ public class ReminderActivity extends ActionBarActivity
 	 */
 	private void prepareViews() {
 		Utils.disableEntry(etDays);
-		Utils.disableEntry(etDescription);
+//		Utils.disableEntry(etDescription);
 		Utils.disableEntry(etHours);
 		
-		// background of image depending on typ of reminder
+		// background of image depending on type of reminder
+		Reminder.Type remType = reminder.getType();
+		// if 'now' has passed eventTime, set to Seriuos
+		Calendar now = Calendar.getInstance();
+		if(reminder.getEventTime().before(now)) {
+			remType = Type.REMINDER_SERIOUS;
+		}
 		int backgroundColorId = R.color.orange_light;
-		switch(reminder.getType()) {
+		switch(remType) {
 		case REMINDER_NORMAL:
 			backgroundColorId = R.color.orange_light;
 			break;
@@ -133,6 +141,11 @@ public class ReminderActivity extends ActionBarActivity
 			break;
 		}
 		Log.d(TAG, "reminder type: " + reminder.getType());
+		// if it is not time to remind just yet, make background green
+		if(now.before(reminder.getReminderTime())) {
+			backgroundColorId = R.color.green_semi_transparent;
+		}
+		
 		ivImg.setBackgroundResource(backgroundColorId);
 		// event time
 		tvEventTime.setText(Utils.dateToString(reminder.getEventTime()));
