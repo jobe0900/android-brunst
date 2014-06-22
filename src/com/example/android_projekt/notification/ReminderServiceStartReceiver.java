@@ -19,6 +19,4 @@ public class ReminderServiceStartReceiver extends BroadcastReceiver
 		Intent serviceIntent = new Intent(context, ReminderService.class);
 		context.startService(serviceIntent);
 	}
-	
-
 }

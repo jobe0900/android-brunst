@@ -507,12 +507,12 @@ public class HeatActivity extends ActionBarActivity
 					individual.toString() + " @ " + individual.getHomesiteNr().toString();
 			reminder.setDescription(descStr);
 			// time of expected event
-			Calendar eventTime = Calendar.getInstance();
+			Calendar eventTime = (Calendar) heat.getEventTime().clone();
 			eventTime.add(Calendar.DATE, individual.getHeatcyclus());
 			Log.d(TAG, "expected next heat: " + Utils.dateToString(eventTime));
 			reminder.setEventTime(eventTime);
 			// reminder time
-			Calendar remindTime = Calendar.getInstance();
+			Calendar remindTime = (Calendar) heat.getEventTime().clone();
 			int remindIn = Integer.parseInt(etRemind.getText().toString());
 			remindTime.add(Calendar.DATE, remindIn);
 			Log.d(TAG, "should create reminder at: " + Utils.datetimeToString(remindTime));

@@ -514,10 +514,11 @@ public class MainActivity extends ActionBarActivity
 	
 	/**
 	 * Start the background service.
+	 * Check for Reminders every half hour.
 	 */
 	private void startService() {
 		// repeat once an hour
-//		final long REPEAT_TIME = 1000 * 10; // once a minute for debug
+		final long REPEAT_TIME = 1000 * 60; // once a minute for debug
 		
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.SECOND, 10); // start after one minute
@@ -526,9 +527,9 @@ public class MainActivity extends ActionBarActivity
 		PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), REPEAT_TIME, pintent);
 		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-		        cal.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pintent);
+//		        cal.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pintent);
+		        cal.getTimeInMillis(), REPEAT_TIME, pintent);
 		Log.d(TAG, "starting the ReminderServiceStartReceiver");
 	}
 }
