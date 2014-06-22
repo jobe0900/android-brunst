@@ -222,16 +222,26 @@ public class HeatEventDB
 	 * Find the HeatRound for the latest heat event
 	 * @return
 	 */
-	public int getRoundNr() {
+	public int getRoundNr(IdNr idNr) {
 		int round = 1;
 		// Just get the last inserted row
-		String rawQeury = 
-				"SELECT rowid, " + COLUMN_HEATROUND + " FROM " + TABLE_NAME +
-				" ORDER BY rowid DESC limit 1";
-		Cursor cursor = database.rawQuery(rawQeury, null);
+		/*
+		 * SELECT HeatEvent.rowid, HeatEvent.heatround FROM HeatEvent, Event
+		 * WHERE HeatEvent.eventid = Event._id
+		 * AND Event.idnr = 'idNr'
+		 * ORDER BY HeatEvent.rowid DESC limit 1
+		 */
+		String rawQuery = 
+				"SELECT " + TABLE_NAME + ".rowid," + TABLE_NAME + "." + COLUMN_HEATROUND + " FROM " + TABLE_NAME + ", " + EventDB.TABLE_NAME +
+				" WHERE " + TABLE_NAME + "." + COLUMN_EVENT_ID + " = " + EventDB.TABLE_NAME + "." + EventDB._ID +
+				" AND " + EventDB.TABLE_NAME + "." + EventDB.COLUMN_IDNR + " = '" + idNr.toString() + "'" +
+				" ORDER BY " + TABLE_NAME + ".rowid DESC limit 1";
+		
+		Cursor cursor = database.rawQuery(rawQuery, null);
 		if(cursor != null && cursor.moveToFirst()) {
 			round = cursor.getInt(1);
 		}
+		Log.d(TAG, "heat ronund nr " + round);
 		return round;
 	}
 	

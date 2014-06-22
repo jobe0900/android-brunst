@@ -2,17 +2,22 @@
 <resources>
 
     <string name="app_name">Brunstkalender</string>
+    
     <string name="action_settings">Inställningar</string>
+    
     <string name="action_delete">Ta bort</string>
     <string name="action_erase">Radera</string>
     <string name="action_save">Spara</string>
+    
     <string name="button_save">Spara</string>
     <string name="button_update">Uppdatera</string>
     <string name="button_delete">Ta bort</string>
     <string name="button_new_short">N</string>
     <string name="button_edit_short">R</string>
     <string name="button_delete_short">X</string>
+    
     <string name="context_menu_delete">Ta bort</string>
+    
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nej</string>
     <string name="dialog_cancel">Avbryt</string>
@@ -24,12 +29,14 @@
     <string name="dialog_ask_save">Spara</string>
     <string name="dialog_pick_image">Välj en bild</string>
     <string name="dialog_pick_number">Välj</string>
+    
     <string name="event_type_reminder">Påminnelse</string>
     <string name="event_type_note">Anteckning</string>
     <string name="event_type_heat">Brunst</string>
     <string name="event_type_mating">Parning</string>
     <string name="event_type_pregcheck">Dräktighetsundersökning</string>
     <string name="event_type_birth">Födelse</string>
+    
     <string name="heat_activity_title">Brunst</string>
     <string name="heat_label_individual_title">Individ:</string>
     <string name="heat_label_lactationnr">Laktation nr</string>
@@ -53,6 +60,7 @@
     <string name="heat_strength_3">3. Trolig</string>
     <string name="heat_strength_4">4. Säker</string>
     <string name="heat_strength_5">5. Stark</string>
+    
     <string name="individual">Individ</string>
     <string name="individual_edit_activity_title">Individ</string>
     <string name="individual_events_activity_title">Händelser</string>
@@ -70,11 +78,13 @@
     <string name="individual_label_events">Händelse</string>
     <string name="individual_sex_male">Tjur</string>
     <string name="individual_sex_female">Ko</string>
+    
     <string name="note_activity_title">Anteckning</string>
     <string name="note_label_idnr">Anteckning för individ:</string>
     <string name="note_entry_hint">Max 200 tecken</string>
     <string name="note_listrow_line1_hint">Datum och tid</string>
     <string name="note_listrow_line2_hint">Anteckningens text</string>
+    
     <string name="production_site">Produktionsplats</string>
     <string name="production_site_activity_title">Produktionsplats</string>
     <string name="production_site_label_number">Produktionsplatsnummer</string>
@@ -86,6 +96,7 @@
     <string name="production_site_hint_postaddress">Postadress</string>
     <string name="production_site_hint_coord"></string>
     <string name="production_site_org_default">SE</string>
+    
     <string name="reminder">Påminnelser</string>
     <string name="reminder_activity_title">Påminnelse</string>
     <string name="reminder_service_title">Påminnelsetjänst</string>
@@ -100,6 +111,7 @@
     <string name="reminder_expected_heat">Förväntad brunst</string>
     <string name="reminder_listrow1_hint">Datum och tid</string>
     <string name="reminder_listrow2_hint">Beskrivning</string>
+    
     <string name="toast_could_not_save">Kunde inte spara</string>
     <string name="toast_could_not_fetch">Kunde inte hämta</string>
     <string name="toast_form_not_correct">Fel i formulär</string>

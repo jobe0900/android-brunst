@@ -318,7 +318,7 @@ public class ProductionSiteActivity extends ActionBarActivity
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			String siteStr = etOrg.getText().toString() + "-" + etPpnr.getText().toString();
 			if(etName.length() > 0) {
-				siteStr += etName.getText().toString();
+				siteStr += " " + etName.getText().toString();
 			}
 			builder.setMessage(getString(R.string.dialog_ask_save) + " " + siteStr + "?");
 			builder.setCancelable(true);

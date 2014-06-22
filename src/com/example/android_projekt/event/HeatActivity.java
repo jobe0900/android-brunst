@@ -211,7 +211,7 @@ public class HeatActivity extends ActionBarActivity
 		
 		if(editing) {
 			// heat round
-			int lastRound = heatDB.getRoundNr();
+			int lastRound = heatDB.getRoundNr(heat.getIdnr());
 			etHeatRound.setText(lastRound + "");
 			
 			// date

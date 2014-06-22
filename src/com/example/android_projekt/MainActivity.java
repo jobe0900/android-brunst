@@ -481,8 +481,8 @@ public class MainActivity extends ActionBarActivity
 		// Get the reminders
 		ReminderDB rdb = new ReminderDB(this);
 		rdb.open();
-//		List<Reminder> reminders = rdb.getAllCurrentReminders();
-		List<Reminder> reminders = rdb.getAllReminders();
+		List<Reminder> reminders = rdb.getAllCurrentReminders();
+//		List<Reminder> reminders = rdb.getAllReminders(); // debug
 		rdb.close();
 
 		Log.d(TAG, "fetched nr of reminders: " + reminders.size());
@@ -518,18 +518,18 @@ public class MainActivity extends ActionBarActivity
 	 */
 	private void startService() {
 		// repeat once an hour
-		final long REPEAT_TIME = 1000 * 60; // once a minute for debug
+//		final long REPEAT_TIME = 1000 * 60; // once a minute for debug
 		
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.SECOND, 10); // start after one minute
+		cal.add(Calendar.SECOND, 10); // start after ten seconds
 
 		Intent intent = new Intent(this, ReminderServiceStartReceiver.class);
 		PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-//		        cal.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pintent);
-		        cal.getTimeInMillis(), REPEAT_TIME, pintent);
+		        cal.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pintent);
+//		        cal.getTimeInMillis(), REPEAT_TIME, pintent);
 		Log.d(TAG, "starting the ReminderServiceStartReceiver");
 	}
 }
