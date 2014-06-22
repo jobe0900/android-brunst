@@ -1,6 +1,7 @@
 package com.example.android_projekt;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import com.example.android_projekt.individ.Individual;
 import com.example.android_projekt.individ.IndividualDB;
 import com.example.android_projekt.individ.IndividualEditActivity;
 import com.example.android_projekt.individ.IndividualEventsActivity;
+import com.example.android_projekt.notification.ReminderService;
+import com.example.android_projekt.notification.ReminderServiceStartReceiver;
 import com.example.android_projekt.productionsite.ProductionSite;
 import com.example.android_projekt.productionsite.ProductionSiteActivity;
 import com.example.android_projekt.productionsite.ProductionSiteDB;
@@ -23,7 +26,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.app.AlarmManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -126,8 +132,10 @@ public class MainActivity extends ActionBarActivity
 		fillSpinners();
 		setupClickListeners();
 		setUpSpinnerListeners();
+		
+		startService();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -473,7 +481,8 @@ public class MainActivity extends ActionBarActivity
 		// Get the reminders
 		ReminderDB rdb = new ReminderDB(this);
 		rdb.open();
-		List<Reminder> reminders = rdb.getAllCurrentReminders();
+//		List<Reminder> reminders = rdb.getAllCurrentReminders();
+		List<Reminder> reminders = rdb.getAllReminders();
 		rdb.close();
 
 		Log.d(TAG, "fetched nr of reminders: " + reminders.size());
@@ -493,7 +502,7 @@ public class MainActivity extends ActionBarActivity
 	}
 
 	/**
-	 * Make the site in selectedSiteNr be the selected site in the productionSiteSpinner
+	 * Make the site in selectedSiteNr be the selected site in the productionSiteSpinner.
 	 */
 	private void setSelectedIndividualInSpinner() {
 		if(selectedSiteStr != null) {
@@ -501,5 +510,25 @@ public class MainActivity extends ActionBarActivity
 			individualSpinner.setSelection(pos);
 			Log.d(TAG, "attempt to set selected individaul at position: " + pos);
 		}
+	}
+	
+	/**
+	 * Start the background service.
+	 */
+	private void startService() {
+		// repeat once an hour
+//		final long REPEAT_TIME = 1000 * 10; // once a minute for debug
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.SECOND, 10); // start after one minute
+
+		Intent intent = new Intent(this, ReminderServiceStartReceiver.class);
+		PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), REPEAT_TIME, pintent);
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+		        cal.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pintent);
+		Log.d(TAG, "starting the ReminderServiceStartReceiver");
 	}
 }

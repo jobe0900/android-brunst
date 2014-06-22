@@ -88,6 +88,7 @@
     <string name="production_site_org_default">SE</string>
     <string name="reminder">Påminnelser</string>
     <string name="reminder_activity_title">Påminnelse</string>
+    <string name="reminder_service_title">Påminnelsetjänst</string>
     <string name="reminder_label_eventtime">Förväntad tid</string>
     <string name="reminder_label_eventtype">Typ:</string>
     <string name="reminder_entry_description_hint">Beskrivning</string>

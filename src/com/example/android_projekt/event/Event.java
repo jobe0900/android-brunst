@@ -3,6 +3,7 @@ package com.example.android_projekt.event;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import com.example.android_projekt.R;
 import com.example.android_projekt.individ.IdNr;
 
 /**
@@ -31,6 +32,14 @@ public class Event
 		EVENT_MATING,
 		EVENT_PREGCHECK,
 		EVENT_BIRTH
+	};
+	
+	private static final int[] TYPE_STRING_IDS = {
+		R.string.event_type_note,
+		R.string.event_type_heat,
+		R.string.event_type_mating,
+		R.string.event_type_pregcheck,
+		R.string.event_type_birth
 	};
 	
 	private long eventId;
@@ -68,6 +77,15 @@ public class Event
 	public String toString() {
 		String str = regTime.toString() + ": " + idnr.toString() + " " + type + " at " + eventTime.toString();
 		return str;
+	}
+	
+	/**
+	 * Get the String id for an EventType.
+	 * @param type
+	 * @return
+	 */
+	public static int getStringIdForType(Event.Type type) {
+		return TYPE_STRING_IDS[type.ordinal()];
 	}
 
 	// GETTERS and SETTERS -----------------------------------------------------

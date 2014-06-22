@@ -454,6 +454,7 @@ public class IndividualEventsActivity extends ActionBarActivity
 		// Get the reminders
 		ReminderDB rdb = new ReminderDB(this);
 		rdb.open();
+//		List<Reminder> reminders = rdb.getAllCurrentRemindersForIndividual(individual.getIdNr());
 		List<Reminder> reminders = rdb.getAllRemindersForIndividual(individual.getIdNr());
 		rdb.close();
 		

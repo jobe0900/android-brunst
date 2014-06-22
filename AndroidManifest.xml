@@ -66,6 +66,13 @@
             android:name="com.example.android_projekt.reminder.ReminderActivity"
             android:label="@string/reminder_activity_title" >
         </activity>
+        <service 
+            android:name="com.example.android_projekt.notification.ReminderService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/reminder_service_title">
+        </service>
+        <receiver android:name="com.example.android_projekt.notification.ReminderServiceStartReceiver">
+        </receiver>
     </application>
 
 </manifest>
